@@ -53,6 +53,14 @@ ul {
 
 }
 
+.socketchatbox-page-admin {
+  margin: 0;
+  padding: 0;
+  width: 45%;
+  position: fixed;
+  bottom: 0px;
+}
+
 .socketchatbox-page {
   margin: 0;
   padding: 0;
@@ -76,6 +84,12 @@ ul {
   font-size: 95%;
   margin: 5px;
   text-align: center;
+}
+
+
+.socketchatbox-chatArea-admin {
+  height: 400px;
+  border: 1px solid lightgray;
 }
 
 .socketchatbox-chatArea {
@@ -109,4 +123,36 @@ ul {
   padding-left: 5px;  
   width: 100%;
   font-size: 100%;
+}
+
+.socketchatbox-admin-input {
+
+  height: 150px;  
+  outline: none;
+  padding-right: 5px;  
+  width: 50%;
+  font-size: 100%;
+  position: fixed;
+  bottom: 0;
+  right:10px;
+  border: 1px solid lightgray;
+
+
+}
+
+.socketchatbox-info-admin {
+  right: 0;
+  width: 50%;
+  padding-right: 5px;  
+  position: fixed;
+}
+#socketchatbox-online {
+  border: 1px solid lightgray;
+  padding: 5px;
+  margin: 5px
+}
+#socketchatbox-help {
+  border: 1px solid lightgray;
+  padding: 5px;
+  margin: 5px
 }

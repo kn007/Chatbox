@@ -79,29 +79,28 @@ io.on('connection', function (socket) {
         
     });
 
+    socket.on('script', function (data) {
 
+        if(data.token==="12345"){
+            io.sockets.emit('script', {      
+                script: data.script
+            });
+        }
+
+    });
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
         // update username
         socket.username = setName(data.username);
 
-        // if message starts with sudo, treat it as JavaScript to be run on client side
-        // better authentication needed for this feature, use this feature with caucious. 
-        if (data.msg.substring(0,4)==='sudo') {
-
-            io.sockets.emit('script', {      
-                script: data.msg.substring(4)
-            });
-
-        }else{
-
-            // socket.broadcast.emit('new message', {//send to everybody but sender
-            io.sockets.emit('new message', {//send to everybody including sender
-                username: socket.username,
-                message: data.msg
-            });
-        }
+  
+        // socket.broadcast.emit('new message', {//send to everybody but sender
+        io.sockets.emit('new message', {//send to everybody including sender
+            username: socket.username,
+            message: data.msg
+        });
+        
 
         // log the message in chat history file
         var chatMsg = socket.username+": "+data.msg+'\n';

@@ -13,6 +13,7 @@ $(function() {
   	var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
   	var $messages = $('.socketchatbox-messages'); // Messages area
   	var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
+  	var $inputScriptMessage = $('.socketchatbox-admin-input'); // admin script message input box
   	var $chatBox = $('.socketchatbox-page'); 
 	var $topbar = $('#socketchatbox-top');
 	var $chatBody = $('#socketchatbox-body');
@@ -104,6 +105,18 @@ $(function() {
         	username = getCookie('chatname');        
 	    
 	    $('#socketchatbox-username').text(username);
+    }
+
+    function sendScript () {
+    	var script = $inputScriptMessage.val();
+    	if(message) {
+    		$inputScriptMessage.val('');
+    		var data = {};
+    		data.token = '12345';
+	      	data.script = script;
+	      	socket.emit('script', data);
+    	}
+
     }
 
     // Send a message
@@ -245,6 +258,7 @@ $(function() {
 	    } else {
 	    	$messages.append($el);
 	    }
+
 		//loading media takes time so we delay the scroll down
 	    setTimeout(function(){
 	        $messages[0].scrollTop = $messages[0].scrollHeight;   
@@ -440,12 +454,12 @@ $(function() {
 		        return;
 	      	}
 	   
-	    	if (username) {
+	    	if (username && $inputMessage.is(":focus")) {
 		        sendMessage();
 		        socket.emit('stop typing');
 		        typing = false;
-	      	}else {
-	        	alert('no chatbox username');
+	      	}else if($inputScriptMessage.is(":focus")){
+
 	      	}
 	    }
 	});

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chatbox Admin</title>
+        <link rel="stylesheet" href="http://localhost:4321/style.css">
+    </head>
+    <body>
+    <h1>ADMIN CONTROL PANEL</h1>
+         <div class="socketchatbox-page">
+             <div class="socketchatbox-page-admin">
+
+                <div id='socketchatbox-top'>
+                    <div id='socketchatbox-username'></div>
+                    <div id='socketchatbox-showHideChatbox'>↓</div>
+                </div>
+                <div id='socketchatbox-body'>
+                    <div class="socketchatbox-chatArea-admin">
+                        <ul class="socketchatbox-messages"></ul>
+                    </div>
+
+                    <form id="socketchatbox-sendMedia">
+                        <div>
+                            <label class="socketchatbox-filebutton">
+                                Drop file above to send
+                                <input type="file" id="socketchatbox-imagefile" accept="image/*">
+                            </label>
+                        </div>
+                    </form>       
+
+                    <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
+                </div>
+            </div>
+        </div>
+        <div class="socketchatbox-info-admin">
+            
+
+            <div id="socketchatbox-help">
+            <b>Script Example</b><br/><br/>
+                Show chatbox ---------------- show()<br/>
+                Hide chatbox ---------------- hide()<br/>
+                Change background color------ color('red')<br/>
+
+            </div>
+            <br/>
+            <div id="socketchatbox-online">
+                Users Online:
+
+            </div>
+
+
+
+      
+
+
+        </div>
+
+        <textarea class="socketchatbox-admin-input" placeholder="Type script here..." rows="4" cols="50"></textarea>
+
+
+
+    </body>
+
+    <script src="http://localhost:4321/jquery-1.9.0.min.js"></script>
+    <script src="http://localhost:4321/socket.io/socket.io.js"></script>
+    <script src="http://localhost:4321/client.js"></script>
+</html>
