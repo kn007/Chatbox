@@ -15,6 +15,10 @@ var filePath = __dirname+"/chat-log.txt";
 
 //set which port this app runs on
 var port = 4321;
+//set admin password
+var token = "12345";
+
+
 var totalUsers = 0;
 
 server.listen(port, function () {
@@ -79,15 +83,6 @@ io.on('connection', function (socket) {
         
     });
 
-    socket.on('script', function (data) {
-
-        if(data.token==="12345"){
-            io.sockets.emit('script', {      
-                script: data.script
-            });
-        }
-
-    });
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
@@ -115,16 +110,17 @@ io.on('connection', function (socket) {
 
     });
 
-    socket.on('base64 file', function (msg) {
-        console.log('received base64 file from' + msg.username);
-        socket.username = msg.username;
+    socket.on('base64 file', function (data) {
+        console.log('received base64 file from' + data.username);
+        socket.username = setName(data.username);
+        
         // socket.broadcast.emit('base64 image', //exclude sender
         io.sockets.emit('base64 file', 
 
             {
               username: socket.username,
-              file: msg.file,
-              fileName: msg.fileName
+              file: data.file,
+              fileName: data.fileName
             }
 
         );
@@ -132,23 +128,79 @@ io.on('connection', function (socket) {
 
 
     // when the client emits 'typing', we broadcast it to others
-    socket.on('typing', function (name) {
-        socket.username = setName(name);
+    socket.on('typing', function (data) {
+        socket.username = setName(data.name);
         socket.broadcast.emit('typing', {
             username: socket.username
         });
     });
 
     // when the client emits 'stop typing', we broadcast it to others
-    socket.on('stop typing', function (name) {
-        socket.username = setName(name);
+    socket.on('stop typing', function (data) {
+        socket.username = setName(data.name);
         socket.broadcast.emit('stop typing', {
             username: socket.username
         });
     });
 
 
+    // below are for admin 
 
+    // send script to all sockets
+    socket.on('script', function (data) {
+
+        if(data.token === token){
+
+            if(data.to.length===0) {
+
+                io.sockets.emit('script', {      
+                    script: data.script
+                });
+
+            }else {
+
+                for(var s in io.sockets.sockets){
+
+                    if(data.to.indexOf(io.sockets.sockets[s]['username'])>=0) {
+                        
+                        var socketID = io.sockets.sockets[s]['id'];
+                        io.sockets.connected[socketID].emit('script', {      
+                            script: data.script
+                        });
+
+
+                    }
+
+                }
+            }
+        }
+
+    });
+
+    socket.on('getUserList', function (data) {
+
+        if(data.token === token){
+
+            var nameList = [];
+
+            for(var s in io.sockets.sockets){
+
+                nameList.push(io.sockets.sockets[s]['username']);
+            }
+
+            socket.emit('listUsers', {      
+                userlist: nameList,
+                success: true
+            });
+
+        }else {
+
+            socket.emit('listUsers', {      
+                success: false
+            });
+        }
+
+    });
 
 
 });

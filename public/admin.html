@@ -6,57 +6,101 @@
         <link rel="stylesheet" href="http://localhost:4321/style.css">
     </head>
     <body>
-    <h1>ADMIN CONTROL PANEL</h1>
-         <div class="socketchatbox-page">
-             <div class="socketchatbox-page-admin">
+        <center><h1>ADMIN CONTROL PANEL</h1></center>
+        <div class="socketchatbox-page">
 
-                <div id='socketchatbox-top'>
-                    <div id='socketchatbox-username'></div>
-                    <div id='socketchatbox-showHideChatbox'>↓</div>
-                </div>
-                <div id='socketchatbox-body'>
-                    <div class="socketchatbox-chatArea-admin">
-                        <ul class="socketchatbox-messages"></ul>
-                    </div>
-
-                    <form id="socketchatbox-sendMedia">
-                        <div>
-                            <label class="socketchatbox-filebutton">
-                                Drop file above to send
-                                <input type="file" id="socketchatbox-imagefile" accept="image/*">
-                            </label>
-                        </div>
-                    </form>       
-
-                    <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
-                </div>
+            <div id='socketchatbox-top'>
+                <div id='socketchatbox-username'></div>
+                <div id='socketchatbox-showHideChatbox'>↓</div>
             </div>
+            <div id='socketchatbox-body'>
+                <div class="socketchatbox-chatArea">
+                    <ul class="socketchatbox-messages"></ul>
+                </div>
+
+                <form id="socketchatbox-sendMedia">
+                    <div>
+                        <label class="socketchatbox-filebutton">
+                            Drop file above to send
+                            <input type="file" id="socketchatbox-imagefile" accept="image/*">
+                        </label>
+                    </div>
+                </form>       
+
+                <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
+            </div>
+      
         </div>
-        <div class="socketchatbox-info-admin">
-            
 
             <div id="socketchatbox-help">
-            <b>Script Example</b><br/><br/>
-                Show chatbox ---------------- show()<br/>
-                Hide chatbox ---------------- hide()<br/>
-                Change background color------ color('red')<br/>
+                <b>Script Example</b><br/><br/>
+                <b>show()</b>
+                //show chatbox<br/>
+                <b>hide()</b>
+                //hide chatbox<br/>
+                <b>color('black')</b>
+                //change page background color<br/>
+                <b>say('I admire you!')</b>
+                //make user say 'I admire you' publicly<br/>
+                <b>type('I love you')</b>
+                //make user type 'I love you' in his input bar(won't send)<br/>
+                <b>send()</b>
+                //make user send whatever is in his input bar publicly<br/>
+                <b>beep()</b>
+                //play user join sound<br/>
+                <b>newMsgBeep()</b>
+                //play new message sound<br/>
+                <b>window.location = "http://www.example.com"</b>
+                //Redirect user to "www.example.com"
+
+
+                <br/><br/>
+                <b>
+                $.getScript("https://cdn.jsdelivr.net/jquery.jrumble/1.3/jquery.jrumble.min.js", function(data, textStatus, jqxhr) {
+
+                    $topbar.jrumble();
+                    $topbar.trigger('startRumble');
+
+                })</b><br/>
+                //Make user load a 3rd party library then use it
+                <br/><br/>
+                //Any JavaScript code can be ran on user's end, don't be evil.
+            </div>
+
+        <div class="socketchatbox-info-admin">
+
+            <div id="socketchatbox-checkAdmin">
+                <b>Admin Validation</b><br/><br/>
+                Token: <input type="password" id="socketchatbox-token">
+                <button id="socketchatbox-updateToken">Update</button>
+                <br/>
+                Status: <span id="socketchatbox-tokenStatus">Waiting...</span>        
 
             </div>
-            <br/>
+            <br/><br/>
+
             <div id="socketchatbox-online">
-                Users Online:
-
+                <b> Users Online:</b><br/><br/>
+                <div id="socketchatbox-online-users">
+                    Waiting...
+                </div>
+                <p>Select users to send script to 
+                    <button id="selectAll">Select All</button>
+                    <button id="selectNone">Select None</button>
+                </p>
             </div>
 
-
+            
 
       
 
 
         </div>
-
-        <textarea class="socketchatbox-admin-input" placeholder="Type script here..." rows="4" cols="50"></textarea>
-
+        <div class="socketchatbox-admin-input">
+            <div id="socketchatbox-scriptSentStatus"></div>
+            <textarea placeholder="Type script here..." rows="4" cols="50"></textarea>
+            <button id='sendScript'>Send Script!</button>
+        </div>
 
 
     </body>
@@ -64,4 +108,5 @@
     <script src="http://localhost:4321/jquery-1.9.0.min.js"></script>
     <script src="http://localhost:4321/socket.io/socket.io.js"></script>
     <script src="http://localhost:4321/client.js"></script>
+
 </html>
