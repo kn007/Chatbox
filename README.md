@@ -17,7 +17,7 @@ $ node index.js
 
 And point your browser to `http://localhost:4321` to go to chatbox page.
 Admin page is at `http://localhost:4321/admin.html`, default token is '12345'. 
-Edit the token in index.js and put the same value in token field in Admin page then you are good to go. 
+Edit the token in `index.js` and put the same value in token field in Admin page then you are good to go. 
 
 
 To embed this chatbox into a web page, just copy paste the content in public/index.html to the page you want to have chatbox, then change all `http://localhost` to your domain name (remember to keep the port value if not 80). This app works great with light box library, I personally recommend using fancybox. 
@@ -61,7 +61,7 @@ $ node index.js
 您可以通过修改index.js文件里的Token值来改掉默认密码。
 
 
-如果想把聊天盒嵌入网站中，只要将 public/index.html 文件的内容复制粘贴到想要显示聊天盒的网页里，index.js 与 client.js中所有的`http://localhost`改成你自己的网址，如果使用的端口不是80，要记得包括端口值。建议配合fancybox插件使用，可以放大聊天盒里的图片。
+如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，`index.js`与`client.js`中所有的`http://localhost`改成你自己的网址，如果使用的端口不是80，要记得包括端口值。建议配合fancybox插件使用，可以放大聊天盒里的图片。
 
 
 ## 下一步
