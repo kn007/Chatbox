@@ -61,7 +61,7 @@ $ node index.js
 您可以通过修改index.js文件里的Token值来改掉默认密码。
 
 
-如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，`index.js`与`client.js`中所有的`http://localhost`改成你自己的网址，如果使用的端口不是80，要记得包括端口值。建议配合fancybox插件使用，可以放大聊天盒里的图片。
+如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，`index.html`, `admin.html`,`client.js`中所有的`http://localhost`改成你自己的网址，如果使用的端口不是80，要记得包括端口值。建议配合fancybox插件使用，可以放大聊天盒里的图片。
 
 
 ## 下一步
