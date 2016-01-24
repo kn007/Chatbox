@@ -44,6 +44,7 @@ function setName(name) {
 
 
 io.on('connection', function (socket) {
+    totalUsers++;
 
     console.log('New user connected');
     // set an initial name before receiving real name from client
@@ -53,14 +54,13 @@ io.on('connection', function (socket) {
     // once the new user is connected, we ask him to tell us his name
     // tell him how many people online now
     socket.emit('login', {
-        numUsers: totalUsers+1
+        numUsers: totalUsers
     });
 
 
 
     // once a new client is connected, this is the first msg he send
     socket.on('login', function (data) {
-        totalUsers++;
         socket.username = setName(data.username);
         console.log('There are '+ totalUsers + ' users now.');
 
