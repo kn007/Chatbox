@@ -1,10 +1,9 @@
 $(function() {
 
-    // change this to your domain and port
-    var socket = io('localhost:4321');
-
-
-
+    // change this to your port
+    var port = 4321;
+    var domain = location.protocol + "//" + location.hostname + ":" + port;
+    var socket = io(domain);
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -104,7 +103,7 @@ $(function() {
         $('#socketchatbox-username').text(username);
 
         // Show/hide chatbox base on cookie value
-        if(getCookie('chatboxOpen')===1) 
+        if(getCookie('chatboxOpen')==='1') 
             show();
         else
             hide();
