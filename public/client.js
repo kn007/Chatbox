@@ -102,6 +102,14 @@ $(function() {
             username = getCookie('chatname');        
         
         $('#socketchatbox-username').text(username);
+
+        // Show/hide chatbox base on cookie value
+        if(getCookie('chatboxOpen')===1) 
+            show();
+        else
+            hide();
+
+
     }
 
 
