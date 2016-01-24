@@ -4,7 +4,7 @@ English version
 
 # Chatbox
 
-A simple chatbox app adapted from Socket.io's chat room demo, it allows file transfer and features a control panel for admin.
+A simple chatbox app adapted from Socket.io's chat room demo, it allows file transfer and features a control panel for admin to use.
 
 
 ## How to use
@@ -24,8 +24,8 @@ To embed this chatbox into a web page, just copy paste the content in public/ind
 
 ## Future plan
 
-Improve chat history feature, currently only storing latest 20 messages
-Improve file transfer support, currently file larger than 10MB may fail to transfer due to timeout, and client side may freeze once receive large file.
+* Improve chat history feature, currently only storing latest 20 messages
+* Improve file transfer support, currently file larger than 10MB may fail to transfer due to timeout, and client side may freeze once receive large file.
 
 
 ## Demo
@@ -36,6 +36,8 @@ You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http:
 
 ![screenshot](/Screenshot.png?raw=true "Screenshot")
 
+![screenshot](/adminPanel.png?raw=true "AdminPanel")
+
 
 -----------------------------------------------------------
 中文版
@@ -44,7 +46,7 @@ You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http:
 
 # 聊天盒
 
-该聊天盒修改自Socket.io的聊天室示例, 可以满足小型文件的传输，并且有控制台功能。
+该聊天盒修改自Socket.io的聊天室示例, 可以满足小型文件的传输，并且有控制台功能，管理员既可对全体游客亦可对特定游客进行操作。
 
 
 ## 如何使用
@@ -67,8 +69,8 @@ $ node index.js
 
 ## 下一步
 
-改进聊天记录功能，目前只能存储最近的20条。
-改进文件传输功能，目前对于稍大文件（大于10MB）的支持不好。
+* 改进聊天记录功能，目前只能存储最近的20条。
+* 改进文件传输功能，目前对于稍大文件（大于10MB）的支持不好。
 
 
 ## 示例
@@ -79,3 +81,5 @@ $ node index.js
 ## 截图
 
 ![screenshot](/Screenshot.png?raw=true "Screenshot")
+
+![screenshot](/adminPanel.png?raw=true "AdminPanel")
