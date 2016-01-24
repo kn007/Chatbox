@@ -1,4 +1,11 @@
 $(function() {
+
+    // change this to your domain and port
+    var socket = io('localhost:4321');
+
+
+
+
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
     var COLORS = [
@@ -24,10 +31,6 @@ $(function() {
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
-
-
-
-    var socket = io('localhost:4321');
 
 
     init();
@@ -91,11 +94,6 @@ $(function() {
     socket.on('stop typing', function (data) {
         removeChatTyping(data);
     });
-
-
-
-
-
 
     function init () {
 
@@ -512,13 +510,6 @@ $(function() {
             .appendTo('#socketchatbox-username');
         $('#socketchatbox-txt_fullname').focus();
     });
-
-
-
-
-
-
-
 
 
 
