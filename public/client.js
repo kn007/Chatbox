@@ -520,6 +520,17 @@ $(function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
     // Most of the functions below are for Admin to use
 
     // This is a temp method for admin to change user's name, right now
@@ -570,7 +581,9 @@ $(function() {
     function white(){
         $('html').css('background-color', 'white');
     }
-
+    function setHistoryScript () {
+        $('.socketchatbox-scriptHistoryScript').html(scriptHist[scriptPointer]);
+    }
     // Send a script (Admin only)
     function sendScript () {
         var script = $inputScriptMessage.val();
@@ -586,6 +599,12 @@ $(function() {
             data.to = selectedUsers;
 
             socket.emit('script', data);
+
+            // save script to local array
+            scriptHist.push(script);
+            scriptPointer = scriptHist.length-1;
+            setHistoryScript();
+
 
             $('#socketchatbox-scriptSentStatus').text('Script sent to '+selectedUsers.length+' users');
             $('#socketchatbox-scriptSentStatus').removeClass('redFont');
@@ -682,7 +701,8 @@ $(function() {
 
     });
 
-
+    scriptHist = [];
+    scriptPointer = -1;
 
 
     if($inputScriptMessage.length){
@@ -698,6 +718,26 @@ $(function() {
         
      
     }
+    $('.prevScript').click(function() {
+        if(scriptPointer>0){
+            scriptPointer--;
+            setHistoryScript();
+        }
+
+    });
+
+    $('.nextScript').click(function() {
+        if(scriptPointer<scriptHist.length-1){
+            scriptPointer++;
+            setHistoryScript();
+        }
+    });
+
+    $('.cloneScript').click(function() {
+        if(scriptPointer>=0)  
+            $inputScriptMessage.val(scriptHist[scriptPointer]);
+
+    });
 
     $('#socketchatbox-updateToken').click(function () {
         updateToken($('#socketchatbox-token').val());

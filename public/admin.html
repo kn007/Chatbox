@@ -7,7 +7,7 @@
     </head>
     <body>
         <center><h1>ADMIN CONTROL PANEL</h1></center>
-        <div class="socketchatbox-page">
+        <div class="socketchatbox-page socketchatbox-admin">
 
             <div id='socketchatbox-top'>
                 <div id='socketchatbox-username'></div>
@@ -33,38 +33,15 @@
         </div>
 
             <div id="socketchatbox-help">
-                <b>Script Example</b><br/><br/>
-                <b>show()</b>
-                //show chatbox<br/>
-                <b>hide()</b>
-                //hide chatbox<br/>
-                <b>color('black')</b>
-                //change page background color<br/>
-                <b>say('I admire you!')</b>
-                //make user say 'I admire you' publicly<br/>
-                <b>type('I love you')</b>
-                //make user type 'I love you' in his input bar(won't send)<br/>
-                <b>send()</b>
-                //make user send whatever is in his input bar publicly<br/>
-                <b>beep()</b>
-                //play user join sound<br/>
-                <b>newMsgBeep()</b>
-                //play new message sound<br/>
-                <b>window.location = "http://www.example.com"</b>
-                //Redirect user to "www.example.com"
+                <b>Instructions</b><br/><br/>
+                <li>
+                The first thing you need to do is to enter your token and click update, the 
+                default token is "12345", you can change the token in index.js.</li> 
+                <li>Once the admin validation is successful, you can see all users online at the moment.</li> 
+                <li>To perform an action to target user, you need to select the user as target then send your script.</li>
 
+                You can see some example scripts in AdminHelp.md.
 
-                <br/><br/>
-                <b>
-                $.getScript("https://cdn.jsdelivr.net/jquery.jrumble/1.3/jquery.jrumble.min.js", function(data, textStatus, jqxhr) {
-
-                    $topbar.jrumble();
-                    $topbar.trigger('startRumble');
-
-                })</b><br/>
-                //Make user load a 3rd party library then use it
-                <br/><br/>
-                //Any JavaScript code can be ran on user's end, don't be evil.
             </div>
 
         <div class="socketchatbox-info-admin">
@@ -80,7 +57,7 @@
             <br/><br/>
 
             <div id="socketchatbox-online">
-                <b> Users Online:</b><br/><br/>
+                <b> Users Online</b><br/><br/>
                 <div id="socketchatbox-online-users">
                     Waiting...
                 </div>
@@ -89,15 +66,28 @@
                     <button id="selectNone">Select None</button>
                 </p>
             </div>
-
-            
-
-      
-
-
         </div>
+
+
+
+
+
         <div class="socketchatbox-admin-input">
-            <div id="socketchatbox-scriptSentStatus"></div>
+            <div class="socketchatbox-scriptHistory">
+                <b> History Script</b>
+                <button class="prevScript">prev</button>
+                <button class="nextScript">next</button>
+                <button class="cloneScript">clone</button>
+                <br/><br/>
+
+
+                <div class="socketchatbox-scriptHistoryScript">
+                    Empty
+                </div>
+
+                
+            </div>
+            <center><div id="socketchatbox-scriptSentStatus"></div></center>
             <textarea placeholder="Type script here..." rows="4" cols="50"></textarea>
             <button id='sendScript'>Send Script!</button>
         </div>

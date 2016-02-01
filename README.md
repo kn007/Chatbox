@@ -1,10 +1,10 @@
-English version
+English description
 
 
 
 # Chatbox
 
-A simple chatbox app adapted from Socket.io's chat room demo, it allows file transfer and features a control panel for admin to use.
+A simple chatbox app based on Socket.IO that allows file transfer and features a control panel for admin to use.
 
 
 ## How to use
@@ -40,13 +40,13 @@ You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http:
 
 
 -----------------------------------------------------------
-中文版
+中文介绍
 
 
 
 # 聊天盒
 
-该聊天盒修改自Socket.io的聊天室示例, 可以满足小型文件的传输，并且有控制台功能，管理员既可对全体游客亦可对特定游客进行操作。
+该聊天盒基于Socket.io，可以进行小型文件的传输，并有控制台功能，管理员可对全体游客或者特定游客进行操作。
 
 
 ## 如何使用
@@ -63,8 +63,7 @@ $ node index.js
 您可以通过修改index.js文件里的Token值来改掉默认密码。
 
 
-如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，`public/index.html`中所有包含的css和JavaScript文件地址需要修改正确。
-推荐配合fancybox插件使用来放大聊天盒里的图片。
+如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，同时`public/index.html`中所有引入css和JavaScript文件地址需要修改正确。推荐配合fancybox插件使用来放大聊天盒里的图片。
 
 
 ## 下一步

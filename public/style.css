@@ -1,5 +1,7 @@
 /* Fix user-agent */
 
+
+
 * {
   box-sizing: border-box;
 }
@@ -12,7 +14,9 @@ ul {
 #socketchatbox-imagefile {
   width:100%;
 }
-
+#socketchatbox-body {
+  display: none
+}
 .socketchatbox-filebutton input[type="file"] {
   position: fixed;
   top: -1000px;
@@ -118,17 +122,19 @@ ul {
 
 /* Admin page*/
 
+.socketchatbox-admin {
+
+  width:40%;
+}
+
+
 .socketchatbox-admin-input {
 
-   
   width: 50%;
   font-size: 100%;
   position: fixed;
   bottom: 0;
   right:15px;
-
-
-
 }
 
 .socketchatbox-admin-input textarea{
@@ -145,7 +151,9 @@ button {
   cursor: pointer;
 }
 
-.socketchatbox-admin-input button {
+
+
+#sendScript {
   width: 100%;
   outline: none;
   padding: 10px;
@@ -157,6 +165,8 @@ button {
   width: 50%;
   position: fixed;
   word-wrap: break-word;
+  background: white;
+
 
 }
 
@@ -167,6 +177,14 @@ button {
 #socketchatbox-online {
   border: 1px solid lightgray;
   padding: 5px;
+  background: white;
+
+}
+.socketchatbox-scriptHistory {
+  border: 1px solid lightgray;
+  padding: 5px;
+  background: white;
+
 }
 #socketchatbox-help {
   border: 1px solid lightgray;
@@ -176,7 +194,10 @@ button {
   word-wrap: break-word;
 
 }
-
+.socketchatbox-scriptHistoryScript {
+  max-height: 100px;
+  overflow-y: scroll;
+}
 .username-info {
   margin: 5px;
   cursor: pointer;
