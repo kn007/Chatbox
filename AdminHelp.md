@@ -1,6 +1,7 @@
 Script Example
                 
-    show()//show chatbox
+    //show chatbox
+    show()
     //hide chatbox
     hide()
     //change page background color
