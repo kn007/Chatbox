@@ -1,23 +1,24 @@
 Script Example
                 
-    show()
-    //show chatbox
-    hide()
+    show()//show chatbox
     //hide chatbox
-    color('black')
+    hide()
     //change page background color
-    say('I admire you!')
+    color('black')
     //make user say 'I admire you' publicly<br/>
-    type('I love you')
+    say('I admire you!')
     //make user type 'I love you' in his input bar(won't send)<br/>
-    send()
+    type('I love you')
     //make user send whatever is in his input bar publicly<br/>
-    beep()
+    send()
     //play user join sound<br/>
-    newMsgBeep()
+    beep()
     //play new message sound<br/>
-    window.location = "http://www.example.com"
+    newMsgBeep()
+    //change the visitor name
+    changeName("old name","new name")
     //Redirect user to "www.example.com"
+    window.location = "http://www.example.com"
 
     $.getScript("https://cdn.jsdelivr.net/jquery.jrumble/1.3/jquery.jrumble.min.js", function(data, textStatus, jqxhr) {
 
