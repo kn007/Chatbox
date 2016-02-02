@@ -19,12 +19,15 @@ And point your browser to `http://localhost:4321` to go to chatbox page.
 Admin page is at `http://localhost:4321/admin.html`, default token is '12345'. 
 Edit the token in `index.js` and put the same value in token field in Admin page then you are good to go. 
 
-Quick way to change port(e.g., change to 2231):
+If you want hide the port like `localhost` (Not `localhost:4321`) in front page, just change the `index.js` port to 4321, and setting `public/client.js` port to 80(or 443).
+
+Quick way to change the port(e.g., change to 2231):
 ```
 sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
 sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
-Same way to change token(e.g., change to 54321):
+
+Same way to change the token(e.g., change to 54321):
 ```
 sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
@@ -71,12 +74,15 @@ $ node index.js
 控制台的访问地址为`http://localhost:4321/admin.html`， 默认的密码为“12345”。
 您可以通过修改index.js文件里的Token值来改掉默认密码。
 
-通过Shell快速修改端口(比如改成2231)：
+如果你想让访问的地址隐藏端口号（如localhost，而非默认的localhost:4321），请修改`index.js`中的端口号为后端端口（如4321），其次修改`public/client.js`的端口为80（或443）即可。
+
+通过Shell快速修改端口（比如改成2231）：
 ```
 sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
 sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
-同理，可以快速修改密码(比如改成54321)：
+
+同理，可以快速修改密码（比如改成54321）：
 ```
 sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
