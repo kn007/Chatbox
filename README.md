@@ -16,7 +16,9 @@ $ node index.js
 ```
 
 And point your browser to `http://localhost:4321` to go to chatbox page.
+
 Admin page is at `http://localhost:4321/admin.html`, default token is '12345'. 
+
 Edit the token in `index.js` and put the same value in token field in Admin page then you are good to go. 
 
 If you want hide the port like `localhost` (Not `localhost:4321`) in front page, just change the `index.js` port to 4321, and setting `public/client.js` port to 80(or 443).
@@ -71,7 +73,9 @@ $ node index.js
 ```
 
 在本地安装则直接访问`http://localhost:4321`即可进入聊天盒。
+
 控制台的访问地址为`http://localhost:4321/admin.html`， 默认的密码为“12345”。
+
 您可以通过修改index.js文件里的Token值来改掉默认密码。
 
 如果你想让访问的地址隐藏端口号（如localhost，而非默认的localhost:4321），请修改`index.js`中的端口号为后端端口（如4321），其次修改`public/client.js`的端口为80（或443）即可。
