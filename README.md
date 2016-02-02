@@ -25,13 +25,13 @@ If you want hide the port like `localhost` (Not `localhost:4321`) in front page,
 
 Quick way to change the port(e.g., change to 2231):
 ```
-sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
-sed -i 's/var port =.*/var port = 2231;/g' ./index.js
+$ sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
+$ sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
 
 Same way to change the token(e.g., change to 54321):
 ```
-sed -i 's/var token =.*/var token = "54321";/g' ./index.js
+$ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 
 To embed this chatbox into a web page, just copy paste the content in public/index.html to the page you want to have chatbox, then change all included css file and JavaScript file path correctly. This app works great with light box library, I personally recommend using fancybox. 
@@ -88,13 +88,13 @@ $ node index.js
 
 通过Shell快速修改端口（比如改成2231）：
 ```
-sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
-sed -i 's/var port =.*/var port = 2231;/g' ./index.js
+$ sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
+$ sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
 
 同理，可以快速修改密码（比如改成54321）：
 ```
-sed -i 's/var token =.*/var token = "54321";/g' ./index.js
+$ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 
 如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，同时`public/index.html`中所有引入css和JavaScript文件地址需要修改正确。推荐配合fancybox插件使用来放大聊天盒里的图片。
