@@ -42,6 +42,8 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
 This is almost certainly due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection.The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
 
+For ways on how this could happen, see [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
+
 ##### Future plan
 
 * Improve chat history feature, currently only storing latest 20 messages
@@ -103,7 +105,9 @@ $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
-比较大的可能是在前端隐藏了端口并使用了http，Websocket通信在使用80端口转发时，80端口只负责连接，握手及通信需直接与后端端口通讯。使用https可以避免这个问题，握手通讯皆用443端口。如果你不想使用https，那么建议你通过使用`http://localhost:4321`的方式来使用，而不隐藏端口；抑或是直接使nodejs监听80端口，而不要通过反代。
+比较大的可能是在前端隐藏了端口并使用了http，具体可以看上面英文解释。简单来说Websocket通信在使用80端口转发时，80端口只负责连接，握手及通信在反代转发到后端端口通讯时可能会出错（在HTTP层被断开）。使用https可以避免这个问题，握手通讯皆用443端口。如果你不想使用https，那么建议你通过使用`http://localhost:4321`的方式来使用，而不隐藏端口；抑或是直接使nodejs监听80端口，而不要通过反代。
+
+更多资料可以参照WebSockets RFC 6455协议中的4.2.1章，[传送门](http://tools.ietf.org/html/rfc6455#section-4.2.1)。
 
 
 ##### 下一步
