@@ -667,29 +667,27 @@ $(function() {
         $('#socketchatbox-tokenStatus').addClass('green');
 
 
-        var userList = {};
-        data.userlist.forEach(function (a) { 
-            if (a in userList) 
-                userList[a] ++; 
-            else userList[a] = 1; 
-        });
 
         var newSelectedUsers = [];
         $('#socketchatbox-online-users').html('');
-        for(var uName in userList) {
+        // key is user's IP address
+        for(var key in data.userdict) {
             
-            var nameWithCount = uName;
-            if(userList[uName]>1){
-                nameWithCount += "("+userList[uName]+")";
+            var user = data.userdict[key];
+
+            var nameWithCount = user.username;
+            if(user.count > 1){
+                nameWithCount += "("+user.count+")";
             }
             var $uNameDiv = $("<span></span>");
             $uNameDiv.text(nameWithCount);
+            $uNameDiv.prop('title', user.ip);
 
             $uNameDiv.addClass("username-info"); 
-            $uNameDiv.data('name', uName);
-            if(selectedUsers.indexOf(uName)>=0){
+            $uNameDiv.data('name', user.username);
+            if(selectedUsers.indexOf(user.username)>=0){
                 $uNameDiv.addClass("selected"); 
-                newSelectedUsers.push(uName);
+                newSelectedUsers.push(user.username);
             }
 
             $('#socketchatbox-online-users').append($uNameDiv);         

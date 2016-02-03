@@ -19,7 +19,7 @@ var port = 4321;
 var token = "12345";
 
 
-var totalUsers = 0;
+var socketList = [];
 
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
@@ -44,17 +44,23 @@ function setName(name) {
 
 
 io.on('connection', function (socket) {
-    totalUsers++;
 
+    socketList.push(socket);
+    
     console.log('New user connected');
     // set an initial name before receiving real name from client
     socket.username = setName('initName'); 
+    socket.remoteAddress = socket.request.connection.remoteAddress;
+
+
+    console.log("socket.id: " + socket.id);
+    console.log("socket.remoteAddress: " + socket.remoteAddress);
 
 
     // once the new user is connected, we ask him to tell us his name
     // tell him how many people online now
     socket.emit('login', {
-        numUsers: totalUsers
+        numUsers: socketList.length
     });
 
 
@@ -62,23 +68,28 @@ io.on('connection', function (socket) {
     // once a new client is connected, this is the first msg he send
     socket.on('login', function (data) {
         socket.username = setName(data.username);
-        console.log('There are '+ totalUsers + ' users now.');
+        console.log('There are '+ socketList.length + ' users now.');
 
         // echo to others that a person has connected
         socket.broadcast.emit('user joined', {
             username: socket.username,
-            numUsers: totalUsers
+            numUsers: socketList.length
         });    
 
     });
 
     // when the user disconnects.. 
     socket.on('disconnect', function () {
-        totalUsers--;
-        // echo globally that this client has left
+
+        var index = socketList.indexOf(socket);
+        if (index != -1) {
+            socketList.splice(index, 1);
+        }
+
+         // echo globally that this client has left
         socket.broadcast.emit('user left', {
             username: socket.username,
-            numUsers: totalUsers
+            numUsers: socketList.length
         });
         
     });
@@ -144,55 +155,84 @@ io.on('connection', function (socket) {
     });
 
 
-    // below are for admin 
 
-    // send script to all sockets
+
+
+
+
+    // below commands are for admin only, so we always want to verify token first
+
+
+
+    // send script to target users
     socket.on('script', function (data) {
 
-        if(data.token === token){
+        if(data.token === token) {
 
-            if(data.to.length===0) {
+            /*
+            for(var s in io.sockets.sockets) {
 
-                io.sockets.emit('script', {      
-                    script: data.script
-                });
-
-            }else {
-
-                for(var s in io.sockets.sockets){
-
-                    if(data.to.indexOf(io.sockets.sockets[s]['username'])>=0) {
-                        
-                        var socketID = io.sockets.sockets[s]['id'];
-                        io.sockets.connected[socketID].emit('script', {      
-                            script: data.script
-                        });
-
-
-                    }
+                if(data.to.indexOf(io.sockets.sockets[s]['username'])>=0) {
+                    
+                    var socketID = io.sockets.sockets[s]['id'];
+                    io.sockets.connected[socketID].emit('script', {      
+                        script: data.script
+                    });
 
                 }
+
             }
+            */
+
+            // O(mn) time complexity, maybe should change to dictionary
+            for (var i = 0; i < socketList.length; i++) {
+                if(data.to.indexOf(socketList[i].username)!= -1) {
+                    socketList[i].emit('script', {      
+                        script: data.script
+                    });
+                }
+            }
+
+
         }
 
     });
 
+
     socket.on('getUserList', function (data) {
 
-        if(data.token === token){
+        if(data.token === token) {
 
-            var nameList = [];
+            // group by IP address
+            var userDict = {};
 
-            for(var s in io.sockets.sockets){
+            for(var i=0; i<socketList.length; i++) {
 
-                nameList.push(io.sockets.sockets[s]['username']);
+                var s = socketList[i];
+
+                if(s.remoteAddress in userDict) {
+
+                    userDict[s.remoteAddress].count++;
+
+                }else {
+
+                    var user = {};
+                    user.username = s.username;
+                    user.ip = s.remoteAddress;
+                    user.count = 1;
+                    userDict[user.ip] = user;
+
+                }
             }
 
+
+
             socket.emit('listUsers', {      
-                userlist: nameList,
+                userdict: userDict,
                 success: true
             });
 
+        // getUserList might still be called when token is wrong 
         }else {
 
             socket.emit('listUsers', {      
