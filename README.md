@@ -14,6 +14,10 @@ $ cd chatbox
 $ npm install
 $ node index.js
 ```
+If you wanna starting application in the background, just using:
+```
+$ nohup node index.js > /dev/null &
+```
 
 And point your browser to `http://localhost:4321` to go to chatbox page.
 
@@ -78,6 +82,10 @@ You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http:
 $ cd chatbox
 $ npm install
 $ node index.js
+```
+如果你想让聊天盒在后台运行，那么使用下面语句启动聊天盒：
+```
+$ nohup node index.js > /dev/null &
 ```
 
 在本地安装则直接访问`http://localhost:4321`即可进入聊天盒。
