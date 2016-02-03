@@ -60,6 +60,7 @@ More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org
 The chatbox is usually minimized at left bottom by default.
 [http://lifeislikeaboat.com](http://lifeislikeaboat.com). 
 
+
 ##### Screenshot
 
 ![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
