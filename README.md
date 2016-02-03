@@ -48,6 +48,7 @@ This is almost certainly due to not using https (SSL). Websocket over plain http
 
 For ways on how this could happen, see [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
+
 ##### Future plan
 
 * Improve chat history feature, currently only storing latest 20 messages
@@ -57,6 +58,7 @@ For ways on how this could happen, see [subsection 4.2.1 of the WebSockets RFC 6
 ##### Demo
 
 You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http://lifeislikeaboat.com). The chatbox is minimized at left bottom by default.
+
 
 ##### Screenshot
 
@@ -76,7 +78,6 @@ You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http:
 
 
 ##### 如何使用
-
 
 ```
 $ cd chatbox
