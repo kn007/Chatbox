@@ -17,6 +17,8 @@ var filePath = __dirname+"/chat-log.txt";
 var port = 4321;
 //set admin password
 var token = "12345";
+//set 1 if you using reverse proxy
+var using_reverse_proxy = 0;
 
 
 var socketList = [];
@@ -50,8 +52,12 @@ io.on('connection', function (socket) {
     console.log('New user connected');
     // set an initial name before receiving real name from client
     socket.username = setName('initName'); 
-    socket.remoteAddress = socket.request.connection.remoteAddress;
-
+    
+	if (using_reverse_proxy != 1) {
+        socket.remoteAddress = socket.request.connection.remoteAddress;
+    }else{
+        socket.remoteAddress = socket.handshake.headers['x-real-ip'];
+	}
 
     console.log("socket.id: " + socket.id);
     console.log("socket.remoteAddress: " + socket.remoteAddress);
