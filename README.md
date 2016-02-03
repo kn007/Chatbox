@@ -60,9 +60,9 @@ You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http:
 
 ##### Screenshot
 
-![screenshot](/Screenshot.png?raw=true "Screenshot")
+![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
 
-![screenshot](/adminPanel.png?raw=true "AdminPanel")
+![screenshot](/screenshots/adminPanel.png?raw=true "AdminPanel")
 
 
 -----------------------------------------------------------
@@ -131,6 +131,6 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 
 ##### 截图
 
-![screenshot](/Screenshot.png?raw=true "Screenshot")
+![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
 
-![screenshot](/adminPanel.png?raw=true "AdminPanel")
+![screenshot](/screenshots/adminPanel.png?raw=true "AdminPanel")
