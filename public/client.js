@@ -637,7 +637,7 @@ $(function() {
 
         $('.username-info').each(function(index, val) {
             $val = $(val);
-            selectedUsers.push($val.data('name'));
+            selectedUsers.push($val.data('ip'));
         });
     });
 
@@ -650,9 +650,9 @@ $(function() {
         var $this = $(this);
         if($this.hasClass('selected')){
             $this.removeClass('selected');
-            selectedUsers.splice( $.inArray($this.data('name'), selectedUsers), 1 );
+            selectedUsers.splice( $.inArray($this.data('ip'), selectedUsers), 1 );
         }else{
-            selectedUsers.push($this.data('name'));
+            selectedUsers.push($this.data('ip'));
             $this.addClass('selected');
         }
     });
@@ -691,10 +691,10 @@ $(function() {
             $uNameDiv.prop('title', user.ip);
 
             $uNameDiv.addClass("username-info"); 
-            $uNameDiv.data('name', user.username);
-            if(selectedUsers.indexOf(user.username)>=0){
+            $uNameDiv.data('ip', user.ip);
+            if(selectedUsers.indexOf(user.ip)>=0){
                 $uNameDiv.addClass("selected"); 
-                newSelectedUsers.push(user.username);
+                newSelectedUsers.push(user.ip);
             }
 
             $('#socketchatbox-online-users').append($uNameDiv);         

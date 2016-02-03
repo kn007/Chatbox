@@ -200,7 +200,7 @@ io.on('connection', function (socket) {
             // O(mn) time complexity, maybe should change to dictionary
             // what about the IP dictionary ?
             for (var i = 0; i < socketList.length; i++) {
-                if(data.to.indexOf(socketList[i].username)!= -1) {
+                if(data.to.indexOf(socketList[i].remoteAddress)!= -1) {
                     socketList[i].emit('script', {      
                         script: data.script
                     });
