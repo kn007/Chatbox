@@ -53,11 +53,11 @@ io.on('connection', function (socket) {
     // set an initial name before receiving real name from client
     socket.username = setName('initName'); 
     
-	if (using_reverse_proxy != 1) {
+    if (using_reverse_proxy != 1) {
         socket.remoteAddress = socket.request.connection.remoteAddress;
     }else{
         socket.remoteAddress = socket.handshake.headers['x-real-ip'];
-	}
+    }
 
     console.log("socket.id: " + socket.id);
     console.log("socket.remoteAddress: " + socket.remoteAddress);
