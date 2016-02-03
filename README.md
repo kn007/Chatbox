@@ -38,9 +38,11 @@ Quick way to change the token(e.g., change to 54321):
 $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 
+If you are using reverse proxy, setting the `using_reverse_proxy` to 1 in `index.js`. In your reverse proxy server, add the real ip address to `X-Real-IP` header.
+
 To embed this chatbox into a web page, just copy paste the content in public/index.html to the page you want to have chatbox, then change all included css file and JavaScript file path correctly. This app works great with light box library, I personally recommend using fancybox. 
 
-If you get error in front page:
+If you are get error in front page:
 ```
 failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
@@ -108,6 +110,8 @@ $ sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
 $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
+
+如果你使用反向代理，请将`index.js`的`using_reverse_proxy`值修改为1，并在反向代理服务器添加X-Real-IP header指向源IP。
 
 如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，同时`public/index.html`中所有引入css和JavaScript文件地址需要修改正确。推荐配合fancybox插件使用来放大聊天盒里的图片。
 
