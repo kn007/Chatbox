@@ -2,7 +2,7 @@
 
 
 
-##### Automatic Sync Comment Author Name to Chatbox's Username
+##### Automatic Sync Wordpress Comment Author Name to Chatbox's Username
 
 In Wordpress, add the following code in functions.php：
 ```
