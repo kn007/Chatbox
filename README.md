@@ -29,7 +29,7 @@ $ sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
 $ sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
 
-Same way to change the token(e.g., change to 54321):
+Quick way to change the token(e.g., change to 54321):
 ```
 $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
@@ -40,9 +40,9 @@ If you get error in front page:
 ```
 failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
-This is almost certainly due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection.The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
+This is almost always due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection.The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
 
-For ways on how this could happen, see [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
+More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
 ##### Future plan
 
@@ -52,7 +52,8 @@ For ways on how this could happen, see [subsection 4.2.1 of the WebSockets RFC 6
 
 ##### Demo
 
-You can see how it looks at my own blog here: [http://lifeislikeaboat.com](http://lifeislikeaboat.com). The chatbox is minimized at left bottom by default.
+The chatbox is usually minimized at left bottom by default.
+[http://lifeislikeaboat.com](http://lifeislikeaboat.com). 
 
 ##### Screenshot
 
@@ -84,9 +85,9 @@ $ node index.js
 
 控制台的访问地址为`http://localhost:4321/admin.html`， 默认的密码为“12345”。
 
-您可以通过修改index.js文件里的Token值来改掉默认密码。
+您可以通过修改index.js文件里的Token值来改掉默认的管理员密码。
 
-如果你想让访问的地址隐藏端口号（如localhost，而非默认的localhost:4321），请修改`index.js`中的端口号为后端端口（如4321），其次修改`public/client.js`的端口为80（或443）即可。
+如果你想让访问的地址隐藏端口号（如localhost，而非源代码中默认的localhost:4321），请修改`index.js`文件中的端口号为服务器后端的监听端口（如4321），其次修改`public/client.js`的端口为80（或443）即可。
 
 通过Shell快速修改端口（比如改成2231）：
 ```
@@ -94,7 +95,7 @@ $ sed -i 's/var port =.*/var port = 2231;/g' ./public/client.js
 $ sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 ```
 
-同理，可以快速修改密码（比如改成54321）：
+同理，可以快速修改管理员密码（比如改成54321）：
 ```
 $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
@@ -105,7 +106,7 @@ $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
-比较大的可能是在前端隐藏了端口并使用了http，具体可以看上面英文解释。简单来说Websocket通信在使用80端口转发时，80端口只负责连接，握手及通信在反代转发到后端端口通讯时可能会出错（在HTTP层被断开）。使用https可以避免这个问题，握手通讯皆用443端口。如果你不想使用https，那么建议你通过使用`http://localhost:4321`的方式来使用，而不隐藏端口；抑或是直接使nodejs监听80端口，而不要通过反代。
+比较大的可能是在前端隐藏了端口并使用了http，具体可以看下面传送门的解释。简单来说Websocket通信在使用80端口转发时，80端口只负责连接，握手及通信在反代转发到后端端口通讯时可能会出错（在HTTP层被断开）。使用https可以避免这个问题，握手通讯皆用443端口。如果你不想使用https，那么建议你通过使用`http://localhost:4321`的方式来使用，而不隐藏端口；或是直接让nodejs监听80端口，而不通过反代。
 
 更多资料可以参照WebSockets RFC 6455协议中的4.2.1章，[传送门](http://tools.ietf.org/html/rfc6455#section-4.2.1)。
 
@@ -118,7 +119,9 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 
 ##### 示例
 
-您可以在我的博客试用该聊天盒，默认最小化于左下角： [http://lifeislikeaboat.com](http://lifeislikeaboat.com) 。
+聊天盒一般默认最小化于网页左下角
+
+[http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
 
 
 ##### 截图
