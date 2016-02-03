@@ -1,5 +1,6 @@
 $(function() {
 
+    var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
@@ -573,10 +574,12 @@ $(function() {
 
     function show(){
         $('#socketchatbox-showHideChatbox').text("↓");
+        $('#socketchatbox-username').text(username);
         $chatBody.show();
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
+        $('#socketchatbox-username').text(chatboxname);
         $chatBody.hide();
     }
     function color(c){
