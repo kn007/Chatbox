@@ -337,7 +337,7 @@ $(function() {
     function changeNameByEdit(){
         var name = $("#socketchatbox-txt_fullname").val();
         if(!sendingFile&&name.length &&  $.trim( name ) !== '' )      
-            changeName(username, name);    
+            changeName(name);    
 
         $('#socketchatbox-username').text(username);    
     }
@@ -533,16 +533,15 @@ $(function() {
 
     // Most of the functions below are for Admin to use
 
-    // This is a temp method for admin to change user's name, right now
-    // it's checking oldname on client side, should only emmit command to
-    // specific client instead
-    function changeName(oldname, name){
-        if(oldname===username){
+
+    function changeName(name){
+        if(name){
             username = name;
             addCookie('chatname', name);
             $('#socketchatbox-username').text(username);
         }
     }
+
     function say(str) {
         sendMessageToServer(str);
     }

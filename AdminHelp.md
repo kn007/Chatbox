@@ -16,8 +16,8 @@ Script Example
     beep()
     //play new message sound<br/>
     newMsgBeep()
-    //change the visitor name
-    changeName("old name","new name")
+    //change the visitor's name
+    changeName("new name")
     //Redirect user to "www.example.com"
     window.location = "http://www.example.com"
 
