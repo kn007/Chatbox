@@ -44,7 +44,7 @@ If you get error in front page:
 ```
 failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
-This is almost certainly due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection.The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
+This is almost certainly due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection. The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
 
 For ways on how this could happen, see [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
