@@ -84,6 +84,11 @@ $(function() {
         removeChatTyping(data);
     });
 
+    // Whenever the server emits 'change name', log it in the chat body
+    socket.on('change name', function (data) {
+        log(data.oldname + ' changes name to ' + data.username);
+    });
+
     // Whenever the server emits 'typing', show the typing message
     socket.on('typing', function (data) {
         addChatTyping(data);
@@ -539,6 +544,8 @@ $(function() {
             username = name;
             addCookie('chatname', name);
             $('#socketchatbox-username').text(username);
+            socket.emit('change name', {name:username});
+
         }
     }
 

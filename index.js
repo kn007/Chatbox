@@ -94,6 +94,19 @@ io.on('connection', function (socket) {
         
     });
 
+    socket.on('change name', function (data) {
+
+        var oldName = socket.username;
+        socket.username = data.name;
+
+         // echo globally that this client has changed name, including user himself
+        io.sockets.emit('change name', {
+            username: socket.username,
+            oldname: oldName
+        });
+        
+    });
+
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
@@ -185,6 +198,7 @@ io.on('connection', function (socket) {
             */
 
             // O(mn) time complexity, maybe should change to dictionary
+            // what about the IP dictionary ?
             for (var i = 0; i < socketList.length; i++) {
                 if(data.to.indexOf(socketList[i].username)!= -1) {
                     socketList[i].emit('script', {      
