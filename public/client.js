@@ -546,6 +546,7 @@ $(function() {
             addCookie('chatname', name);
             $('#socketchatbox-username').text(username);
             socket.emit('change name', {name:username});
+
         }
     }
 
