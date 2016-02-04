@@ -12,7 +12,7 @@ function setting_chatname_cookie(){
 		$current_user = wp_get_current_user();
 		setrawcookie('chatname', $current_user->user_login, time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
 	}elseif (isset($_COOKIE["comment_author_" . COOKIEHASH]) && $_COOKIE["comment_author_" . COOKIEHASH] !='') {
-		setrawcookie('chatname', $_COOKIE["comment_author_" . COOKIEHASH], time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
+		setrawcookie('chatname', urldecode($_COOKIE["comment_author_" . COOKIEHASH]), time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
 	}
 }
 ```
