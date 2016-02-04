@@ -14,12 +14,15 @@ $ cd chatbox
 $ npm install
 $ node index.js
 ```
-If you wanna starting application in the background, just using:
-```
-$ nohup node index.js > /dev/null &
-```
 
 And point your browser to `http://localhost:4321` to go to chatbox page.
+
+If you want the application to run in the background, just do:
+```
+$ nohup node index.js > /dev/null &
+
+```
+Or use tools like `forever` or `pm2` to run it. 
 
 Admin page is at `http://localhost:4321/admin.html`, default token is '12345'. 
 
@@ -40,9 +43,9 @@ $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 
 If you are using reverse proxy, setting the `using_reverse_proxy` to 1 in `index.js`. In your reverse proxy server, add the real ip address to `X-Real-IP` header.
 
-To embed this chatbox into a web page, just copy paste the content in public/index.html to the page you want to have chatbox, then change all included css file and JavaScript file path correctly. This app works great with light box library, I personally recommend using fancybox. 
+To embed this chatbox into a web page, just copy paste the content in public/index.html to the page you want to have chatbox, then change all included css file and JavaScript file path correctly. This app works great with light box library, I recommend using fancybox. 
 
-When embed this chatbox to wordpress, you can see [this page](/wordpress/README.md) to know how to auto-sync the comment author name to chatbox's nickname.
+When embedding this chatbox to Wordpress, you can see [this page](/wordpress/README.md) to know how to auto-sync the comment author name with chatbox visitor's nickname, so they don't need to enter nickname again.
 
 If you are get error in front page:
 ```
@@ -89,12 +92,15 @@ $ cd chatbox
 $ npm install
 $ node index.js
 ```
-如果你想让聊天盒在后台运行，那么使用下面语句启动聊天盒：
-```
-$ nohup node index.js > /dev/null &
-```
 
 在本地安装则直接访问`http://localhost:4321`即可进入聊天盒。
+
+如果你想让聊天盒在后台运行，可以用下面语句启动聊天盒：
+```
+$ nohup node index.js > /dev/null &
+
+```
+也可以使用`forever`或`pm2`工具来运行。
 
 控制台的访问地址为`http://localhost:4321/admin.html`， 默认的密码为“12345”。
 
