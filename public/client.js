@@ -33,7 +33,12 @@ $(function() {
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
-
+    
+    // This uuid is unique for each browser but not unique for each connection
+    // because one browser can have multiple tabs each with connections to the chatbox server.
+    // And this uuid should always be passed on login, it's used to identify/combine user, 
+    // multiple connections from same browser are regarded as same user.
+    var uuid = "uuid not set!"; 
 
     init();
     loadHistoryChatFromCookie();
@@ -41,7 +46,7 @@ $(function() {
     // Socket events
     socket.on('login', function (data) {
 
-        socket.emit('login', {username:username});
+        socket.emit('login', {username:username, uuid:uuid});
         // Display the welcome message
         var message = "Welcome, "+username;
         log(message, {
@@ -88,7 +93,7 @@ $(function() {
     });
 
     // Whenever the server emits 'change name', log it in the chat body
-    socket.on('change name', function (data) {
+    socket.on('log change name', function (data) {
         log(data.oldname + ' changes name to ' + data.username);
     });
 
@@ -103,6 +108,19 @@ $(function() {
     });
 
     function init () {
+
+        // Read old uuid from cookie if exist
+        if(getCookie('uuid')!==''){
+            uuid = getCookie('uuid'); 
+            console.log("found uuid");
+
+        }
+        else
+        {
+            console.log("create uuid");
+            uuid = guid();
+            addCookie('uuid', uuid);
+        }
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
@@ -402,6 +420,18 @@ $(function() {
         }
     }
 
+    // generate a unique guid for each browser, will pass in cookie
+    function guid() {
+
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+
     function getCookie(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
@@ -419,7 +449,8 @@ $(function() {
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + cookiedomain + "; path=/";
+        //document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + cookiedomain + "; path=/";
+        document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/";
     }
 
 

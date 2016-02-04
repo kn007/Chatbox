@@ -22,6 +22,11 @@ var using_reverse_proxy = 0;
 
 
 var socketList = [];
+// users are grouped by browser base on cookie's uuid implementation, 
+// therefore 1 connection is the smallest unique unit and 1 user is not.
+// 1 user may contain multiple connections when he opens multiple tabs in same browser.
+var userDict = {}; 
+var userCount = 0; 
 
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
@@ -45,13 +50,15 @@ function setName(name) {
 
 
 
+
 io.on('connection', function (socket) {
 
+
+    var defaultUser = {};
+    defaultUser.username = "default name";
+    socket.user = defaultUser; // assign a default user before we create the real user
     socketList.push(socket);
-    
-    console.log('New user connected');
-    // set an initial name before receiving real name from client
-    socket.username = setName('initName'); 
+    console.log('New connection established. Current total connection count: '+ socketList.length );
 
     
     if (using_reverse_proxy != 1) {
@@ -67,49 +74,98 @@ io.on('connection', function (socket) {
 
     // once the new user is connected, we ask him to tell us his name
     // tell him how many people online now
+    // TODO: numUser or numSocket
     socket.emit('login', {
-        numUsers: socketList.length
+        numUsers: userCount + 1
     });
 
 
 
     // once a new client is connected, this is the first msg he send
+    // we'll find out if he's a new user or existing one looking at the cookieID
+    // then we'll map the user with the socket
     socket.on('login', function (data) {
-        socket.username = setName(data.username);
-        console.log('There are '+ socketList.length + ' users now.');
 
-        // echo to others that a person has connected
-        socket.broadcast.emit('user joined', {
-            username: socket.username,
-            numUsers: socketList.length
-        });    
+        var user;
+
+        if(data.uuid in userDict) {
+            // existing user making new connection
+            user = userDict[data.uuid];
+            console.log(user.username + ' made a new connection.');
+
+        }else{ 
+            // a new user is joining
+            user = {};
+            user.cookieID = data.uuid;
+            user.username = setName(data.username);
+            user.socketList = [];
+            userDict[user.cookieID] = user;
+            userCount++;
+            console.log(user.username + 'just joined. Current user count: '+userCount);
+
+            // echo to others that a person has joined
+       
+            socket.broadcast.emit('user joined', {
+                username: socket.user.username,
+                numUsers: userCount
+            });   
+
+        }
+
+        // map user <----> socket
+        user.socketList.push(socket);
+        socket.user = user;
+
+
+ 
 
     });
 
     // when the user disconnects.. 
     socket.on('disconnect', function () {
+        var user = socket.user;
 
-        var index = socketList.indexOf(socket);
-        if (index != -1) {
-            socketList.splice(index, 1);
+        console.log(user.username + ' closed a connection.');
+
+        // remove from socket list
+        var socketIndex = socketList.indexOf(socket);
+        if (socketIndex != -1) {
+            socketList.splice(socketIndex, 1);
         }
 
-         // echo globally that this client has left
-        socket.broadcast.emit('user left', {
-            username: socket.username,
-            numUsers: socketList.length
-        });
+        // also need to remove socket from user's socketlist
+        // when a user has 0 socket connection, remove the user
+        var socketIndexInUser = socketList.indexOf(socket);
+        if (socketIndexInUser != -1) {
+            user.socketList.splice(socketIndexInUser, 1);
+            if(user.socketList.length === 0){
+                console.log("It's his last connection.");
+                delete userDict[user.uuid];
+                userCount--;
+                // echo globally that this user has left
+                socket.broadcast.emit('user left', {
+                    username: socket.user.username,
+                    numUsers: userCount
+                });
+
+
+            }
+        }
+
+
+
         
     });
 
     socket.on('change name', function (data) {
 
-        var oldName = socket.username;
-        socket.username = data.name;
+        var oldName = socket.user.username;
+        socket.user.username = data.name;
 
-         // echo globally that this client has changed name, including user himself
-        io.sockets.emit('change name', {
-            username: socket.username,
+
+        // echo globally that this client has changed name, including user himself
+        io.sockets.emit('log change name', {
+            username: socket.user.username,
             oldname: oldName
         });
         
@@ -118,19 +174,16 @@ io.on('connection', function (socket) {
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
-        // update username
-        socket.username = setName(data.username);
-
   
         // socket.broadcast.emit('new message', {//send to everybody but sender
         io.sockets.emit('new message', {//send to everybody including sender
-            username: socket.username,
+            username: socket.user.username,
             message: data.msg
         });
         
 
         // log the message in chat history file
-        var chatMsg = socket.username+": "+data.msg+'\n';
+        var chatMsg = socket.user.username+": "+data.msg+'\n';
         console.log(chatMsg);
 
         fs.appendFile(filePath, chatMsg, function(err) {
@@ -144,13 +197,12 @@ io.on('connection', function (socket) {
 
     socket.on('base64 file', function (data) {
         console.log('received base64 file from' + data.username);
-        socket.username = setName(data.username);
         
         // socket.broadcast.emit('base64 image', //exclude sender
         io.sockets.emit('base64 file', 
 
             {
-              username: socket.username,
+              username: socket.user.username,
               file: data.file,
               fileName: data.fileName
             }
@@ -161,17 +213,15 @@ io.on('connection', function (socket) {
 
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
-        socket.username = setName(data.name);
         socket.broadcast.emit('typing', {
-            username: socket.username
+            username: socket.user.username
         });
     });
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on('stop typing', function (data) {
-        socket.username = setName(data.name);
         socket.broadcast.emit('stop typing', {
-            username: socket.username
+            username: socket.user.username
         });
     });
 
@@ -190,66 +240,26 @@ io.on('connection', function (socket) {
 
         if(data.token === token) {
 
-            /*
-            for(var s in io.sockets.sockets) {
-
-                if(data.to.indexOf(io.sockets.sockets[s]['username'])>=0) {
-                    
-                    var socketID = io.sockets.sockets[s]['id'];
-                    io.sockets.connected[socketID].emit('script', {      
-                        script: data.script
-                    });
-
-                }
-
-            }
-            */
-
- 
-
-            // O(mn) time complexity, maybe should change to dictionary
-            // what about the IP dictionary ?
-            for (var i = 0; i < socketList.length; i++) {
-                if(data.to.indexOf(socketList[i].remoteAddress)!= -1) {
-                    socketList[i].emit('script', {      
-                        script: data.script
-                    });
+            // userKey is cookieID
+            for (var userKey in data.to) {
+                if(userKey in userDict) {
+                    var user = userDict[userKey];
+                    for (var s in user.socketList) {
+                        s.emit('script', {script: data.script});
+                    }
                 }
             }
-
 
         }
 
     });
 
+     
+
 
     socket.on('getUserList', function (data) {
-
+        
         if(data.token === token) {
-
-            // group by IP address
-            var userDict = {};
-
-            for(var i=0; i<socketList.length; i++) {
-
-                var s = socketList[i];
-
-                if(s.remoteAddress in userDict) {
-
-                    userDict[s.remoteAddress].count++;
-
-                }else {
-
-                    var user = {};
-                    user.username = s.username;
-                    user.ip = s.remoteAddress;
-                    user.count = 1;
-                    userDict[user.ip] = user;
-
-                }
-            }
-
-
 
             socket.emit('listUsers', {      
                 userdict: userDict,
