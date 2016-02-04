@@ -378,7 +378,7 @@ $(function() {
             dataToSaveIntoCookie.message = msg;
             chatHistory.push(dataToSaveIntoCookie);
             // keep most recent 20 messages only           
-            chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0))
+            chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0));
             addCookie('chathistory',JSON.stringify(chatHistory));
         }
     }
@@ -464,6 +464,16 @@ $(function() {
                 typing = false;
             }
         }
+        
+        // When the client hits ESC on their keyboard
+        if (event.which === 27) {
+            if ($("#socketchatbox-txt_fullname").is(":focus")) {
+                $('#socketchatbox-username').text(username);
+                $inputMessage.focus();
+                return;
+            }
+        }
+        
     });
 
     $inputMessage.on('input', function() {
@@ -627,7 +637,7 @@ $(function() {
     }
 
 
-    var token = ""
+    var token = "";
     var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
     var selectedUsers = [];
 
