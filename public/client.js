@@ -5,8 +5,6 @@ $(function() {
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
     var socket = io(domain);
-    
-    var cookiedomain = '.' + location.hostname;
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -33,12 +31,31 @@ $(function() {
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
-    
+
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
     // And this uuid should always be passed on login, it's used to identify/combine user, 
     // multiple connections from same browser are regarded as same user.
     var uuid = "uuid not set!"; 
+
+    var GetCookieDomain = function() {
+        var host = location.hostname;
+        var re = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+    	if (re.test(host) == true || host == 'localhost') return host;
+        var regex = /([^]*).*/;
+        var match = host.match(regex);
+        if (typeof match != "undefined" && null != match) {
+            host = match[1];
+        }
+        if (typeof host != "undefined" && null != host) {
+            var strAry = host.split(".");
+            if (strAry.length > 1) {
+            host = strAry[strAry.length - 2] + "." + strAry[strAry.length - 1];
+            }
+        }
+        return '.' + host;
+    }
+
 
     init();
     loadHistoryChatFromCookie();
@@ -449,8 +466,8 @@ $(function() {
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
-        //document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + cookiedomain + "; path=/";
-        document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/";
+        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + GetCookieDomain() + "; path=/";
+
     }
 
 
