@@ -511,6 +511,8 @@ $(function() {
 
     // change username
     $('#socketchatbox-username').click(function(e){
+        if(getCookie('chatboxOpen')!=1) return;
+        if(getCookie(comment_author)!=='') return;
         if(sendingFile) return;
         e.stopPropagation();
         if($("#socketchatbox-txt_fullname").is(":focus")) return;
