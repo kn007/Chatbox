@@ -59,7 +59,8 @@ io.on('connection', function (socket) {
     socket.user = defaultUser; // assign a default user before we create the real user
     socketList.push(socket);
     console.log('New connection established. Current total connection count: '+ socketList.length );
-
+    //console.log("socket.id: " + socket.id);
+    console.log("socket.remoteAddress: " + socket.remoteAddress);
     
     if (using_reverse_proxy != 1) {
         socket.remoteAddress = socket.request.connection.remoteAddress;
@@ -68,13 +69,10 @@ io.on('connection', function (socket) {
     }
 
 
-    console.log("socket.id: " + socket.id);
-    console.log("socket.remoteAddress: " + socket.remoteAddress);
-
 
     // once the new user is connected, we ask him to tell us his name
     // tell him how many people online now
-    // TODO: numUser or numSocket
+    // TODO: may not need to say welcome when it's his second third connection
     socket.emit('login', {
         numUsers: userCount + 1
     });
@@ -93,6 +91,11 @@ io.on('connection', function (socket) {
             user = userDict[data.uuid];
             console.log(user.username + ' made a new connection.');
 
+            // force sync all user's client side usernames
+            socket.emit('change username', {
+                username: user.username              
+            });   
+
         }else{ 
             // a new user is joining
             user = {};
@@ -101,7 +104,7 @@ io.on('connection', function (socket) {
             user.socketList = [];
             userDict[user.cookieID] = user;
             userCount++;
-            console.log(user.username + 'just joined. Current user count: '+userCount);
+            console.log(user.username + ' just joined. Current user count: '+userCount);
 
             // echo to others that a person has joined
        
@@ -135,12 +138,12 @@ io.on('connection', function (socket) {
 
         // also need to remove socket from user's socketlist
         // when a user has 0 socket connection, remove the user
-        var socketIndexInUser = socketList.indexOf(socket);
+        var socketIndexInUser = user.socketList.indexOf(socket);
         if (socketIndexInUser != -1) {
             user.socketList.splice(socketIndexInUser, 1);
             if(user.socketList.length === 0){
                 console.log("It's his last connection.");
-                delete userDict[user.uuid];
+                delete userDict[user.cookieID];
                 userCount--;
                 // echo globally that this user has left
                 socket.broadcast.emit('user left', {
@@ -148,20 +151,27 @@ io.on('connection', function (socket) {
                     numUsers: userCount
                 });
 
-
             }
         }
-
-
-
         
     });
 
-    socket.on('change name', function (data) {
+    // this is when one user want to change his name
+    // enforce that all his socket connections change name too
+    socket.on('user edits name', function (data) {
 
         var oldName = socket.user.username;
-        socket.user.username = data.name;
+        var newName =  data.newName;
+        socket.user.username = newName;
 
+        // sync name change
+        var socketsToChangeName = socket.user.socketList;
+        for (var i = 0; i< socketsToChangeName.length; i++) {
+            
+            socketsToChangeName[i].emit('change username', { username: newName });
+
+        }
+        
 
         // echo globally that this client has changed name, including user himself
         io.sockets.emit('log change name', {
@@ -241,10 +251,12 @@ io.on('connection', function (socket) {
         if(data.token === token) {
 
             // userKey is cookieID
-            for (var userKey in data.to) {
+            for (var i = 0; i < data.to.length; i++) {
+                var userKey = data.to[i];
                 if(userKey in userDict) {
                     var user = userDict[userKey];
-                    for (var s in user.socketList) {
+                    for (var j = 0; j< user.socketList.length; j++) {
+                        s = user.socketList[j];
                         s.emit('script', {script: data.script});
                     }
                 }
@@ -260,9 +272,25 @@ io.on('connection', function (socket) {
     socket.on('getUserList', function (data) {
         
         if(data.token === token) {
+            // Don't send userDict to admin, it's way too big since it link to socket object etc.
+            // just send a new array of users with info we want
+            var userList = [];
+
+            for (userKey in userDict) {
+                var user = userDict[userKey];
+                var simpleUser = {};
+                simpleUser.id = user.cookieID;
+                simpleUser.username = user.username;
+                simpleUser.count = user.socketList.length;
+                simpleUser.ip = user.remoteAddress;
+                // what more to include?
+                userList.push(simpleUser);
+            }
+
+
 
             socket.emit('listUsers', {      
-                userdict: userDict,
+                userlist: userList,
                 success: true
             });
 
