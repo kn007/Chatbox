@@ -1,10 +1,11 @@
 $(function() {
 
-    var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
     var socket = io(domain);
+	
+    var comment_author = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -102,6 +103,10 @@ $(function() {
 
     function init () {
 
+        // For Wordpress to get username from cookie if exist
+        if(getCookie(comment_author)!=='')
+            addCookie('chatname', getCookie(comment_author));
+		
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
             username = getCookie('chatname');        
@@ -506,7 +511,6 @@ $(function() {
 
     // change username
     $('#socketchatbox-username').click(function(e){
-        if(getCookie('chatboxOpen')!=1) return;
         if(sendingFile) return;
         e.stopPropagation();
         if($("#socketchatbox-txt_fullname").is(":focus")) return;
@@ -574,12 +578,10 @@ $(function() {
 
     function show(){
         $('#socketchatbox-showHideChatbox').text("↓");
-        $('#socketchatbox-username').text(username);
         $chatBody.show();
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $('#socketchatbox-username').text(chatboxname);
         $chatBody.hide();
     }
     function color(c){
@@ -773,3 +775,4 @@ $(function() {
 
 
 
+i

@@ -14,6 +14,10 @@ $ cd chatbox
 $ npm install
 $ node index.js
 ```
+If you wanna starting application in the background, just using:
+```
+$ nohup node index.js > /dev/null &
+```
 
 And point your browser to `http://localhost:4321` to go to chatbox page.
 
@@ -34,13 +38,18 @@ Quick way to change the token(e.g., change to 54321):
 $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 
+If you are using reverse proxy, setting the `using_reverse_proxy` to 1 in `index.js`. In your reverse proxy server, add the real ip address to `X-Real-IP` header.
+
 To embed this chatbox into a web page, just copy paste the content in public/index.html to the page you want to have chatbox, then change all included css file and JavaScript file path correctly. This app works great with light box library, I personally recommend using fancybox. 
 
-If you get error in front page:
+When embed this chatbox to wordpress, you can see [this page](/wordpress/README.md) to know how to auto-sync the comment author name to chatbox's nickname.
+
+If you are get error in front page:
 ```
 failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
 This is almost always due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection.The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
+
 
 More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
@@ -55,11 +64,12 @@ More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org
 The chatbox is usually minimized at left bottom by default.
 [http://lifeislikeaboat.com](http://lifeislikeaboat.com). 
 
+
 ##### Screenshot
 
-![screenshot](/Screenshot.png?raw=true "Screenshot")
+![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
 
-![screenshot](/adminPanel.png?raw=true "AdminPanel")
+![screenshot](/screenshots/adminPanel.png?raw=true "AdminPanel")
 
 
 -----------------------------------------------------------
@@ -74,11 +84,14 @@ The chatbox is usually minimized at left bottom by default.
 
 ##### 如何使用
 
-
 ```
 $ cd chatbox
 $ npm install
 $ node index.js
+```
+如果你想让聊天盒在后台运行，那么使用下面语句启动聊天盒：
+```
+$ nohup node index.js > /dev/null &
 ```
 
 在本地安装则直接访问`http://localhost:4321`即可进入聊天盒。
@@ -100,7 +113,11 @@ $ sed -i 's/var port =.*/var port = 2231;/g' ./index.js
 $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 ```
 
+如果你使用反向代理，请将`index.js`的`using_reverse_proxy`值修改为1，并在反向代理服务器添加X-Real-IP 头指向源IP。
+
 如果想把聊天盒嵌入网站中，只要将`public/index.html`文件的内容复制粘贴到想要显示聊天盒的网页里，同时`public/index.html`中所有引入css和JavaScript文件地址需要修改正确。推荐配合fancybox插件使用来放大聊天盒里的图片。
+
+嵌入Wordpress后，同步评论者用户名，可参照[此说明](/wordpress/README.md) 。
 
 如果你在调试时出现：
 ```
@@ -121,11 +138,12 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 
 聊天盒一般默认最小化于网页左下角
 
-[http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
 
+
+[http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
 
 ##### 截图
 
-![screenshot](/Screenshot.png?raw=true "Screenshot")
+![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
 
-![screenshot](/adminPanel.png?raw=true "AdminPanel")
+![screenshot](/screenshots/adminPanel.png?raw=true "AdminPanel")
