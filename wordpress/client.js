@@ -105,7 +105,7 @@ $(function() {
 
         // For Wordpress to get username from cookie if exist
         if(getCookie(comment_author)!=='')
-            addCookie('chatname', getCookie(comment_author));
+            addCookie('chatname', decodeURI(getCookie(comment_author)));
 		
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
