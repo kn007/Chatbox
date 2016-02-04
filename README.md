@@ -50,8 +50,8 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 ```
 This is almost always due to not using https (SSL). Websocket over plain http is vulnerable to proxies in the middle (often transparent) operating at the http layer breaking the connection.The only way to avoid this is to use SSL all the time - this gives websocket the best chance of working.
 
-More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
+More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
 ##### Future plan
 
@@ -137,6 +137,8 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 ##### 示例
 
 聊天盒一般默认最小化于网页左下角
+
+
 
 [http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
 
