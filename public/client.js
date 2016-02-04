@@ -464,6 +464,16 @@ $(function() {
                 typing = false;
             }
         }
+        
+        // When the client hits ESC on their keyboard
+        if (event.which === 27) {
+            if ($("#socketchatbox-txt_fullname").is(":focus")) {
+                $('#socketchatbox-username').text(username);
+                $inputMessage.focus();
+                return;
+            }
+        }
+        
     });
 
     $inputMessage.on('input', function() {
