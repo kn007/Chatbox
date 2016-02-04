@@ -5,6 +5,8 @@ $(function() {
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
     var socket = io(domain);
+    
+    var cookiedomain = '.' + location.hostname;
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -417,7 +419,7 @@ $(function() {
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/";
+        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + cookiedomain + "; path=/";
     }
 
 
