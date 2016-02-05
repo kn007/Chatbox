@@ -400,7 +400,7 @@ $(function() {
         newUserSound.play();
     }
 
-    function writeChatHistoryIntoCookie(username, msg){
+    function writeChatHistoryIntoCookie(username, msg) {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
@@ -421,7 +421,7 @@ $(function() {
         }
     }
 
-    function loadHistoryChatFromCookie(){
+    function loadHistoryChatFromCookie() {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
@@ -449,7 +449,7 @@ $(function() {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
-    var GetCookieDomain = function() {
+    function GetCookieDomain() {
         var host = location.hostname;
         var re = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
         if (re.test(host) == true || host == 'localhost') return host;
