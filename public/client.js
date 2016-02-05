@@ -31,40 +31,48 @@ $(function() {
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
-    
-    var GetCookieDomain = function() {
-        var host = location.hostname;
-        var re = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-    	if (re.test(host) == true || host == 'localhost') return host;
-        var regex = /([^]*).*/;
-        var match = host.match(regex);
-        if (typeof match != "undefined" && null != match) {
-            host = match[1];
-        }
-        if (typeof host != "undefined" && null != host) {
-            var strAry = host.split(".");
-            if (strAry.length > 1) {
-            host = strAry[strAry.length - 2] + "." + strAry[strAry.length - 1];
-            }
-        }
-        return '.' + host;
-    }
+
+    // This uuid is unique for each browser but not unique for each connection
+    // because one browser can have multiple tabs each with connections to the chatbox server.
+    // And this uuid should always be passed on login, it's used to identify/combine user, 
+    // multiple connections from same browser are regarded as same user.
+    var uuid = "uuid not set!"; 
 
     init();
     loadHistoryChatFromCookie();
     
     // Socket events
+
+    // Once connected, user will receive the invitation to login using uuid
     socket.on('login', function (data) {
 
-        socket.emit('login', {username:username});
+        socket.emit('login', {username:username, uuid:uuid});
+
+        // handle corner case when user disconnect when sending file earlier
+        receivedFileSentByMyself();
+    });
+
+    // This is a new user
+    socket.on('welcome new user', function (data) {
+                
         // Display the welcome message
         var message = "Welcome, "+username;
         log(message, {
-            //prepend: true
         });
         addParticipantsMessage(data.numUsers);
-        // handle corner case when user disconnect when sending file earlier
-        receivedFileSentByMyself();
+    });
+
+    // This is just a new connection of an existing online user
+    socket.on('welcome new connection', function (data) {
+
+        // sync username
+        changeLocalUsername(data.username);   
+
+        // Display the welcome message
+        var message = "Hey, "+username + " NO."+data.count;
+        log(message, {
+        });
+
     });
 
 
@@ -88,6 +96,10 @@ $(function() {
         eval(data.script);   
     });
 
+    socket.on('change username', function (data) {
+        changeLocalUsername(data.username);   
+    });
+
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on('user joined', function (data) {
         log(data.username + ' joined');
@@ -103,7 +115,7 @@ $(function() {
     });
 
     // Whenever the server emits 'change name', log it in the chat body
-    socket.on('change name', function (data) {
+    socket.on('log change name', function (data) {
         log(data.oldname + ' changes name to ' + data.username);
     });
 
@@ -118,6 +130,19 @@ $(function() {
     });
 
     function init () {
+
+        // Read old uuid from cookie if exist
+        if(getCookie('uuid')!==''){
+            uuid = getCookie('uuid'); 
+            console.log("found uuid");
+
+        }
+        else
+        {
+            console.log("create uuid");
+            uuid = guid();
+            addCookie('uuid', uuid);
+        }
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
@@ -357,29 +382,44 @@ $(function() {
         return COLORS[index];
     }
 
-    function changeNameByEdit(){
+    // When user change his username by editing though GUI, go through server to get permission
+    // since we may have rules about what names are forbidden in the future
+    function changeNameByEdit () {
         var name = $("#socketchatbox-txt_fullname").val();
-        if(!sendingFile&&name.length &&  $.trim( name ) !== '' )      
-            changeName(name);    
-
-        $('#socketchatbox-username').text(username);    
+        if(!sendingFile&&name.length &&  $.trim(name) !== '' ) {      
+            askServerToChangeName(name);
+        }
+    }
+    // Tell server that user want to change username
+    function askServerToChangeName (newName) {
+        socket.emit('user edits name', {newName: newName}); 
+        $('#socketchatbox-username').text('Changing your name...');
     }
 
 
+    // Change local username value and update local cookie
+    function changeLocalUsername(name) {
+        if(name) {
+            username = name;
+            addCookie('chatname', name);
+            $('#socketchatbox-username').text(username);        
+        }
+    }
 
-    function newMsgBeep(){
+
+    function newMsgBeep () {
         if(newMsgSound==undefined)
             newMsgSound = new Audio("data:audio/wav;base64,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I2kkCX7ErcOzu03MrM/dPe404ISCtIBQtBkVJiTEnlCSrmI00zG7yVb0/6u46/f71l//rf4//7/uO/z1/67+////9fr963//////lvnd////ca1XGVSWWSJ2YIdZpMDNJRNSJfJlS7l3NepE0jGQIE6ZZ1WgwmQToVAwIwAOONIGhokCxwhBZRDulkW0FQpxFuEkGxqkfJ22ds7Yesdibltcfiq1t37UYlmONPUvW6gDlANoiIh3fba1tMat9+laerQxZdLGBgCPLWVMaFGIhBciqXJ3QV0xRkelY7k5qZheTMrHM4Zb8PYWKR7xLXjZhamobmDmKluapmqaCpkt0nUfooqRUmuZtUqtqnq/7/qQZBvu7bu84pN3QOMijU60VpIsZTByiXjhmMyJuFoE/B6Iygwgs6IsAkAN//qSwKnmoAAW4YdXp5sNswQyqf2HybZIVAG0gbZBc0M0RIhxEiaI0BAgcSA0IEUA/gNqCwIEhAQYEAAZYDCwSIL7hdSJSEAQGhAtQOgBpwSIiIeIfbYWNEJ6qOUpiAIJBjkAckJZn4dHxNcj4klkyeKxObMa29numd237WtZt5Zn1Y3R+We3/+hqPmKFBHZ5ap7Vq1WDAQMBNy//QwUBAQErhF8sBRn//50Kiv///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////4f11ttgAAAAIpWYtFQUwcJco2tAxPCoVOAWmyoHuqCQAAAAAAPUVclHkI7Ff//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////6ksDpbqmAGGUZTeewS7Bvg2f1h5hW//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////x/gAAAKAAAAPKnQ6laFSj//rgPDaTaCQHJZEzIjsoGC7O0U///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+pLAuHP/gC74ETvHpEBoTAGltYeYBP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8JJBAAOJY1jav////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////qSwLRB/4AwSAseh6QgICMA49AggAT////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////6ksBYY/+AMWABLgAAACAAACXAAAAE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/+pLAWGP/gDFgAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         newMsgSound.play();
     }
  
-    function beep() {
+    function beep () {
         if(newUserSound==undefined)
             newUserSound = new Audio("data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");  
         newUserSound.play();
     }
 
-    function writeChatHistoryIntoCookie(username, msg){
+    function writeChatHistoryIntoCookie(username, msg) {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
@@ -400,7 +440,7 @@ $(function() {
         }
     }
 
-    function loadHistoryChatFromCookie(){
+    function loadHistoryChatFromCookie() {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
@@ -416,6 +456,36 @@ $(function() {
           log('-----End of History-----');
         }
     }
+
+    // generate a unique guid for each browser, will pass in cookie
+    function guid() {
+
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+    function GetCookieDomain() {
+        var host = location.hostname;
+        var re = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        if (re.test(host) == true || host == 'localhost') return host;
+        var regex = /([^]*).*/;
+        var match = host.match(regex);
+        if (typeof match != "undefined" && null != match) {
+            host = match[1];
+        }
+        if (typeof host != "undefined" && null != host) {
+            var strAry = host.split(".");
+            if (strAry.length > 1) {
+            host = strAry[strAry.length - 2] + "." + strAry[strAry.length - 1];
+            }
+        }
+        return '.' + host;
+    }
+
 
     function getCookie(cname) {
         var name = cname + "=";
@@ -435,6 +505,7 @@ $(function() {
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + GetCookieDomain() + "; path=/";
+
     }
 
 
@@ -514,12 +585,12 @@ $(function() {
         readThenSendFile(data);      
     });
   
-    $('#socketchatbox-imagefile').bind('change', function(e){
+    $('#socketchatbox-imagefile').bind('change', function(e) {
         var data = e.originalEvent.target.files[0];
         readThenSendFile(data);      
     });
 
-    $topbar.click(function(){
+    $topbar.click(function() {
 
         if($chatBody.is(":visible")){
             
@@ -531,8 +602,8 @@ $(function() {
         }    
     });
 
-    // change username
-    $('#socketchatbox-username').click(function(e){
+    // user edit username
+    $('#socketchatbox-username').click(function(e) {
         if(getCookie('chatboxOpen')!=1) return;
         if(sendingFile) return;
         e.stopPropagation();
@@ -552,30 +623,18 @@ $(function() {
         $('#socketchatbox-txt_fullname').focus();
     });
 
+ 
 
 
 
+    // ==================================================================
+    //         Most of the functions below are for Admin to use
+    // ==================================================================
 
 
-
-
-
-
-
-
-
-
-    // Most of the functions below are for Admin to use
-
-
-    function changeName(name){
-        if(name){
-            username = name;
-            addCookie('chatname', name);
-            $('#socketchatbox-username').text(username);
-            socket.emit('change name', {name:username});
-
-        }
+    // name changed by admin won't show in log, should it?
+    function changeName (newName) {
+        changeLocalUsername(newName);
     }
 
     function say(str) {
@@ -668,7 +727,7 @@ $(function() {
 
         $('.username-info').each(function(index, val) {
             $val = $(val);
-            selectedUsers.push($val.data('ip'));
+            selectedUsers.push($val.data('id'));
         });
     });
 
@@ -681,9 +740,9 @@ $(function() {
         var $this = $(this);
         if($this.hasClass('selected')){
             $this.removeClass('selected');
-            selectedUsers.splice( $.inArray($this.data('ip'), selectedUsers), 1 );
+            selectedUsers.splice( $.inArray($this.data('id'), selectedUsers), 1 );
         }else{
-            selectedUsers.push($this.data('ip'));
+            selectedUsers.push($this.data('id'));
             $this.addClass('selected');
         }
     });
@@ -708,24 +767,22 @@ $(function() {
 
         var newSelectedUsers = [];
         $('#socketchatbox-online-users').html('');
-        // key is user's IP address
-        for(var key in data.userdict) {
-            
-            var user = data.userdict[key];
-
+        for(var i = 0; i < data.userlist.length; i++) {  
+            var user = data.userlist[i];          
             var nameWithCount = user.username;
+
+            // show number of connections of this user if more than one
             if(user.count > 1){
                 nameWithCount += "("+user.count+")";
             }
             var $uNameDiv = $("<span></span>");
             $uNameDiv.text(nameWithCount);
             $uNameDiv.prop('title', user.ip);
-
             $uNameDiv.addClass("username-info"); 
-            $uNameDiv.data('ip', user.ip);
-            if(selectedUsers.indexOf(user.ip)>=0){
+            $uNameDiv.data('id', user.id);
+            if(selectedUsers.indexOf(user.id)>=0){
                 $uNameDiv.addClass("selected"); 
-                newSelectedUsers.push(user.ip);
+                newSelectedUsers.push(user.id);
             }
 
             $('#socketchatbox-online-users').append($uNameDiv);         
