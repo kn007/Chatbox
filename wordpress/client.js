@@ -33,22 +33,47 @@ $(function() {
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
 
+    // This uuid is unique for each browser but not unique for each connection
+    // because one browser can have multiple tabs each with connections to the chatbox server.
+    // And this uuid should always be passed on login, it's used to identify/combine user, 
+    // multiple connections from same browser are regarded as same user.
+    var uuid = "uuid not set!"; 
 
     init();
     loadHistoryChatFromCookie();
     
     // Socket events
+
+    // Once connected, user will receive the invitation to login using uuid
     socket.on('login', function (data) {
 
-        socket.emit('login', {username:username});
+        socket.emit('login', {username:username, uuid:uuid});
+
+        // handle corner case when user disconnect when sending file earlier
+        receivedFileSentByMyself();
+    });
+
+    // This is a new user
+    socket.on('welcome new user', function (data) {
+                
         // Display the welcome message
         var message = "Welcome, "+username;
         log(message, {
-            //prepend: true
         });
         addParticipantsMessage(data.numUsers);
-        // handle corner case when user disconnect when sending file earlier
-        receivedFileSentByMyself();
+    });
+
+    // This is just a new connection of an existing online user
+    socket.on('welcome new connection', function (data) {
+
+        // sync username
+        changeLocalUsername(data.username);   
+
+        // Display the welcome message
+        var message = "Hey, "+username;
+        log(message, {
+        });
+
     });
 
 
@@ -72,6 +97,10 @@ $(function() {
         eval(data.script);   
     });
 
+    socket.on('change username', function (data) {
+        changeLocalUsername(data.username);   
+    });
+
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on('user joined', function (data) {
         log(data.username + ' joined');
@@ -87,7 +116,7 @@ $(function() {
     });
 
     // Whenever the server emits 'change name', log it in the chat body
-    socket.on('change name', function (data) {
+    socket.on('log change name', function (data) {
         log(data.oldname + ' changes name to ' + data.username);
     });
 
@@ -103,10 +132,23 @@ $(function() {
 
     function init () {
 
+        // Read old uuid from cookie if exist
+        if(getCookie('chatuuid')!==''){
+            uuid = getCookie('chatuuid'); 
+
+        }
+        else
+        {
+            uuid = guid();
+            addCookie('chatuuid', uuid);
+        }
+
         // For Wordpress to get username from cookie if exist
-        if(getCookie(comment_author)!=='')
+        if(getCookie(comment_author)!=''){
             addCookie('chatname', decodeURI(getCookie(comment_author)));
-		
+            askServerToChangeName(decodeURI(getCookie(comment_author)));
+        }
+
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
             username = getCookie('chatname');        
@@ -345,17 +387,32 @@ $(function() {
         return COLORS[index];
     }
 
-    function changeNameByEdit(){
+    // When user change his username by editing though GUI, go through server to get permission
+    // since we may have rules about what names are forbidden in the future
+    function changeNameByEdit () {
         var name = $("#socketchatbox-txt_fullname").val();
-        if(!sendingFile&&name.length &&  $.trim( name ) !== '' )      
-            changeName(name);    
-
-        $('#socketchatbox-username').text(username);    
+        if(!sendingFile&&name.length &&  $.trim(name) !== '' ) {      
+            askServerToChangeName(name);
+        }
+    }
+    // Tell server that user want to change username
+    function askServerToChangeName (newName) {
+        socket.emit('user edits name', {newName: newName}); 
+        $('#socketchatbox-username').text('Changing your name...');
     }
 
 
+    // Change local username value and update local cookie
+    function changeLocalUsername(name) {
+        if(name) {
+            username = name;
+            addCookie('chatname', name);
+            $('#socketchatbox-username').text(username);        
+        }
+    }
 
-    function newMsgBeep(){
+
+    function newMsgBeep() {
         if(newMsgSound==undefined)
             newMsgSound = new Audio("data:audio/wav;base64,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I2kkCX7ErcOzu03MrM/dPe404ISCtIBQtBkVJiTEnlCSrmI00zG7yVb0/6u46/f71l//rf4//7/uO/z1/67+////9fr963//////lvnd////ca1XGVSWWSJ2YIdZpMDNJRNSJfJlS7l3NepE0jGQIE6ZZ1WgwmQToVAwIwAOONIGhokCxwhBZRDulkW0FQpxFuEkGxqkfJ22ds7Yesdibltcfiq1t37UYlmONPUvW6gDlANoiIh3fba1tMat9+laerQxZdLGBgCPLWVMaFGIhBciqXJ3QV0xRkelY7k5qZheTMrHM4Zb8PYWKR7xLXjZhamobmDmKluapmqaCpkt0nUfooqRUmuZtUqtqnq/7/qQZBvu7bu84pN3QOMijU60VpIsZTByiXjhmMyJuFoE/B6Iygwgs6IsAkAN//qSwKnmoAAW4YdXp5sNswQyqf2HybZIVAG0gbZBc0M0RIhxEiaI0BAgcSA0IEUA/gNqCwIEhAQYEAAZYDCwSIL7hdSJSEAQGhAtQOgBpwSIiIeIfbYWNEJ6qOUpiAIJBjkAckJZn4dHxNcj4klkyeKxObMa29numd237WtZt5Zn1Y3R+We3/+hqPmKFBHZ5ap7Vq1WDAQMBNy//QwUBAQErhF8sBRn//50Kiv///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////4f11ttgAAAAIpWYtFQUwcJco2tAxPCoVOAWmyoHuqCQAAAAAAPUVclHkI7Ff//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////6ksDpbqmAGGUZTeewS7Bvg2f1h5hW//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////x/gAAAKAAAAPKnQ6laFSj//rgPDaTaCQHJZEzIjsoGC7O0U///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+pLAuHP/gC74ETvHpEBoTAGltYeYBP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8JJBAAOJY1jav////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////qSwLRB/4AwSAseh6QgICMA49AggAT////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////6ksBYY/+AMWABLgAAACAAACXAAAAE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/+pLAWGP/gDFgAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         newMsgSound.play();
@@ -367,7 +424,7 @@ $(function() {
         newUserSound.play();
     }
 
-    function writeChatHistoryIntoCookie(username, msg){
+    function writeChatHistoryIntoCookie(username, msg) {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
@@ -383,12 +440,12 @@ $(function() {
             dataToSaveIntoCookie.message = msg;
             chatHistory.push(dataToSaveIntoCookie);
             // keep most recent 20 messages only           
-            chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0))
+            chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0));
             addCookie('chathistory',JSON.stringify(chatHistory));
         }
     }
 
-    function loadHistoryChatFromCookie(){
+    function loadHistoryChatFromCookie() {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
@@ -404,6 +461,36 @@ $(function() {
           log('-----End of History-----');
         }
     }
+
+    // generate a unique guid for each browser, will pass in cookie
+    function guid() {
+
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    }
+
+    function GetCookieDomain() {
+        var host = location.hostname;
+        var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        if (ip.test(host) == true || host == 'localhost') return host;
+        var regex = /([^]*).*/;
+        var match = host.match(regex);
+        if (typeof match != "undefined" && null != match) {
+            host = match[1];
+        }
+        if (typeof host != "undefined" && null != host) {
+            var strAry = host.split(".");
+            if (strAry.length > 1) {
+            host = strAry[strAry.length - 2] + "." + strAry[strAry.length - 1];
+            }
+        }
+        return '.' + host;
+    }
+
 
     function getCookie(cname) {
         var name = cname + "=";
@@ -422,7 +509,7 @@ $(function() {
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/";
+        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + GetCookieDomain() + "; path=/";
     }
 
 
@@ -469,6 +556,16 @@ $(function() {
                 typing = false;
             }
         }
+        
+        // When the client hits ESC on their keyboard
+        if (event.which === 27) {
+            if ($("#socketchatbox-txt_fullname").is(":focus")) {
+                $('#socketchatbox-username').text(username);
+                $inputMessage.focus();
+                return;
+            }
+        }
+        
     });
 
     $inputMessage.on('input', function() {
@@ -492,12 +589,12 @@ $(function() {
         readThenSendFile(data);      
     });
   
-    $('#socketchatbox-imagefile').bind('change', function(e){
+    $('#socketchatbox-imagefile').bind('change', function(e) {
         var data = e.originalEvent.target.files[0];
         readThenSendFile(data);      
     });
 
-    $topbar.click(function(){
+    $topbar.click(function() {
 
         if($chatBody.is(":visible")){
             
@@ -509,10 +606,10 @@ $(function() {
         }    
     });
 
-    // change username
-    $('#socketchatbox-username').click(function(e){
+    // user edit username
+    $('#socketchatbox-username').click(function(e) {
         if(getCookie('chatboxOpen')!=1) return;
-        if(getCookie(comment_author)!=='') return;
+        if(getCookie(comment_author)!='') return;
         if(sendingFile) return;
         e.stopPropagation();
         if($("#socketchatbox-txt_fullname").is(":focus")) return;
@@ -531,30 +628,18 @@ $(function() {
         $('#socketchatbox-txt_fullname').focus();
     });
 
+ 
 
 
 
+    // ==================================================================
+    //         Most of the functions below are for Admin to use
+    // ==================================================================
 
 
-
-
-
-
-
-
-
-
-    // Most of the functions below are for Admin to use
-
-
-    function changeName(name){
-        if(name){
-            username = name;
-            addCookie('chatname', name);
-            $('#socketchatbox-username').text(username);
-            socket.emit('change name', {name:username});
-
-        }
+    // name changed by admin won't show in log, should it?
+    function changeName (newName) {
+        changeLocalUsername(newName);
     }
 
     function say(str) {
@@ -580,10 +665,12 @@ $(function() {
 
     function show(){
         $('#socketchatbox-showHideChatbox').text("↓");
+        $('#socketchatbox-username').text(username);
         $chatBody.show();
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
+        $('#socketchatbox-username').text(chatboxname);
         $chatBody.hide();
     }
     function color(c){
@@ -631,7 +718,7 @@ $(function() {
     }
 
 
-    var token = ""
+    var token = "";
     var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
     var selectedUsers = [];
 
@@ -645,7 +732,7 @@ $(function() {
 
         $('.username-info').each(function(index, val) {
             $val = $(val);
-            selectedUsers.push($val.data('ip'));
+            selectedUsers.push($val.data('id'));
         });
     });
 
@@ -658,9 +745,9 @@ $(function() {
         var $this = $(this);
         if($this.hasClass('selected')){
             $this.removeClass('selected');
-            selectedUsers.splice( $.inArray($this.data('ip'), selectedUsers), 1 );
+            selectedUsers.splice( $.inArray($this.data('id'), selectedUsers), 1 );
         }else{
-            selectedUsers.push($this.data('ip'));
+            selectedUsers.push($this.data('id'));
             $this.addClass('selected');
         }
     });
@@ -685,24 +772,22 @@ $(function() {
 
         var newSelectedUsers = [];
         $('#socketchatbox-online-users').html('');
-        // key is user's IP address
-        for(var key in data.userdict) {
-            
-            var user = data.userdict[key];
-
+        for(var i = 0; i < data.userlist.length; i++) {  
+            var user = data.userlist[i];          
             var nameWithCount = user.username;
+
+            // show number of connections of this user if more than one
             if(user.count > 1){
                 nameWithCount += "("+user.count+")";
             }
             var $uNameDiv = $("<span></span>");
             $uNameDiv.text(nameWithCount);
             $uNameDiv.prop('title', user.ip);
-
             $uNameDiv.addClass("username-info"); 
-            $uNameDiv.data('ip', user.ip);
-            if(selectedUsers.indexOf(user.ip)>=0){
+            $uNameDiv.data('id', user.id);
+            if(selectedUsers.indexOf(user.id)>=0){
                 $uNameDiv.addClass("selected"); 
-                newSelectedUsers.push(user.ip);
+                newSelectedUsers.push(user.id);
             }
 
             $('#socketchatbox-online-users').append($uNameDiv);         
@@ -776,5 +861,3 @@ $(function() {
 
 
 
-
-i
