@@ -51,7 +51,7 @@ Another blog web software also can modify like this.
 
 ##### Demo
 
-[https://kn007.net/](https://kn007.net/)
+[https://kn007.net/](https://kn007.net/) (Chatbox will show after post comment)
 
 
 
@@ -112,5 +112,5 @@ if(getCookie(comment_author)!='') return;
 
 ##### 示例
 
-[https://kn007.net/](https://kn007.net/) 
+[https://kn007.net/](https://kn007.net/) （聊天盒需要评论后方才显示）
 
