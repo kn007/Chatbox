@@ -143,7 +143,9 @@ $(function() {
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
-            username = getCookie('chatname');        
+            username = getCookie('chatname');   
+        else
+            addCookie('chatname', username);     
         
         $('#socketchatbox-username').text(username);
 
