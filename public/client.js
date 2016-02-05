@@ -442,7 +442,7 @@ $(function() {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
-          }catch(e){}
+        }catch(e){}
         if(chatHistory.length){
           log("----Chat History----");
           options = {};
