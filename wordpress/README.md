@@ -41,6 +41,11 @@ if(getCookie(comment_author)!=='') {
 ```
 Done.
 
+If you need disallow change the chatbox nickname in Wordpress, find the `$('#socketchatbox-username').click(function(e)` in `public/client.js`, include this code:
+```
+if(getCookie(comment_author)!='') return;
+```
+
 Another blog web software also can modify like this.
 
 
@@ -94,6 +99,11 @@ if(getCookie(comment_author)!=='') {
 }
 ```
 如此便好。
+
+如果你需要强制聊天盒昵称与Wordpress评论名称同步，禁止被修改，请在`public/client.js`找到`$('#socketchatbox-username').click(function(e)`，在其函数里面加入：
+```
+if(getCookie(comment_author)!='') return;
+```
 
 最后要说的是，其他博客程序，修改方法类似。
 
