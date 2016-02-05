@@ -78,8 +78,7 @@ $(function() {
 
     // Whenever the server emits 'new message', update the chat body
     socket.on('new message', function (data) {
-        processChatMessage(data);   
-        console.log(data.message);
+        processChatMessage(data);
     });
 
     socket.on('base64 file', function (data) {
@@ -443,7 +442,7 @@ $(function() {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
-          }catch(e){}
+        }catch(e){}
         if(chatHistory.length){
           log("----Chat History----");
           options = {};
@@ -634,6 +633,7 @@ $(function() {
     // name changed by admin won't show in log, should it?
     function changeName (newName) {
         changeLocalUsername(newName);
+        askServerToChangeName(newName);
     }
 
     function say(str) {
@@ -838,7 +838,6 @@ $(function() {
     function updateToken(t) {
         token = t;
         addCookie('chatBoxAdminToken', token);
-        console.log(token);
     }
 
   
