@@ -20,7 +20,6 @@ And point your browser to `http://localhost:4321` to go to chatbox page.
 If you want the application to run in the background, just do:
 ```
 $ nohup node index.js > /dev/null &
-
 ```
 Or use tools like `forever` or `pm2` to run it. 
 
@@ -98,7 +97,6 @@ $ node index.js
 如果你想让聊天盒在后台运行，可以用下面语句启动聊天盒：
 ```
 $ nohup node index.js > /dev/null &
-
 ```
 也可以使用`forever`或`pm2`工具来运行。
 
