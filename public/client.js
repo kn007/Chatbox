@@ -633,6 +633,7 @@ $(function() {
     // name changed by admin won't show in log, should it?
     function changeName (newName) {
         changeLocalUsername(newName);
+        askServerToChangeName(newName);
     }
 
     function say(str) {
