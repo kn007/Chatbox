@@ -34,17 +34,24 @@ Replaced the `https://kn007.net` to your blog url, no trailing slash.
 
 Then, in `public/client.js`, find the `function init ()`, prior to add the following code into the function:
 ```
-if(getCookie(comment_author)!=='')
+if(getCookie(comment_author)!=='') {
   addCookie('chatname', getCookie(comment_author));
+  askServerToChangeName(decodeURI(getCookie(comment_author)));
+}
 ```
 Done.
+
+If you need disallow change the chatbox nickname in Wordpress, find the `$('#socketchatbox-username').click(function(e)` in `public/client.js`, include this code:
+```
+if(getCookie(comment_author)!='') return;
+```
 
 Another blog web software also can modify like this.
 
 
 ##### Demo
 
-[https://kn007.net/](https://kn007.net/)
+[https://kn007.net/](https://kn007.net/) (Chatbox will show after post comment)
 
 
 
@@ -86,10 +93,17 @@ $ sed -i "s/var comment_author =.*/var comment_author = 'comment_author_$(echo -
 
 2.在`public/client.js`中，找到`function init ()`，在函数中最前面加入：
 ```
-if(getCookie(comment_author)!=='')
+if(getCookie(comment_author)!=='') {
   addCookie('chatname', getCookie(comment_author));
+  askServerToChangeName(decodeURI(getCookie(comment_author)));
+}
 ```
 如此便好。
+
+如果你需要强制聊天盒昵称与Wordpress评论名称同步，禁止被修改，请在`public/client.js`找到`$('#socketchatbox-username').click(function(e)`，在其函数里面加入：
+```
+if(getCookie(comment_author)!='') return;
+```
 
 最后要说的是，其他博客程序，修改方法类似。
 
@@ -98,5 +112,5 @@ if(getCookie(comment_author)!=='')
 
 ##### 示例
 
-[https://kn007.net/](https://kn007.net/) 
+[https://kn007.net/](https://kn007.net/) （聊天盒需要评论后方才显示）
 

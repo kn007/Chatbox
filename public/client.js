@@ -69,7 +69,7 @@ $(function() {
         changeLocalUsername(data.username);   
 
         // Display the welcome message
-        var message = "Hey, "+username + " NO."+data.count;
+        var message = "Hey, "+username;
         log(message, {
         });
 
@@ -132,21 +132,20 @@ $(function() {
     function init () {
 
         // Read old uuid from cookie if exist
-        if(getCookie('uuid')!==''){
-            uuid = getCookie('uuid'); 
-            console.log("found uuid");
-
+        if(getCookie('chatuuid')!==''){
+            uuid = getCookie('chatuuid'); 
         }
         else
         {
-            console.log("create uuid");
             uuid = guid();
-            addCookie('uuid', uuid);
+            addCookie('chatuuid', uuid);
         }
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
-            username = getCookie('chatname');        
+            username = getCookie('chatname');   
+        else
+            addCookie('chatname', username);     
         
         $('#socketchatbox-username').text(username);
 
@@ -470,8 +469,8 @@ $(function() {
 
     function GetCookieDomain() {
         var host = location.hostname;
-        var re = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-        if (re.test(host) == true || host == 'localhost') return host;
+        var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        if (ip.test(host) == true || host == 'localhost') return host;
         var regex = /([^]*).*/;
         var match = host.match(regex);
         if (typeof match != "undefined" && null != match) {
