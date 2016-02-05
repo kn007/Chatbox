@@ -87,7 +87,7 @@ io.on('connection', function (socket) {
     // then we'll map the user and the socket
     socket.on('login', function (data) {
 
-        var user;
+        var user; // the user for this socket
 
         // the user already exists, this is just a new connection from him
         if(data.uuid in userDict) {
