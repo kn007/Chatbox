@@ -58,15 +58,18 @@ io.on('connection', function (socket) {
     defaultUser.username = "default name";
     socket.user = defaultUser; // assign a default user before we create the real user
     socketList.push(socket);
-    console.log('New connection established. Current total connection count: '+ socketList.length );
-    //console.log("socket.id: " + socket.id);
-    console.log("socket.remoteAddress: " + socket.remoteAddress);
-    
+
+
     if (using_reverse_proxy != 1) {
         socket.remoteAddress = socket.request.connection.remoteAddress;
     }else{
         socket.remoteAddress = socket.handshake.headers['x-real-ip'];
     }
+
+    console.log('New connection established. Current total connection count: '+ socketList.length );
+    //console.log("socket.id: " + socket.id);
+    console.log("socket.remoteAddress: " + socket.remoteAddress);
+
 
 
 
@@ -101,6 +104,7 @@ io.on('connection', function (socket) {
             user = {};
             user.cookieID = data.uuid;
             user.username = setName(data.username);
+            user.ip = socket.remoteAddress;
             user.socketList = [];
             userDict[user.cookieID] = user;
             userCount++;
@@ -282,7 +286,7 @@ io.on('connection', function (socket) {
                 simpleUser.id = user.cookieID;
                 simpleUser.username = user.username;
                 simpleUser.count = user.socketList.length;
-                simpleUser.ip = user.remoteAddress;
+                simpleUser.ip = user.ip;
                 // what more to include?
                 userList.push(simpleUser);
             }

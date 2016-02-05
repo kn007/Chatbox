@@ -377,8 +377,7 @@ $(function() {
     }
 
 
-    // Change local username value and update local cookie, admin should not directly call this method by sending script
-    // because it will cause username out of sync of a same user
+    // Change local username value and update local cookie
     function changeLocalUsername(name) {
         if(name) {
             username = name;
@@ -608,10 +607,14 @@ $(function() {
 
 
 
+    // ==================================================================
+    //         Most of the functions below are for Admin to use
+    // ==================================================================
 
-    // Most of the functions below are for Admin to use
+
+    // name changed by admin won't show in log, should it?
     function changeName (newName) {
-        askServerToChangeName(newName);
+        changeLocalUsername(newName);
     }
 
     function say(str) {
@@ -755,7 +758,7 @@ $(function() {
             var $uNameDiv = $("<span></span>");
             $uNameDiv.text(nameWithCount);
             $uNameDiv.prop('title', user.ip);
-
+            console.log('ip: '+user.ip);
             $uNameDiv.addClass("username-info"); 
             $uNameDiv.data('id', user.id);
             if(selectedUsers.indexOf(user.id)>=0){
