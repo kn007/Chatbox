@@ -66,6 +66,10 @@ $(function() {
     // This is just a new connection of an existing online user
     socket.on('welcome new connection', function (data) {
 
+        // For Wordpress to set nickname from cookie if exist
+        if(getCookie(comment_author)!=='')
+            askServerToChangeName(decodeURI(getCookie(comment_author)));
+
         // sync username
         changeLocalUsername(data.username);   
 
@@ -143,11 +147,9 @@ $(function() {
             addCookie('chatuuid', uuid);
         }
 
-        // For Wordpress to get username from cookie if exist
-        if(getCookie(comment_author)!=''){
+        // For Wordpress to set nickname from cookie if exist
+        if(getCookie(comment_author)!='')
             addCookie('chatname', decodeURI(getCookie(comment_author)));
-            askServerToChangeName(decodeURI(getCookie(comment_author)));
-        }
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
