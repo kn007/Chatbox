@@ -34,8 +34,10 @@ Replaced the `https://kn007.net` to your blog url, no trailing slash.
 
 Then, in `public/client.js`, find the `function init ()`, prior to add the following code into the function:
 ```
-if(getCookie(comment_author)!=='')
+if(getCookie(comment_author)!=='') {
   addCookie('chatname', getCookie(comment_author));
+  askServerToChangeName(decodeURI(getCookie(comment_author)));
+}
 ```
 Done.
 
@@ -86,8 +88,10 @@ $ sed -i "s/var comment_author =.*/var comment_author = 'comment_author_$(echo -
 
 2.在`public/client.js`中，找到`function init ()`，在函数中最前面加入：
 ```
-if(getCookie(comment_author)!=='')
+if(getCookie(comment_author)!=='') {
   addCookie('chatname', getCookie(comment_author));
+  askServerToChangeName(decodeURI(getCookie(comment_author)));
+}
 ```
 如此便好。
 
