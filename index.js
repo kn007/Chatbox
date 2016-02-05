@@ -119,7 +119,7 @@ io.on('connection', function (socket) {
 
             // echo to others that a new user just joined
             socket.broadcast.emit('user joined', {
-                username: socket.user.username,
+                username: user.username,
                 numUsers: userCount
             });   
 
