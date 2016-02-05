@@ -42,17 +42,37 @@ $(function() {
     loadHistoryChatFromCookie();
     
     // Socket events
+
+    // Once connected, user will receive the invitation to login using uuid
     socket.on('login', function (data) {
 
         socket.emit('login', {username:username, uuid:uuid});
+
+        // handle corner case when user disconnect when sending file earlier
+        receivedFileSentByMyself();
+    });
+
+    // This is a new user
+    socket.on('welcome new user', function (data) {
+                
         // Display the welcome message
         var message = "Welcome, "+username;
         log(message, {
-            //prepend: true
         });
         addParticipantsMessage(data.numUsers);
-        // handle corner case when user disconnect when sending file earlier
-        receivedFileSentByMyself();
+    });
+
+    // This is just a new connection of an existing online user
+    socket.on('welcome new connection', function (data) {
+
+        // sync username
+        changeLocalUsername(data.username);   
+
+        // Display the welcome message
+        var message = "Hey, "+username + " NO."+data.count;
+        log(message, {
+        });
+
     });
 
 
@@ -758,7 +778,6 @@ $(function() {
             var $uNameDiv = $("<span></span>");
             $uNameDiv.text(nameWithCount);
             $uNameDiv.prop('title', user.ip);
-            console.log('ip: '+user.ip);
             $uNameDiv.addClass("username-info"); 
             $uNameDiv.data('id', user.id);
             if(selectedUsers.indexOf(user.id)>=0){

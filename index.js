@@ -84,19 +84,21 @@ io.on('connection', function (socket) {
 
     // once a new client is connected, this is the first msg he send
     // we'll find out if he's a new user or existing one looking at the cookieID
-    // then we'll map the user with the socket
+    // then we'll map the user and the socket
     socket.on('login', function (data) {
 
         var user;
 
+        // the user already exists, this is just a new connection from him
         if(data.uuid in userDict) {
             // existing user making new connection
             user = userDict[data.uuid];
             console.log(user.username + ' made a new connection.');
 
             // force sync all user's client side usernames
-            socket.emit('change username', {
-                username: user.username              
+            socket.emit('welcome new connection', {
+                username: user.username,
+                count: user.socketList.length + 1              
             });   
 
         }else{ 
@@ -110,8 +112,12 @@ io.on('connection', function (socket) {
             userCount++;
             console.log(user.username + ' just joined. Current user count: '+userCount);
 
-            // echo to others that a person has joined
-       
+            // welcome the new user
+            socket.emit('welcome new user', {
+                numUsers: userCount
+            });  
+
+            // echo to others that a new user just joined
             socket.broadcast.emit('user joined', {
                 username: socket.user.username,
                 numUsers: userCount
