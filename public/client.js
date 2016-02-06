@@ -400,7 +400,7 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            $('#socketchatbox-username').text(username);        
+            if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);        
         }
     }
 
