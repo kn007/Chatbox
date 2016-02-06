@@ -392,7 +392,7 @@ $(function() {
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName}); 
-        $('#socketchatbox-username').text('Changing your name...');
+        if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text('Changing your name...');
     }
 
 
