@@ -6,23 +6,26 @@
 
 First, in `public/client.js`, add a line like this:
 ```
-var comment_author = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+var comment_author = '';
 ```
 You can add it after `var port`, the value can get by `COOKIEHASH` or `md5(home_url());`.
 
-Quick way to change the `comment_author`'s value:
+Quick way to change the `wordpress_cookie`'s value:
 ```
-$ sed -i "s/var comment_author =.*/var comment_author = 'comment_author_$(echo -n https://kn007.net | md5sum | cut -d ' ' -f1)';/g" ./public/client.js
+$ sed -i "s/var wordpress_cookie =.*/var wordpress_cookie = 'comment_author_$(echo -n https://kn007.net | md5sum | cut -d ' ' -f1)';/g" ./public/client.js
 ```
 Replaced the `https://kn007.net` to your blog url, no trailing slash.
 
 Also in `public/client.js`, add a new action:
 ```
 socket.on('wordpress check', function (data) {
-  syncCommentAuthorName();
+  setTimeout(function(){syncCommentAuthorName();},1000);
 });
 function syncCommentAuthorName() {
-  if(comment_author=='') return;
+  setTimeout(function(){syncCommentAuthorName();},3000);
+  if(getCookie(wordpress_cookie)=='') return;
+  comment_author = decodeURI(getCookie(wordpress_cookie));
   if(username===comment_author) return;
   askServerToChangeName(comment_author);
 }
@@ -30,10 +33,10 @@ function syncCommentAuthorName() {
 
 Then, find the `function init()`, prior to add the following code into the function:
 ```
-if(getCookie(comment_author)!=='') {
-  comment_author = decodeURI(getCookie(comment_author));
+if(getCookie(wordpress_cookie)!=='') {
+  comment_author = decodeURI(getCookie(wordpress_cookie));
   addCookie('chatname', comment_author);
-}else{comment_author = '';}
+}
 ```
 
 Last step, find `user.socketList.push(socket)` in `index.js`, add following code before it.
@@ -67,23 +70,26 @@ Another blog web software also can modify like this.
 
 1.在`public/client.js`中增加一行（比如在`var port`后面）：
 ```
-var comment_author = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+var comment_author = '';
 ```
 后面的hash字符可以通过wordpress输出`COOKIEHASH`或者通过`md5(home_url());`得出。
 
 在shell下快速修改的方法：
 ```
-$ sed -i "s/var comment_author =.*/var comment_author = 'comment_author_$(echo -n https://kn007.net | md5sum | cut -d ' ' -f1)';/g" ./public/client.js
+$ sed -i "s/var wordpress_cookie =.*/var wordpress_cookie = 'comment_author_$(echo -n https://kn007.net | md5sum | cut -d ' ' -f1)';/g" ./public/client.js
 ```
 其中`https://kn007.net`就是你的WP博客网址，替换成你的，谨记最后面不带斜杠。
 
 2.在`public/client.js`中，注册动作：
 ```
 socket.on('wordpress check', function (data) {
-  syncCommentAuthorName();
+  setTimeout(function(){syncCommentAuthorName();},1000);
 });
 function syncCommentAuthorName() {
-  if(comment_author=='') return;
+  setTimeout(function(){syncCommentAuthorName();},3000);
+  if(getCookie(wordpress_cookie)=='') return;
+  comment_author = decodeURI(getCookie(wordpress_cookie));
   if(username===comment_author) return;
   askServerToChangeName(comment_author);
 }
@@ -96,10 +102,10 @@ socket.emit('wordpress check', {});
 
 4.在`public/client.js`中，找到`function init()`，在函数中最前面加入：
 ```
-if(getCookie(comment_author)!=='') {
-  comment_author = decodeURI(getCookie(comment_author));
+if(getCookie(wordpress_cookie)!=='') {
+  comment_author = decodeURI(getCookie(wordpress_cookie));
   addCookie('chatname', comment_author);
-}else{comment_author = '';}
+}
 ```
 如此便好。
 
