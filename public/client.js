@@ -467,7 +467,7 @@ $(function() {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
-    function GetCookieDomain() {
+    function getCookieDomain() {
         var host = location.hostname;
         var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
         if (ip.test(host) == true || host == 'localhost') return host;
@@ -750,6 +750,8 @@ $(function() {
             $this.addClass('selected');
         }
     });
+
+    var $tokenStatus = $('#socketchatbox-tokenStatus');
     // Only admin should receive this message
     socket.on('listUsers', function (data) {
 
@@ -757,15 +759,15 @@ $(function() {
         if(!data.success){
 
             $('#socketchatbox-online-users').html('Invalid Token!');
-            $('#socketchatbox-tokenStatus').html('Invalid Token!');
-            $('#socketchatbox-tokenStatus').addClass('error');
-            $('#socketchatbox-tokenStatus').removeClass('green');
+            $tokenStatus.html('Invalid Token!');
+            $tokenStatus.addClass('error');
+            $tokenStatus.removeClass('green');
 
             return;
         }
-        $('#socketchatbox-tokenStatus').html('Valid Token');
-        $('#socketchatbox-tokenStatus').removeClass('error');
-        $('#socketchatbox-tokenStatus').addClass('green');
+        $tokenStatus.html('Valid Token');
+        $tokenStatus.removeClass('error');
+        $tokenStatus.addClass('green');
 
 
 
@@ -796,6 +798,23 @@ $(function() {
         selectedUsers = newSelectedUsers;
 
     });
+
+
+    function updateToken(t) {
+        token = t;
+        addCookie('chatBoxAdminToken', token);
+    }
+
+  
+    function getUserList() {
+
+        socket.emit('getUserList', {token: token});
+        setTimeout(function(){
+
+            getUserList();
+
+        },3000);
+    }
 
     scriptHist = [];
     scriptPointer = -1;
@@ -840,19 +859,4 @@ $(function() {
     });
 
 
-    function updateToken(t) {
-        token = t;
-        addCookie('chatBoxAdminToken', token);
-    }
-
-  
-    function getUserList() {
-
-        socket.emit('getUserList', {token: token});
-        setTimeout(function(){
-
-            getUserList();
-
-        },3000);
-    }
 });
