@@ -1,11 +1,12 @@
 $(function() {
 
+    var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
     var socket = io(domain);
 	
-    var comment_author = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+    var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -29,9 +30,11 @@ $(function() {
     var newMsgSound;
     var newUserSound;
 
+    var initialize = 0;
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
+    var comment_author = '';
 
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
@@ -40,7 +43,6 @@ $(function() {
     var uuid = "uuid not set!"; 
 
     init();
-    loadHistoryChatFromCookie();
     
     // Socket events
 
@@ -66,10 +68,6 @@ $(function() {
     // This is just a new connection of an existing online user
     socket.on('welcome new connection', function (data) {
 
-        // For Wordpress to set nickname from cookie if exist
-        if(getCookie(comment_author)!=='')
-            askServerToChangeName(decodeURI(getCookie(comment_author)));
-
         // sync username
         changeLocalUsername(data.username);   
 
@@ -79,12 +77,15 @@ $(function() {
         });
 
     });
-
+    
+    // For Wordpress
+    socket.on('wordpress check', function (data) {
+        setTimeout(function(){syncCommentAuthorName();},1000);
+    });
 
     // Whenever the server emits 'new message', update the chat body
     socket.on('new message', function (data) {
-        processChatMessage(data);   
-        console.log(data.message);
+        processChatMessage(data);
     });
 
     socket.on('base64 file', function (data) {
@@ -135,35 +136,49 @@ $(function() {
     });
 
     function init () {
+        
+        if(initialize !== 0) return;
 
         // Read old uuid from cookie if exist
         if(getCookie('chatuuid')!==''){
             uuid = getCookie('chatuuid'); 
-
-        }
-        else
-        {
+        }else{
             uuid = guid();
             addCookie('chatuuid', uuid);
         }
 
-        // For Wordpress to set nickname from cookie if exist
-        if(getCookie(comment_author)!='')
-            addCookie('chatname', decodeURI(getCookie(comment_author)));
+        // For Wordpress to get username from cookie if exist
+        if(getCookie(wordpress_cookie)!=='') {
+            comment_author = decodeURI(getCookie(wordpress_cookie));
+            addCookie('chatname', comment_author);
+        }
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
-            username = getCookie('chatname');        
+            username = getCookie('chatname');
+        else
+            addCookie('chatname', username);
         
-        $('#socketchatbox-username').text(username);
+        loadHistoryChatFromCookie();
 
         // Show/hide chatbox base on cookie value
-        if(getCookie('chatboxOpen')==='1') 
+        if(getCookie('chatboxOpen')==='1') {
+            initialize = 1;
             show();
-        else
+        }else{
+            initialize = -1;
             hide();
+        }
 
 
+    }
+
+    function syncCommentAuthorName() {
+        setTimeout(function(){syncCommentAuthorName();},3000);
+        if(getCookie(wordpress_cookie)=='') return;
+        comment_author = decodeURI(getCookie(wordpress_cookie));
+        if(username===comment_author) return;
+        askServerToChangeName(comment_author);
     }
 
 
@@ -409,7 +424,7 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            $('#socketchatbox-username').text(username);        
+            if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);        
         }
     }
 
@@ -451,7 +466,7 @@ $(function() {
         var chatHistory = [];
         try{
             chatHistory = JSON.parse(getCookie('chathistory'));
-          }catch(e){}
+        }catch(e){}
         if(chatHistory.length){
           log("----Chat History----");
           options = {};
@@ -610,8 +625,8 @@ $(function() {
 
     // user edit username
     $('#socketchatbox-username').click(function(e) {
-        if(getCookie('chatboxOpen')!=1) return;
-        if(getCookie(comment_author)!='') return;
+        if(getCookie('chatboxOpen')!=='1') return;
+        if(comment_author!=='') return;
         if(sendingFile) return;
         e.stopPropagation();
         if($("#socketchatbox-txt_fullname").is(":focus")) return;
@@ -669,6 +684,10 @@ $(function() {
         $('#socketchatbox-showHideChatbox').text("↓");
         $('#socketchatbox-username').text(username);
         $chatBody.show();
+        if (initialize === -1) {
+            initialize = 1;
+            log();
+        }
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
@@ -846,7 +865,6 @@ $(function() {
     function updateToken(t) {
         token = t;
         addCookie('chatBoxAdminToken', token);
-        console.log(token);
     }
 
   
