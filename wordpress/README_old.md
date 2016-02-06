@@ -1,3 +1,6 @@
+#DEPRECATED!!!
+
+
 # English description
 
 
@@ -57,6 +60,8 @@ Another blog web software also can modify like this.
 
 
 -----------------------------------------------------------
+#此为旧说明，已经废弃
+
 # 中文介绍
 
 
