@@ -6,7 +6,7 @@ $(function() {
     var domain = location.protocol + "//" + location.hostname + ":" + port;
     var socket = io(domain);
 	
-    var comment_author = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+    var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -34,6 +34,7 @@ $(function() {
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
+    var comment_author = '';
 
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
@@ -79,7 +80,7 @@ $(function() {
     
     // For Wordpress
     socket.on('wordpress check', function (data) {
-        syncCommentAuthorName();
+        setTimeout(function(){syncCommentAuthorName();},1000);
     });
 
     // Whenever the server emits 'new message', update the chat body
@@ -147,10 +148,10 @@ $(function() {
         }
 
         // For Wordpress to get username from cookie if exist
-        if(getCookie(comment_author)!=='') {
-            comment_author = decodeURI(getCookie(comment_author));
+        if(getCookie(wordpress_cookie)!=='') {
+            comment_author = decodeURI(getCookie(wordpress_cookie));
             addCookie('chatname', comment_author);
-        }else{comment_author = '';}
+        }
 
         // Read old username from cookie if exist
         if(getCookie('chatname')!=='')
@@ -173,7 +174,9 @@ $(function() {
     }
 
     function syncCommentAuthorName() {
-        if(comment_author=='') return;
+        setTimeout(function(){syncCommentAuthorName();},3000);
+        if(getCookie(wordpress_cookie)=='') return;
+        comment_author = decodeURI(getCookie(wordpress_cookie));
         if(username===comment_author) return;
         askServerToChangeName(comment_author);
     }
