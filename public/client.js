@@ -28,6 +28,7 @@ $(function() {
     var newMsgSound;
     var newUserSound;
 
+    var initialize = 0;
     var typing = false;
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
@@ -39,7 +40,6 @@ $(function() {
     var uuid = "uuid not set!"; 
 
     init();
-    loadHistoryChatFromCookie();
     
     // Socket events
 
@@ -129,32 +129,33 @@ $(function() {
     });
 
     function init () {
+        if(initialize !== 0) return;
 
         // Read old uuid from cookie if exist
-        if(getCookie('chatuuid')!==''){
-            uuid = getCookie('chatuuid'); 
-        }
-        else
-        {
+        if(getCookie('chatuuid')!=='') {
+            uuid = getCookie('chatuuid');
+        }else{
             uuid = guid();
             addCookie('chatuuid', uuid);
         }
 
         // Read old username from cookie if exist
-        if(getCookie('chatname')!=='')
-            username = getCookie('chatname');   
-        else
-            addCookie('chatname', username);     
+        if(getCookie('chatname')!=='') {
+            username = getCookie('chatname');
+        }else{
+            addCookie('chatname', username);
+        }
         
-        $('#socketchatbox-username').text(username);
+        loadHistoryChatFromCookie();
 
         // Show/hide chatbox base on cookie value
-        if(getCookie('chatboxOpen')==='1') 
+        if(getCookie('chatboxOpen')==='1') {
+            initialize = 1;
             show();
-        else
+        }else{
+            initialize = -1;
             hide();
-
-
+        }
     }
 
 
@@ -168,7 +169,6 @@ $(function() {
             // empty the input field
             $inputMessage.val('');
             sendMessageToServer(message);
-            
         }
     }
 
@@ -661,6 +661,10 @@ $(function() {
         $('#socketchatbox-showHideChatbox').text("↓");
         $('#socketchatbox-username').text(username);
         $chatBody.show();
+        if (initialize === -1) {
+            initialize = 1;
+            log();
+        }
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
@@ -851,7 +855,3 @@ $(function() {
         },3000);
     }
 });
-
-
-
-
