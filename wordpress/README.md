@@ -21,6 +21,11 @@ Also in `public/client.js`, add a new action:
 socket.on('wordpress check', function (data) {
   syncCommentAuthorName();
 });
+function syncCommentAuthorName() {
+  if(comment_author=='') return;
+  if(username===comment_author) return;
+  askServerToChangeName(comment_author);
+}
 ```
 
 Then, find the `function init()`, prior to add the following code into the function:
@@ -77,6 +82,11 @@ $ sed -i "s/var comment_author =.*/var comment_author = 'comment_author_$(echo -
 socket.on('wordpress check', function (data) {
   syncCommentAuthorName();
 });
+function syncCommentAuthorName() {
+  if(comment_author=='') return;
+  if(username===comment_author) return;
+  askServerToChangeName(comment_author);
+}
 ```
 
 3.在`index.js`中，在`user.socketList.push(socket)`前面加入：
