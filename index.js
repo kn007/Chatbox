@@ -56,6 +56,7 @@ io.on('connection', function (socket) {
 
     var defaultUser = {};
     defaultUser.username = "default name";
+    defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
     socketList.push(socket);
 
@@ -145,6 +146,13 @@ io.on('connection', function (socket) {
         if (socketIndex != -1) {
             socketList.splice(socketIndex, 1);
         }
+
+
+        // the user only exist after login
+        if(user.notLoggedIn){
+            return;
+        }
+        
 
         // also need to remove socket from user's socketlist
         // when a user has 0 socket connection, remove the user
