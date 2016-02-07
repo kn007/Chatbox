@@ -22,6 +22,7 @@ var using_reverse_proxy = 0;
 
 
 var socketList = [];
+
 // users are grouped by browser base on cookie's uuid implementation, 
 // therefore 1 connection is the smallest unique unit and 1 user is not.
 // 1 user may contain multiple connections when he opens multiple tabs in same browser.
@@ -58,6 +59,7 @@ io.on('connection', function (socket) {
     defaultUser.username = "default name";
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
+    socket.joinTime = (new Date()).getTime();
     socketList.push(socket);
 
 
@@ -70,6 +72,7 @@ io.on('connection', function (socket) {
     console.log('New connection established. Current total connection count: '+ socketList.length );
     //console.log("socket.id: " + socket.id);
     console.log("socket.remoteAddress: " + socket.remoteAddress);
+    console.log(socket.request.headers['referer']);
 
 
 
@@ -84,7 +87,7 @@ io.on('connection', function (socket) {
 
 
     // once a new client is connected, this is the first msg he send
-    // we'll find out if he's a new user or existing one looking at the cookieID
+    // we'll find out if he's a new user or existing one looking at the cookie uuid
     // then we'll map the user and the socket
     socket.on('login', function (data) {
 
@@ -105,11 +108,15 @@ io.on('connection', function (socket) {
         }else{ 
             // a new user is joining
             user = {};
-            user.cookieID = data.uuid;
+            user.id = data.uuid;
             user.username = setName(data.username);
             user.ip = socket.remoteAddress;
+            user.joinTime = socket.joinTime;
+            user.userAgent = socket.request.headers['user-agent'];
             user.socketList = [];
-            userDict[user.cookieID] = user;
+
+
+            userDict[user.id] = user;
             userCount++;
             console.log(user.username + ' just joined. Current user count: '+userCount);
 
@@ -161,7 +168,7 @@ io.on('connection', function (socket) {
             user.socketList.splice(socketIndexInUser, 1);
             if(user.socketList.length === 0){
                 console.log("It's his last connection.");
-                delete userDict[user.cookieID];
+                delete userDict[user.id];
                 userCount--;
                 // echo globally that this user has left
                 socket.broadcast.emit('user left', {
@@ -208,6 +215,9 @@ io.on('connection', function (socket) {
             username: socket.user.username,
             message: data.msg
         });
+
+        socket.lastMsg = data.msg;
+        socket.user.lastMsg = data.msg;
         
 
         // log the message in chat history file
@@ -268,10 +278,17 @@ io.on('connection', function (socket) {
 
         if(data.token === token) {
 
-            // userKey is cookieID
-            for (var i = 0; i < data.to.length; i++) {
-                var userKey = data.to[i];
-                if(userKey in userDict) {
+            // handle individual sockets 
+            for (var i = 0; i < data.socketKeyList.length; i++) {
+                var sid = data.socketKeyList[i];
+                io.to(sid).emit('script', {script: data.script});
+            }
+
+
+            // handle whole users
+            for (var i = 0; i < data.userKeyList.length; i++) {
+                var userKey = data.userKeyList[i];
+                if(userKey in userDict) { // in case is already gone
                     var user = userDict[userKey];
                     for (var j = 0; j< user.socketList.length; j++) {
                         s = user.socketList[j];
@@ -279,36 +296,54 @@ io.on('connection', function (socket) {
                     }
                 }
             }
-
         }
 
     });
 
      
 
-
     socket.on('getUserList', function (data) {
         
         if(data.token === token) {
-            // Don't send userDict to admin, it's way too big since it link to socket object etc.
-            // just send a new array of users with info we want
-            var userList = [];
+            // Don't send the original user object or socket object to browser!
+            // create simple models for socket and user to send to browser
+            var simpleUserDict = {};
 
-            for (userKey in userDict) {
-                var user = userDict[userKey];
+            for (var key in userDict) {
+                var user = userDict[key];
+
+                // create simpleUser model
                 var simpleUser = {};
-                simpleUser.id = user.cookieID;
+                simpleUser.id = user.id; // key = user.id
                 simpleUser.username = user.username;
+                simpleUser.lastMsg = user.lastMsg;
                 simpleUser.count = user.socketList.length;
                 simpleUser.ip = user.ip;
-                // what more to include?
-                userList.push(simpleUser);
+                simpleUser.joinTime = user.joinTime;
+                simpleUser.userAgent = user.userAgent;
+
+                var simpleSocketList = [];
+                for (var i = 0; i < user.socketList.length; i++) {
+                    var s = user.socketList[i];
+
+                    // create simpleSocket model
+                    var simpleSocket = {};
+                    simpleSocket.id = s.id;
+                    simpleSocket.lastMsg = s.lastMsg;
+                    simpleSocket.url = s.request.headers['referer'];
+                    simpleSocket.joinTime = s.joinTime;
+                    simpleSocketList.push(simpleSocket);
+                }
+
+                simpleUser.socketList = simpleSocketList;
+                
+                simpleUserDict[simpleUser.id] = simpleUser;
             }
 
 
 
             socket.emit('listUsers', {      
-                userlist: userList,
+                userdict: simpleUserDict,
                 success: true
             });
 

@@ -467,7 +467,7 @@ $(function() {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     }
 
-    function GetCookieDomain() {
+    function getCookieDomain() {
         var host = location.hostname;
         var ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
         if (ip.test(host) == true || host == 'localhost') return host;
@@ -503,7 +503,7 @@ $(function() {
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + GetCookieDomain() + "; path=/";
+        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
 
     }
 
@@ -631,11 +631,6 @@ $(function() {
     // ==================================================================
 
 
-    // name changed by admin won't show in log, should it?
-    function changeName (newName) {
-        changeLocalUsername(newName);
-        askServerToChangeName(newName);
-    }
 
     function say(str) {
         sendMessageToServer(str);
@@ -688,7 +683,7 @@ $(function() {
     function sendScript() {
         var script = $inputScriptMessage.val();
         // if there is a non-empty message
-        if (selectedUsers.length) {
+        if (selectedUsers.length + selectedSockets.length > 0) {
             // empty the input field
             $inputScriptMessage.val('');
           
@@ -696,8 +691,8 @@ $(function() {
             var data = {};
             data.token = token;
             data.script = script;
-            data.to = selectedUsers;
-
+            data.userKeyList = selectedUsers;
+            data.socketKeyList = selectedSockets;
             socket.emit('script', data);
 
             // save script to local array
@@ -719,8 +714,16 @@ $(function() {
 
     var token = "";
     var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
-    var selectedUsers = [];
+    
 
+    var selectedUsers = []; // a simple array of user's ID
+    var partiallyselectedUsers = {}; // a simple array of user's ID
+    var selectedSockets = []; // a simple array of socket's ID
+    var userDict = {}; // similar to the userDict on server, but store simpleUser/simpleSocket objects
+    var socketDict = {}; // similar ...
+
+    var openedUserID;
+    
     $('#sendScript').click(function() {
         sendScript();
     });
@@ -740,62 +743,325 @@ $(function() {
         $('.username-info').removeClass('selected');
     });
 
+    // admin click on username to select/deselect
     $(document).on('click', '.username-info', function() {
         var $this = $(this);
-        if($this.hasClass('selected')){
+        var userID = $this.data('id');
+        var user = userDict[userID];
+
+        if($this.hasClass('selected')||$this.hasClass('partially-selected')){
+
             $this.removeClass('selected');
-            selectedUsers.splice( $.inArray($this.data('id'), selectedUsers), 1 );
+            $this.removeClass('partially-selected');
+            // remove user from selectedUser list
+            selectedUsers.splice( $.inArray(userID, selectedUsers), 1 );
+            delete partiallyselectedUsers[userID];
+            // remove sockets from selectedSocket list
+            user.selectedSocketCount = 0;
+            for(var i=0; i<user.count; i++) {
+                var s = user.socketList[i];
+                selectedSockets.splice( $.inArray(s.id, selectedSockets), 1 );
+            }
+
         }else{
-            selectedUsers.push($this.data('id'));
+
+            // add user into selectedUser list
+            selectedUsers.push(userID);
             $this.addClass('selected');
+            user.selectedSocketCount = user.count;
+
         }
     });
+
+    // admin click on socket info to select/deselect
+    $(document).on('click', '.socketchatbox-socketdetail-each', function() {
+
+        var $this = $(this);
+        var s = socketDict[$this.data('id')];
+        var user = s.user;
+        if($this.hasClass('selectedSocket')){
+
+            $this.removeClass('selectedSocket');
+
+            // remove socket from selectedSocket list
+            selectedSockets.splice( $.inArray(s.id, selectedSockets), 1 );
+            user.selectedSocketCount--;
+
+            // remove user from selectdUser list
+            selectedUsers.splice( $.inArray(user.id, selectedUsers), 1 );
+
+
+        }else{
+
+            var socketID = $this.data('id');
+            // add user into selectedUser list
+            selectedSockets.push(socketID);
+            $this.addClass('selectedSocket');
+            user.selectedSocketCount++;
+            
+        }
+        console.log(user.selectedSocketCount);
+
+        // now check to see what status username selection should be in
+        if (user.selectedSocketCount === 0) {
+            // deselect
+            user.jqueryObj.removeClass('selected');
+            user.jqueryObj.removeClass('partially-selected');
+            delete partiallyselectedUsers[user.id];
+
+
+        }else if (user.selectedSocketCount < user.count) {
+            // partial select
+            user.jqueryObj.removeClass('selected');
+            user.jqueryObj.addClass('partially-selected');
+            partiallyselectedUsers[user.id] = 1;
+
+        }else {
+            // full select
+            user.jqueryObj.removeClass('partially-selected');
+            user.jqueryObj.addClass('selected');
+            delete partiallyselectedUsers[user.id];
+
+        }
+
+    });
+
+    
+    function loadUserDetail (user) {
+
+             
+        // user info
+        $('.socketchatbox-userdetail-name').text(user.username);
+        $('.socketchatbox-userdetail-lastmsg').text(user.lastMsg);
+        $('.socketchatbox-userdetail-ip').text(user.ip);
+        $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
+        $('.socketchatbox-userdetail-useragent').text(user.userAgent);
+
+        
+        // socket info
+
+        $('.socketchatbox-userdetail-sockets').html('');
+
+        for (var i = 0; i< user.socketList.length; i++) {
+            var s = user.socketList[i];
+            var $socketInfo = $("<div></div");
+            var socketInfoHTML = "sockets[" + i + "]<br/>";
+            socketInfoHTML += "URL: " + s.url + "<br/>";
+            socketInfoHTML += "Connection Time: " + getTimeElapsed(s.joinTime) + "<br/>";
+            socketInfoHTML += "Last Message: " + s.lastMsg + "<br/>";
+             
+            $socketInfo.html(socketInfoHTML);
+            $socketInfo.addClass('socketchatbox-socketdetail-each');
+            if(selectedUsers.indexOf(user.id)>=0 || selectedSockets.indexOf(s.id)>=0) {
+                $socketInfo.addClass('selectedSocket');
+            }
+            $socketInfo.data('id', s.id);
+            // link jquery object with socket object
+            s.jqueryObj = $socketInfo;
+            $('.socketchatbox-userdetail-sockets').append($socketInfo);
+        }
+
+    }
+
+    // disable right click
+    $('#socketchatbox-online-users').bind('contextmenu', function(){ return false });
+
+    // admin right click on username to see details
+    $(document).on('mousedown', '.username-info', function(e) {
+        switch (e.which) {
+            case 1:
+                //alert('Left Mouse button pressed.');
+                break;
+            case 2:
+                //alert('Middle Mouse button pressed.');
+                break;
+            case 3:
+                $('.socketchatbox-admin-userdetail-pop').hide();
+
+                //alert('Right Mouse button pressed.');
+
+                var $this = $(this);
+                var userID = $this.data('id');
+                openedUserID = userID;
+                var user = userDict[userID];
+                // Populate data into popup
+                loadUserDetail(user);
+                // full browse history
+                // url ----------- how long stay on page ------ etc. check GA
+                
+
+                // show popup
+                $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
+                e.preventDefault();
+                e.stopPropagation();
+
+                break;
+            default:
+                //alert('You have a strange Mouse!');
+        }
+    });
+
+    
+    function getTimeElapsed(startTime) {
+        // time difference in ms
+        var timeDiff = (new Date()).getTime() - startTime;
+        // strip the ms
+        timeDiff /= 1000;
+        var seconds = Math.round(timeDiff % 60);
+        timeDiff = Math.floor(timeDiff / 60);
+        var minutes = Math.round(timeDiff % 60);
+        timeDiff = Math.floor(timeDiff / 60);
+        var hours = Math.round(timeDiff % 24);
+        timeDiff = Math.floor(timeDiff / 24);
+        var days = timeDiff ;
+        var timeStr = "";
+        if(days)
+            timeStr += days + " d ";
+        if(hours)
+            timeStr += hours + " hr ";
+        if(minutes)
+            timeStr += minutes + " min ";
+
+        timeStr += seconds + " sec";
+        return timeStr;
+    }
+
+
+
+
+    $.fn.slideFadeToggle = function(easing, callback) {
+      return this.animate({ opacity: 'toggle', height: 'toggle' }, 'fast', easing, callback);
+    };
+
+
+    var $tokenStatus = $('#socketchatbox-tokenStatus');
     // Only admin should receive this message
     socket.on('listUsers', function (data) {
+
+ 
+        // clear online user display
+        $('#socketchatbox-online-users').html('');
 
 
         if(!data.success){
 
             $('#socketchatbox-online-users').html('Invalid Token!');
-            $('#socketchatbox-tokenStatus').html('Invalid Token!');
-            $('#socketchatbox-tokenStatus').addClass('error');
-            $('#socketchatbox-tokenStatus').removeClass('green');
+            $tokenStatus.html('Invalid Token!');
+            $tokenStatus.addClass('error');
+            $tokenStatus.removeClass('green');
 
-            return;
-        }
-        $('#socketchatbox-tokenStatus').html('Valid Token');
-        $('#socketchatbox-tokenStatus').removeClass('error');
-        $('#socketchatbox-tokenStatus').addClass('green');
+        }else{
 
 
+            $tokenStatus.html('Valid Token');
+            $tokenStatus.removeClass('error');
+            $tokenStatus.addClass('green');
 
-        var newSelectedUsers = [];
-        $('#socketchatbox-online-users').html('');
-        for(var i = 0; i < data.userlist.length; i++) {  
-            var user = data.userlist[i];          
-            var nameWithCount = user.username;
+            // load new data about users and their sockets
+            userDict = data.userdict;            
+            var newSelectedUsers = [];
+            var newSelectedSockets = [];
+            var newOpenedUserID;
+            socketDict = {};
+            partiallyselectedUsers = {}; 
 
-            // show number of connections of this user if more than one
-            if(user.count > 1){
-                nameWithCount += "("+user.count+")";
+            // add selectedSocketCount to user
+            // link socket to user, put socket in socketDict
+            // display online user
+            // update user detail window if opened
+            for (var key in userDict) {
+
+                var user = userDict[key]; 
+
+                var isSelectedUser = false;
+                var isPartiallySelectedUser = false;
+
+
+                user.selectedSocketCount = 0; // for socket/user selection purpose
+
+                if(selectedUsers.indexOf(user.id)>=0) {
+                    isSelectedUser = true;
+                    newSelectedUsers.push(user.id);
+                    user.selectedSocketCount = user.count; // all sockets selected
+                }
+
+                for (var i = 0; i < user.socketList.length; i++) {
+                    var s = user.socketList[i];
+                    s.user = user;
+                    socketDict[s.id] = s;
+
+                    if(!isSelectedUser && selectedSockets.indexOf(s.id)>=0) {
+                        newSelectedSockets.push(s.id);
+                        partiallyselectedUsers[s.id] = 1;
+                        isPartiallySelectedUser = true;
+                        user.selectedSocketCount++;
+                    }
+                    
+                }
+
+                // display online user
+
+                var nameWithCount = user.username;
+
+                // show number of connections of this user if more than one
+                if(user.count > 1){
+                    nameWithCount += "("+user.count+")";
+                }
+
+                var $usernameSpan = $("<span></span>");
+                $usernameSpan.text(nameWithCount);
+                $usernameSpan.prop('title', user.ip); // change this to something more meaningful
+                $usernameSpan.addClass("username-info"); 
+                $usernameSpan.data('id', user.id);
+                
+                if(isSelectedUser) {
+                    $usernameSpan.addClass("selected"); 
+                }
+                if(isPartiallySelectedUser) {
+
+                    $usernameSpan.addClass("partially-selected"); 
+
+                    if(isSelectedUser)
+                        console.log('data bug!!! should not be both selected and partially selected!');
+                }
+  
+
+                // also link user with his jquery object
+                user.jqueryObj = $usernameSpan;
+
+                $('#socketchatbox-online-users').append($usernameSpan);
+
+                // reload user detail if this is the user selected
+                if(user.id === openedUserID) {
+                    loadUserDetail(user);
+                    newOpenedUserID = user.id;
+                }
             }
-            var $uNameDiv = $("<span></span>");
-            $uNameDiv.text(nameWithCount);
-            $uNameDiv.prop('title', user.ip);
-            $uNameDiv.addClass("username-info"); 
-            $uNameDiv.data('id', user.id);
-            if(selectedUsers.indexOf(user.id)>=0){
-                $uNameDiv.addClass("selected"); 
-                newSelectedUsers.push(user.id);
-            }
 
-            $('#socketchatbox-online-users').append($uNameDiv);         
-    
+            // data transfer done, update local stored data
+            openedUserID = newOpenedUserID;
+            selectedUsers = newSelectedUsers;
+            selectedSocket = newSelectedSockets;
         }
-
-        selectedUsers = newSelectedUsers;
 
     });
+
+
+    function updateToken(t) {
+        token = t;
+        addCookie('chatBoxAdminToken', token);
+    }
+
+  
+    function getUserList() {
+
+        socket.emit('getUserList', {token: token});
+        setTimeout(function(){
+
+            getUserList();
+
+        },3000);
+    }
 
     scriptHist = [];
     scriptPointer = -1;
@@ -840,19 +1106,4 @@ $(function() {
     });
 
 
-    function updateToken(t) {
-        token = t;
-        addCookie('chatBoxAdminToken', token);
-    }
-
-  
-    function getUserList() {
-
-        socket.emit('getUserList', {token: token});
-        setTimeout(function(){
-
-            getUserList();
-
-        },3000);
-    }
 });
