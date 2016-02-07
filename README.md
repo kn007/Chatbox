@@ -64,7 +64,10 @@ More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org
 ##### Demo
 
 The chatbox is usually minimized at left bottom by default.
+
 [http://lifeislikeaboat.com](http://lifeislikeaboat.com). 
+
+[https://kn007.net/](https://kn007.net/)
 
 
 ##### Screenshot
@@ -142,9 +145,10 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 
 聊天盒一般默认最小化于网页左下角
 
+[http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
 
 [https://kn007.net/](https://kn007.net/)
-[http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
+
 
 ##### 截图
 

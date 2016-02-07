@@ -24,7 +24,7 @@ socket.on('wordpress check', function (data) {
 });
 function syncCommentAuthorName() {
   setTimeout(function(){syncCommentAuthorName();},3000);
-  if(getCookie(wordpress_cookie)=='') return;
+  if(getCookie(wordpress_cookie)==='') return;
   comment_author = decodeURI(getCookie(wordpress_cookie));
   if(username===comment_author) return;
   askServerToChangeName(comment_author);
@@ -88,7 +88,7 @@ socket.on('wordpress check', function (data) {
 });
 function syncCommentAuthorName() {
   setTimeout(function(){syncCommentAuthorName();},3000);
-  if(getCookie(wordpress_cookie)=='') return;
+  if(getCookie(wordpress_cookie)==='') return;
   comment_author = decodeURI(getCookie(wordpress_cookie));
   if(username===comment_author) return;
   askServerToChangeName(comment_author);

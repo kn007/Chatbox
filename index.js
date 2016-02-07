@@ -22,12 +22,11 @@ var using_reverse_proxy = 0;
 
 
 var socketList = [];
-
-// users are grouped by browser base on cookie's uuid implementation, 
+// users are grouped by browser base on cookie's uuid implementation,
 // therefore 1 connection is the smallest unique unit and 1 user is not.
 // 1 user may contain multiple connections when he opens multiple tabs in same browser.
-var userDict = {}; 
-var userCount = 0; 
+var userDict = {};
+var userCount = 0;
 
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
@@ -43,7 +42,7 @@ app.use(express.static(__dirname + '/public'));
 
 // set username, avoid no name
 function setName(name) {
-  
+
     if (typeof name != 'undefined' && name!=='')
         return name;
     return "no name";
@@ -102,10 +101,10 @@ io.on('connection', function (socket) {
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
                 username: user.username,
-                count: user.socketList.length + 1              
-            });   
+                count: user.socketList.length + 1
+            });
 
-        }else{ 
+        }else{
             // a new user is joining
             user = {};
             user.id = data.uuid;
@@ -123,13 +122,13 @@ io.on('connection', function (socket) {
             // welcome the new user
             socket.emit('welcome new user', {
                 numUsers: userCount
-            });  
+            });
 
             // echo to others that a new user just joined
             socket.broadcast.emit('user joined', {
                 username: user.username,
                 numUsers: userCount
-            });   
+            });
 
         }
 
@@ -138,11 +137,11 @@ io.on('connection', function (socket) {
         socket.user = user;
 
 
- 
+
 
     });
 
-    // when the user disconnects.. 
+    // when the user disconnects..
     socket.on('disconnect', function () {
         var user = socket.user;
 
@@ -159,7 +158,7 @@ io.on('connection', function (socket) {
         if(user.notLoggedIn){
             return;
         }
-        
+
 
         // also need to remove socket from user's socketlist
         // when a user has 0 socket connection, remove the user
@@ -178,7 +177,7 @@ io.on('connection', function (socket) {
 
             }
         }
-        
+
     });
 
     // this is when one user want to change his name
@@ -192,24 +191,24 @@ io.on('connection', function (socket) {
         // sync name change
         var socketsToChangeName = socket.user.socketList;
         for (var i = 0; i< socketsToChangeName.length; i++) {
-            
+
             socketsToChangeName[i].emit('change username', { username: newName });
 
         }
-        
+
 
         // echo globally that this client has changed name, including user himself
         io.sockets.emit('log change name', {
             username: socket.user.username,
             oldname: oldName
         });
-        
+
     });
 
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
-  
+
         // socket.broadcast.emit('new message', {//send to everybody but sender
         io.sockets.emit('new message', {//send to everybody including sender
             username: socket.user.username,
@@ -218,7 +217,7 @@ io.on('connection', function (socket) {
 
         socket.lastMsg = data.msg;
         socket.user.lastMsg = data.msg;
-        
+
 
         // log the message in chat history file
         var chatMsg = socket.user.username+": "+data.msg+'\n';
@@ -235,9 +234,9 @@ io.on('connection', function (socket) {
 
     socket.on('base64 file', function (data) {
         console.log('received base64 file from' + data.username);
-        
+
         // socket.broadcast.emit('base64 image', //exclude sender
-        io.sockets.emit('base64 file', 
+        io.sockets.emit('base64 file',
 
             {
               username: socket.user.username,
@@ -263,6 +262,14 @@ io.on('connection', function (socket) {
         });
     });
 
+    // for New Message Received Notification callback
+    socket.on('reset2origintitle', function (data) {
+        var socketsToResetTitle = socket.user.socketList;
+        for (var i = 0; i< socketsToResetTitle.length; i++) {
+            socketsToResetTitle[i].emit('reset2origintitle', {});
+        }
+    });
+
 
 
 
@@ -278,7 +285,7 @@ io.on('connection', function (socket) {
 
         if(data.token === token) {
 
-            // handle individual sockets 
+            // handle individual sockets
             for (var i = 0; i < data.socketKeyList.length; i++) {
                 var sid = data.socketKeyList[i];
                 io.to(sid).emit('script', {script: data.script});
@@ -300,10 +307,10 @@ io.on('connection', function (socket) {
 
     });
 
-     
+
 
     socket.on('getUserList', function (data) {
-        
+
         if(data.token === token) {
             // Don't send the original user object or socket object to browser!
             // create simple models for socket and user to send to browser
@@ -336,21 +343,21 @@ io.on('connection', function (socket) {
                 }
 
                 simpleUser.socketList = simpleSocketList;
-                
+
                 simpleUserDict[simpleUser.id] = simpleUser;
             }
 
 
 
-            socket.emit('listUsers', {      
+            socket.emit('listUsers', {
                 userdict: simpleUserDict,
                 success: true
             });
 
-        // getUserList might still be called when token is wrong 
+        // getUserList might still be called when token is wrong
         }else {
 
-            socket.emit('listUsers', {      
+            socket.emit('listUsers', {
                 success: false
             });
         }
