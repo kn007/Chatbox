@@ -598,15 +598,12 @@ $(function() {
                 $inputMessage.focus();
                 return;
             }
-
-<<<<<<< Updated upstream
-=======
+ 
             if ($("#socketchatbox-admin-changename").is(":focus")) {
                 adminChangeName();
                 return;
             }
-       
->>>>>>> Stashed changes
+
             if (username && $inputMessage.is(":focus")) {
                 sendMessage();
                 socket.emit('stop typing', {name:username});
@@ -751,9 +748,7 @@ $(function() {
         //if (selectedUsers.length + selectedSockets.length > 0) {
             // empty the input field
             $inputScriptMessage.val('');
-<<<<<<< Updated upstream
-
-=======
+ 
             var userKeyList = [];
             var socketKeyList = [];
             for(var userKey in selectedUsers){
@@ -761,8 +756,7 @@ $(function() {
             }
             for(var socketKey in selectedSockets){
                 socketKeyList.push(socketKey);
-            }
->>>>>>> Stashed changes
+            } 
 
             var data = {};
             data.token = token;
@@ -908,14 +902,12 @@ $(function() {
                 if(user.selectedSocketCount==0)
                     delete partiallyselectedUsers[user.id];
 
-<<<<<<< Updated upstream
             var socketID = $this.data('id');
             // add user into selectedUser list
             selectedSockets.push(socketID);
             $this.addClass('selectedSocket');
             user.selectedSocketCount++;
 
-=======
             }else{
                 user.selectedSocketCount++;
                 if(user.selectedSocketCount == user.count){
@@ -925,7 +917,6 @@ $(function() {
                     selectedSockets[socketID] = s;
                 }
             }
->>>>>>> Stashed changes
         }
 
 
@@ -1198,7 +1189,6 @@ $(function() {
                 $usernameSpan.prop('title', user.ip); // change this to something more meaningful
                 $usernameSpan.addClass("username-info");
                 $usernameSpan.data('id', user.id);
-<<<<<<< Updated upstream
 
                 if(isSelectedUser) {
                     $usernameSpan.addClass("selected");
@@ -1211,10 +1201,7 @@ $(function() {
                         console.log('data bug!!! should not be both selected and partially selected!');
                 }
 
-=======
 
-
->>>>>>> Stashed changes
 
                 // also link user with his jquery object
                 user.jqueryObj = $usernameSpan;
@@ -1245,12 +1232,7 @@ $(function() {
         addCookie('chatBoxAdminToken', token);
     }
 
-
-<<<<<<< Updated upstream
-=======
-
-  
->>>>>>> Stashed changes
+ 
     function getUserList() {
 
         socket.emit('getUserList', {token: token});
