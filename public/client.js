@@ -113,6 +113,8 @@ $(function() {
         log(message, {
         });
 
+        socket.emit('reset2origintitle', {});
+
     });
 
 
