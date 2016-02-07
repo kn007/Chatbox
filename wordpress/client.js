@@ -60,7 +60,7 @@ $(function() {
         notify: function() {
             if(document.title.indexOf("~New Message Received~")) clearTimeout(changeTitle.timer);
             document.title = "~New Message Received~ " + changeTitle.originTitle;
-            changeTitle.timer = setTimeout(function(){changeTitle.clear();},3000);
+            changeTitle.timer = setTimeout(function(){changeTitle.reset();},3000);
         },
         flash: function() {
             changeTitle.timer = setTimeout(function () {
@@ -74,7 +74,7 @@ $(function() {
             }, 500);
             changeTitle.done = 1;
         },
-        clear: function() {
+        reset: function() {
             clearTimeout(changeTitle.timer);
             document.title = changeTitle.originTitle;
             changeTitle.done = 0;
@@ -178,7 +178,7 @@ $(function() {
 
     // For New Message Notification
     socket.on('reset2origintitle', function (data) {
-        changeTitle.clear();
+        changeTitle.reset();
     });
 
     function init() {
@@ -455,7 +455,7 @@ $(function() {
     }
 
     function clearNewMessageNotification() {
-        changeTitle.clear();
+        changeTitle.reset();
         socket.emit('reset2origintitle', {});
     }
 
