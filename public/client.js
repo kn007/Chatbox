@@ -919,7 +919,7 @@ $(function() {
     }
 
     // disable right click
-    $('#socketchatbox-online-users').bind('contextmenu', function(){ return false });
+    $('#socketchatbox-online-users').bind('contextmenu', function(){ return false; });
 
     // admin right click on username to see details
     $(document).on('mousedown', '.username-info', function(e) {
