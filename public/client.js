@@ -723,11 +723,7 @@ $(function() {
     var socketDict = {}; // similar ...
 
     var openedUserID;
-    // important:
-    // don't save any additional information in userDict or socketDict, they get reset and only reflect data from server 
-    // only modification we make is just mapping each other.
-
-
+    
     $('#sendScript').click(function() {
         sendScript();
     });
@@ -942,8 +938,7 @@ $(function() {
     // Only admin should receive this message
     socket.on('listUsers', function (data) {
 
-        // clear all data
-        userDict = {};
+ 
         // clear online user display
         $('#socketchatbox-online-users').html('');
 
@@ -956,43 +951,53 @@ $(function() {
             $tokenStatus.removeClass('green');
 
         }else{
-            
-            var newSelectedUsers = [];
-            var newSelectedSockets = [];
-            var newPartiallySelectedUsers = {};
-            var newOpenedUserID;
+
+
             $tokenStatus.html('Valid Token');
             $tokenStatus.removeClass('error');
             $tokenStatus.addClass('green');
 
             // load new data about users and their sockets
-            userDict = data.userdict;
-
-
-
-            // link socket back to user, put socket in socketDict
-            // display online user
+            userDict = data.userdict;            
+            var newSelectedUsers = [];
+            var newSelectedSockets = [];
+            var newOpenedUserID;
             socketDict = {};
+            partiallyselectedUsers = {}; 
 
+            // add selectedSocketCount to user
+            // link socket to user, put socket in socketDict
+            // display online user
+            // update user detail window if opened
             for (var key in userDict) {
 
-                var user = userDict[key];  
+                var user = userDict[key]; 
+
+                var isSelectedUser = false;
+                var isPartiallySelectedUser = false;
+
 
                 user.selectedSocketCount = 0; // for socket/user selection purpose
 
-                for (var i = 0; i<user.socketList.length; i++) {
+                if(selectedUsers.indexOf(user.id)>=0) {
+                    isSelectedUser = true;
+                    newSelectedUsers.push(user.id);
+                    user.selectedSocketCount = user.count; // all sockets selected
+                }
+
+                for (var i = 0; i < user.socketList.length; i++) {
                     var s = user.socketList[i];
                     s.user = user;
                     socketDict[s.id] = s;
 
-                    if(selectedSockets.indexOf(s.id)>=0) {
+                    if(!isSelectedUser && selectedSockets.indexOf(s.id)>=0) {
                         newSelectedSockets.push(s.id);
+                        partiallyselectedUsers[s.id] = 1;
+                        isPartiallySelectedUser = true;
                         user.selectedSocketCount++;
                     }
                     
                 }
-
-
 
                 // display online user
 
@@ -1008,15 +1013,18 @@ $(function() {
                 $usernameSpan.prop('title', user.ip); // change this to something more meaningful
                 $usernameSpan.addClass("username-info"); 
                 $usernameSpan.data('id', user.id);
-                if(selectedUsers.indexOf(user.id)>=0) {
+                
+                if(isSelectedUser) {
                     $usernameSpan.addClass("selected"); 
-                    newSelectedUsers.push(user.id);
                 }
-                if(user.id in partiallyselectedUsers) {
+                if(isPartiallySelectedUser) {
 
                     $usernameSpan.addClass("partially-selected"); 
-                    newPartiallySelectedUsers[user.id] = 1;
+
+                    if(isSelectedUser)
+                        console.log('data bug!!! should not be both selected and partially selected!');
                 }
+  
 
                 // also link user with his jquery object
                 user.jqueryObj = $usernameSpan;
@@ -1030,9 +1038,9 @@ $(function() {
                 }
             }
 
+            // data transfer done, update local stored data
             openedUserID = newOpenedUserID;
             selectedUsers = newSelectedUsers;
-            partiallyselectedUsers = newPartiallySelectedUsers;
             selectedSocket = newSelectedSockets;
         }
 
