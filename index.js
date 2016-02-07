@@ -262,7 +262,7 @@ io.on('connection', function (socket) {
         });
     });
 
-    // for New Message Notification callback
+    // for New Message Received Notification callback
     socket.on('reset2origintitle', function (data) {
         var socketsToResetTitle = socket.user.socketList;
         for (var i = 0; i< socketsToResetTitle.length; i++) {
