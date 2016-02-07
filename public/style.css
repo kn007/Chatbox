@@ -1,5 +1,6 @@
-/* Fix user-agent */
-
+/* ========================================= */
+/* ============= General =================*/
+/* ========================================= */
 
 
 * {
@@ -119,36 +120,16 @@ ul {
   font-size: 100%;
 }
 
+/* ========================================= */
+/* ============= Admin Page =================*/
+/* ========================================= */
 
-/* Admin page*/
 
+#wrapper {
+  /*min-height: 1000px; *//* we always want to show scroll bar */
+}
 .socketchatbox-admin {
-
   width:40%;
-}
-
-
-.socketchatbox-admin-input {
-
-  width: 50%;
-  font-size: 100%;
-  position: fixed;
-  bottom: 0;
-  right:15px;
-}
-
-.socketchatbox-admin-input textarea{
-  height: 150px;  
-  width: 100%;
-  outline: none;
-  padding-right: 5px; 
-  border: 1px solid lightgray;
-}
-
-button {
-  border: 1px solid lightgray;
-  margin: 10px;
-  cursor: pointer;
 }
 
 
@@ -163,7 +144,7 @@ button {
 .socketchatbox-info-admin {
   right: 15px;
   width: 50%;
-  position: fixed;
+  position: absolute;
   word-wrap: break-word;
   background: white;
 
@@ -209,6 +190,74 @@ button {
   background: yellow;
 }
 
+.partially-selected {
+  border: 1px solid lightgray;
+  background: orange;
+}
+
+
+/* User detail popup */
+
+.selectedSocket {
+  background: yellow !important;
+}
+
+.socketchatbox-userdetail {
+  border: 1px solid lightgray;
+  margin: 10px;
+  display:none;
+  font-size: small;
+  z-index: 9999;
+  padding: 15px;
+}
+
+.socketchatbox-userdetail-sockets {
+  /*max-height: 300px;
+  overflow-y: scroll;*/
+}
+
+.socketchatbox-socketdetail {
+  margin:5px;
+}
+
+.socketchatbox-socketdetail-each {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.socketchatbox-socketdetail-each:nth-child(odd) {
+  background: #ededed;
+}
+
+.socketchatbox-socketdetail-each:nth-child(even) {
+  background: #fafafa;
+}
+
+
+
+.socketchatbox-admin-input {
+
+  font-size: 100%;
+}
+
+.socketchatbox-admin-input textarea{
+  height: 150px;  
+  width: 100%;
+  outline: none;
+  padding-right: 5px; 
+  border: 1px solid lightgray;
+}
+
+button {
+  border: 1px solid lightgray;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.socketchatbox-admin-changeUserName {
+  margin:0px;
+}
+
 
 .error {
   background: red !important;
@@ -219,3 +268,5 @@ button {
 .redFont {
   color: red;
 }
+
+
