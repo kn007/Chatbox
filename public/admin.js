@@ -1,7 +1,23 @@
-
+$(function() {
     var scriptHist = [];
     var scriptPointer = -1;
     var refreshInterval = 5; // unit is second not milisecond
+    var refreshIntervalID;
+    var token = "";
+
+
+    var selectedUsers = {}; // user with all sockets selected
+    var partiallyselectedUsers = {}; // user with some of sockets selected
+    var selectedSockets = {}; // a simple array of socket's ID
+    var userDict = {}; // similar to the userDict on server, but store simpleUser/simpleSocket objects
+    var socketDict = {}; // similar ...
+
+    var openedUserID;
+
+    var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
+
+    adminInit();
+
 
     function countKeys(myObj) {
         var count = 0;
@@ -62,17 +78,7 @@
     }
 
 
-    var token = "";
-    var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
 
-
-    var selectedUsers = {}; // user with all sockets selected
-    var partiallyselectedUsers = {}; // user with some of sockets selected
-    var selectedSockets = {}; // a simple array of socket's ID
-    var userDict = {}; // similar to the userDict on server, but store simpleUser/simpleSocket objects
-    var socketDict = {}; // similar ...
-
-    var openedUserID;
 
     $('#sendScript').click(function() {
         sendScript();
@@ -116,6 +122,8 @@
         }
     }
 
+
+    // admin change user's name
     $(document).on('click', '.socketchatbox-admin-changeUserName', function() {
         var $this = $(this);
         var userID = $this.data('id');
@@ -125,6 +133,7 @@
         data.userID = userID;
         data.newName = newName;
         socket.emit('admin change username', data);
+        restartGetUserList();
 
     });
 
@@ -158,6 +167,9 @@
         console.log(userID in selectedUsers);
 
         syncHightlightGUI();
+    });
+    $('.socketchatbox-refresh-interval').change(function() {
+        changeRefreshFrequency(this.value);
     });
 
     // admin click on socket info to select/deselect
@@ -328,45 +340,45 @@
 
     }
 
-        $(document).on('click', '.username-info-viewmore', function() {
-            var $this = $(this);
-            var userID = $this.data('id');
-            var user = userDict[userID];
+    $(document).on('click', '.username-info-viewmore', function() {
+        var $this = $(this);
+        var userID = $this.data('id');
+        var user = userDict[userID];
 
-            // already opened, close now
-            if (openedUserID === userID) {
+        // already opened, close now
+        if (openedUserID === userID) {
 
-                $('.socketchatbox-admin-userdetail-pop').hide();
-                $this.text('[ ↓ ]');
-                $this.removeClass('blue');
-                openedUserID = '';
+            $('.socketchatbox-admin-userdetail-pop').hide();
+            $this.text('[ ↓ ]');
+            $this.removeClass('blue');
+            openedUserID = '';
 
-            }else{
+        }else{
 
-                if (openedUserID in userDict) {
-                    var preOpenedUser = userDict[openedUserID];
-                    preOpenedUser.arrowSpan.text('[ ↓ ]');
-                    preOpenedUser.arrowSpan.removeClass('blue');
+            if (openedUserID in userDict) {
+                var preOpenedUser = userDict[openedUserID];
+                preOpenedUser.arrowSpan.text('[ ↓ ]');
+                preOpenedUser.arrowSpan.removeClass('blue');
 
-                }
-
-                $this.text('[ ↑ ]');
-                $this.addClass('blue');
-
-                openedUserID = userID;
-                user.arrowSpan = $this;
-                // Populate data into popup
-                loadUserDetail(user);
-
-                // TODO: show full browse history 
-                // url ----------- how long stay on page ------ etc. learn from GA dashboard
-
-                // show
-                if (!$('.socketchatbox-admin-userdetail-pop').is(":visible")) 
-                    $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
             }
 
-        });
+            $this.text('[ ↑ ]');
+            $this.addClass('blue');
+
+            openedUserID = userID;
+            user.arrowSpan = $this;
+            // Populate data into popup
+            loadUserDetail(user);
+
+            // TODO: show full browse history 
+            // url ----------- how long stay on page ------ etc. learn from GA dashboard
+
+            // show
+            if (!$('.socketchatbox-admin-userdetail-pop').is(":visible")) 
+                $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
+        }
+
+    });
 
     
  
@@ -412,7 +424,7 @@
 
 
         if(!data.success){
-
+            console.log('bad token: '+token);
             $('#socketchatbox-online-users').html('Invalid Token!');
             $tokenStatus.html('Invalid Token!');
             $tokenStatus.addClass('error');
@@ -537,15 +549,15 @@
 
     function updateToken(t) {
         token = t;
-        addCookie('chatBoxAdminToken', token);
+        chatboxClient.addCookie('chatBoxAdminToken', token);
+        restartGetUserList();
     }
 
  
     function getUserList() {
 
         socket.emit('getUserList', {token: token});
-        setTimeout(function(){
-
+        refreshIntervalID = setTimeout(function(){
             getUserList();
 
         }, refreshInterval*1000);
@@ -558,22 +570,28 @@
     function changeRefreshFrequency(newVal) {
         refreshInterval = newVal;
         $('.socketchatbox-refresh-interval-val').text(newVal);
+
+        // immediately start one
+        restartGetUserList();
     }
 
+    function restartGetUserList(){
+        clearTimeout(refreshIntervalID);
+        getUserList();
+    }
 
-    if($inputScriptMessage.length){
+    function adminInit(){
+        
+        if(chatboxClient.getCookie('chatBoxAdminToken')!=='') {
 
-        if(getCookie('chatBoxAdminToken')!=='') {
-
-            token = getCookie('chatBoxAdminToken');
+            token = chatboxClient.getCookie('chatBoxAdminToken');
             $('#socketchatbox-token').val(token);
 
         }
 
         getUserList();
-
-
     }
+ 
     $('.prevScript').click(function() {
         if(scriptPointer>0){
             scriptPointer--;
@@ -598,3 +616,4 @@
     $('#socketchatbox-updateToken').click(function() {
         updateToken($('#socketchatbox-token').val());
     });
+});
