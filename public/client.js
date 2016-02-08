@@ -99,7 +99,7 @@ $(function() {
             var expires = "expires="+d.toUTCString();
             document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
         }
-    }
+    };
 
     window.chatboxClient = chatboxClient;
     window.socket = socket;
