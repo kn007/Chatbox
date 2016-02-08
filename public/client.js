@@ -565,9 +565,30 @@
         e.stopPropagation();
     }
 
+    function fileTooBig(data){
+
+        var fileSize = data.size/1024/1024; //MB
+        var File_Size_Limit = 5;
+        if (fileSize > File_Size_Limit){
+                
+            alert("Don't upload file larger than "+File_Size_Limit+" MB!");
+            return true;
+        }
+
+        return false;
+
+    }
+
     function readThenSendFile(data){
-        if(sendingFile)
+
+        if(sendingFile){
+            alert('Still sending last file!');
             return;
+        }
+
+        if(fileTooBig(data))
+            return;
+
 
         var reader = new FileReader();
         reader.onload = function(evt){
