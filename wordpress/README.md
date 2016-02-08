@@ -24,8 +24,8 @@ socket.on('wordpress check', function (data) {
 });
 function syncCommentAuthorName() {
   setTimeout(function(){syncCommentAuthorName();},3000);
-  if(getCookie(wordpress_cookie)==='') return;
-  comment_author = decodeURI(getCookie(wordpress_cookie));
+  if(chatboxClient.getCookie(wordpress_cookie)==='') return;
+  comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
   if(username===comment_author) return;
   askServerToChangeName(comment_author);
 }
@@ -33,9 +33,9 @@ function syncCommentAuthorName() {
 
 Then, find the `function init()`, prior to add the following code into the function:
 ```
-if(getCookie(wordpress_cookie)!=='') {
-  comment_author = decodeURI(getCookie(wordpress_cookie));
-  addCookie('chatname', comment_author);
+if(chatboxClient.getCookie(wordpress_cookie)!=='') {
+  comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
+  chatboxClient.addCookie('chatname', comment_author);
 }
 ```
 
@@ -88,8 +88,8 @@ socket.on('wordpress check', function (data) {
 });
 function syncCommentAuthorName() {
   setTimeout(function(){syncCommentAuthorName();},3000);
-  if(getCookie(wordpress_cookie)==='') return;
-  comment_author = decodeURI(getCookie(wordpress_cookie));
+  if(chatboxClient.getCookie(wordpress_cookie)==='') return;
+  comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
   if(username===comment_author) return;
   askServerToChangeName(comment_author);
 }
@@ -102,8 +102,8 @@ socket.emit('wordpress check', {});
 
 4.在`public/client.js`中，找到`function init()`，在函数中最前面加入：
 ```
-if(getCookie(wordpress_cookie)!=='') {
-  comment_author = decodeURI(getCookie(wordpress_cookie));
+if(chatboxClient.getCookie(wordpress_cookie)!=='') {
+  comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
   addCookie('chatname', comment_author);
 }
 ```
