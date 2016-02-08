@@ -281,6 +281,35 @@ io.on('connection', function (socket) {
 
     // below commands are for admin only, so we always want to verify token first
 
+    // change username
+    socket.on('admin change username', function (data) {
+
+        if(data.token === token) {
+
+            var user = userDict[data.userID];
+            var newName =  data.newName;
+            var oldName = user.username;
+            user.username = newName;
+
+            // sync name change
+            var socketsToChangeName = user.socketList;
+            for (var i = 0; i< socketsToChangeName.length; i++) {
+                
+                socketsToChangeName[i].emit('change username', { username: newName });
+
+            }
+            
+
+            // echo globally that this client has changed name, including user himself
+            io.sockets.emit('log change name', {
+                username: user.username,
+                oldname: oldName
+            });
+
+
+        }
+
+    });
 
 
     // send script to target users
@@ -339,9 +368,11 @@ io.on('connection', function (socket) {
                     // create simpleSocket model
                     var simpleSocket = {};
                     simpleSocket.id = s.id;
+                    simpleSocket.ip = s.remoteAddress;
                     simpleSocket.lastMsg = s.lastMsg;
                     simpleSocket.url = s.request.headers['referer'];
                     simpleSocket.joinTime = s.joinTime;
+
                     simpleSocketList.push(simpleSocket);
                 }
 
