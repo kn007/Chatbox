@@ -76,7 +76,7 @@
 
 .partially-selected {
   border: 1px solid lightgray;
-  background: orange;
+  background: linear-gradient(90deg, yellow 50%, white 50%);
 }
 
 
@@ -113,6 +113,7 @@
 .socketchatbox-socketdetail-each {
   padding: 15px;
   cursor: pointer;
+  border: 1px solid lightgray;
 }
 
 .socketchatbox-socketdetail-each:nth-child(odd) {
