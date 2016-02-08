@@ -87,12 +87,18 @@
 }
 
 .socketchatbox-userdetail {
-  border: 5px solid #81DAF5;
+  border: 1px solid lightgray;
+  background: #ccffff;
   margin: 10px;
   display:none;
   font-size: small;
   z-index: 9999;
   padding: 15px;
+}
+
+.socketchatbox-userdetail-name {
+  font-size: larger;
+  font-weight: bold;
 }
 
 .socketchatbox-userdetail-sockets {
@@ -148,7 +154,7 @@ button {
 }
 
 .blue {
-  background: #81DAF5;
+  background: #ccffff;
 }
 
 .error {

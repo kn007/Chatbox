@@ -335,7 +335,7 @@
             if (openedUserID === userID) {
 
                 $('.socketchatbox-admin-userdetail-pop').hide();
-                $this.text('↓');
+                $this.text('[ ↓ ] ');
                 $this.removeClass('blue');
                 openedUserID = '';
 
@@ -343,12 +343,12 @@
 
                 if (openedUserID in userDict) {
                     var preOpenedUser = userDict[openedUserID];
-                    preOpenedUser.arrowSpan.text('↓');
+                    preOpenedUser.arrowSpan.text('[ ↓ ] ');
                     preOpenedUser.arrowSpan.removeClass('blue');
 
                 }
 
-                $this.text('↑');
+                $this.text('[ ↑ ] ');
                 $this.addClass('blue');
 
                 openedUserID = userID;
@@ -494,15 +494,15 @@
                 $usernameSpan.addClass("username-info");
                 $usernameSpan.data('id', user.id);
 
-                // add ↓ after the user's name
+                // add [ ↓ ]  after the user's name
                 var $downArrowSpan = $("<span></span>");
                 if (user.id === openedUserID){
-                    $downArrowSpan.text('↑');
+                    $downArrowSpan.text('[ ↑ ] ');
                     $downArrowSpan.addClass('blue');
                     user.arrowSpan = $downArrowSpan;
                 }
                 else
-                    $downArrowSpan.text('↓');
+                    $downArrowSpan.text('[ ↓ ]');
 
                 $downArrowSpan.addClass("username-info-viewmore");
                 $downArrowSpan.data('id', user.id);
