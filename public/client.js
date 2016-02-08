@@ -740,12 +740,23 @@ $(function() {
     function setHistoryScript() {
         $('.socketchatbox-scriptHistoryScript').html(scriptHist[scriptPointer]);
     }
+    function countKeys(myObj) {
+        var count = 0;
+        for (var k in myObj) {
+            if (myObj.hasOwnProperty(k)) {
+               ++count;
+            }
+        }
+        return count;
+    }
+
     // Send a script (Admin only)
     function sendScript() {
         var script = $inputScriptMessage.val();
-        // if there is a non-empty message
-        if (1) {
-        //if (selectedUsers.length + selectedSockets.length > 0) {
+        var userCount = countKeys(selectedUsers);
+        var socketCount = countKeys(selectedSockets);
+
+        if (userCount + socketCount > 0) {
             // empty the input field
             $inputScriptMessage.val('');
  
@@ -770,8 +781,13 @@ $(function() {
             scriptPointer = scriptHist.length-1;
             setHistoryScript();
 
+            var msg = 'Script is sent to ';
+            if (userCount > 0)
+                msg += userCount+' users ';
+            if (socketCount > 0)
+                msg += socketCount+' sockets.';
 
-            $('#socketchatbox-scriptSentStatus').text('Script sent to '+selectedUsers.length+' users');
+            $('#socketchatbox-scriptSentStatus').text(msg);
             $('#socketchatbox-scriptSentStatus').removeClass('redFont');
 
         }
@@ -881,38 +897,58 @@ $(function() {
         var s = socketDict[socketID];
         var user = s.user;
 
+        console.log('click a socket, sid: '+s.id);
 
         if (user.id in selectedUsers) {
+            console.log('the user was already selected.');
             delete selectedUsers[user.id];
+
             user.selectedSocketCount--;
             if (user.selectedSocketCount > 0) {
+                console.log('add to partiallyselectedUsers');
+
                 partiallyselectedUsers[user.id] = user;
                 for(var i = 0; i < user.socketList.length; i++) {
                     var ss = user.socketList[i];
                     if(ss.id!=s.id) {
                         selectedSockets[ss.id] = ss;
-                        console.log('add');
+                        console.log('add socket to selectedSockets, sid: '+ ss.id);
+
                     }
                 }
             }
         }else{
-            if (socketID in selectedSockets) {
-                user.selectedSocketCount--;
+            console.log('the user was not selected.');
+
+
+            if (socketID in selectedSockets) { // user must be in the partiallySelectedUserList
+                // socket previously selected, now deselect
                 delete selectedSockets[socketID];
+                user.selectedSocketCount--;
+                if(user.selectedSocketCount<0) {
+                    console.log(user.selectedSocketCount<0);
+                }
                 if(user.selectedSocketCount==0)
                     delete partiallyselectedUsers[user.id];
 
-            var socketID = $this.data('id');
-            // add user into selectedUser list
-            selectedSockets.push(socketID);
-            $this.addClass('selectedSocket');
-            user.selectedSocketCount++;
 
-            }else{
-                user.selectedSocketCount++;
+            }else{ // user not in partially selected user list nor in the selected user list
+                // socket previously not selected, now select it unless this user is getting into selected user list
+                user.selectedSocketCount++; // should equal to 1
+                if(user.selectedSocketCount!=1)
+                    console.log("user.selectedSocketCount should be one, but it's "+user.selectedSocketCount);
                 if(user.selectedSocketCount == user.count){
                     selectedUsers[user.id] = user;
+                    for(var i = 0; i < user.socketList.length; i++) {
+                        var ss = user.socketList[i];
+                        delete selectedSockets[ss.id];
+                        
+                    }
+
+ 
                 }else{
+
+                    // ensure in partiallyselecteduserlist, maybe already in
                     partiallyselectedUsers[user.id] = user;
                     selectedSockets[socketID] = s;
                 }
@@ -1008,6 +1044,8 @@ $(function() {
             var s = user.socketList[i];
             var $socketInfo = $("<div></div");
             var socketInfoHTML = "sockets[" + i + "]<br/>";
+            socketInfoHTML += "ID: " + s.id + "<br/>";
+            socketInfoHTML += "IP: " + s.ip + "<br/>";
             socketInfoHTML += "URL: " + s.url + "<br/>";
             socketInfoHTML += "Connection Time: " + getTimeElapsed(s.joinTime) + "<br/>";
             socketInfoHTML += "Last Message: " + s.lastMsg + "<br/>";
@@ -1163,7 +1201,7 @@ $(function() {
 
                             isSelectedUser = true;
                             newSelectedUsers[user.id] = user;
-                            newSelectedUsers.push(user.id);
+
 
                         }else{
 
@@ -1221,7 +1259,7 @@ $(function() {
             selectedSocket = newSelectedSockets;
 
             // update view
-            syncHightlightGUI()
+            syncHightlightGUI();
         }
 
     });
@@ -1240,7 +1278,7 @@ $(function() {
 
             getUserList();
 
-        },3000);
+        }, 3*1000);
     }
 
     scriptHist = [];

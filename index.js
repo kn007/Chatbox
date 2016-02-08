@@ -360,9 +360,11 @@ io.on('connection', function (socket) {
                     // create simpleSocket model
                     var simpleSocket = {};
                     simpleSocket.id = s.id;
+                    simpleSocket.ip = s.remoteAddress;
                     simpleSocket.lastMsg = s.lastMsg;
                     simpleSocket.url = s.request.headers['referer'];
                     simpleSocket.joinTime = s.joinTime;
+
                     simpleSocketList.push(simpleSocket);
                 }
 
