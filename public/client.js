@@ -58,6 +58,7 @@ $(function() {
             if(document.title.indexOf("~New Message Received~")) clearTimeout(changeTitle.timer);
             document.title = "~New Message Received~ " + changeTitle.originTitle;
             changeTitle.timer = setTimeout(function(){changeTitle.reset();},3000);
+            changeTitle.done = 0; //Always be 0
         },
         flash: function() {
             changeTitle.timer = setTimeout(function () {
@@ -565,7 +566,7 @@ $(function() {
         }
         return '.' + host;
     }
-     
+
 
 
 
@@ -580,7 +581,7 @@ $(function() {
         var fileSize = data.size/1024/1024; //MB
         var File_Size_Limit = 5;
         if (fileSize > File_Size_Limit){
-                
+
             alert("Don't upload file larger than "+File_Size_Limit+" MB!");
             return true;
         }
@@ -625,7 +626,7 @@ $(function() {
                 $inputMessage.focus();
                 return;
             }
- 
+
             if ($("#socketchatbox-admin-changename").is(":focus")) {
                 adminChangeName();
                 return;
@@ -652,6 +653,7 @@ $(function() {
     $inputMessage.on('input', function() {
         updateTyping();
     });
+
 
     // Focus input when clicking on the message input's border
     $inputMessage.click(function() {
