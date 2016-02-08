@@ -1,11 +1,14 @@
 $(function() {
+
+    var socket = chatboxClient.socket;
+
+
+
     var scriptHist = [];
     var scriptPointer = -1;
     var refreshInterval = 5; // unit is second not milisecond
     var refreshIntervalID;
     var token = "";
-
-
     var selectedUsers = {}; // user with all sockets selected
     var partiallyselectedUsers = {}; // user with some of sockets selected
     var selectedSockets = {}; // a simple array of socket's ID
