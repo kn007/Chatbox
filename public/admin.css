@@ -88,7 +88,7 @@
 
 .socketchatbox-userdetail {
   border: 1px solid lightgray;
-  background: #ccffff;
+  background: #E8FFFF;
   margin: 10px;
   display:none;
   font-size: small;
@@ -140,12 +140,13 @@
 
 button {
   border: 1px solid lightgray;
-  margin: 10px;
+  margin-left: 10px;
   cursor: pointer;
+  background: beige;
 }
 
 .socketchatbox-admin-changeUserName {
-  margin:0px;
+  /*margin:0px;*/
 }
 
 .socketchatbox-refresh-interval {
@@ -154,7 +155,7 @@ button {
 }
 
 .blue {
-  background: #ccffff;
+  background: #E8FFFF;
 }
 
 .error {

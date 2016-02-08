@@ -116,7 +116,17 @@
         }
     }
 
+    $(document).on('click', '.socketchatbox-admin-changeUserName', function() {
+        var $this = $(this);
+        var userID = $this.data('id');
+        var newName = $('.socketchatbox-userdetail-name-edit').val();
+        var data = {};
+        data.token = token;
+        data.userID = userID;
+        data.newName = newName;
+        socket.emit('admin change username', data);
 
+    });
 
     // admin click on username to select/deselect
     $(document).on('click', '.username-info', function() {
@@ -283,16 +293,8 @@
 
         // user info
         $('.socketchatbox-userdetail-name').text(user.username);
-        $('.socketchatbox-userdetail-name').click(function(){
-
-            var data = {};
-            data.token = token;
-            data.userID = user.id;
-            data.newName = prompt("Please enter new name", user.username);
-
-            socket.emit('admin change username', data);
-
-        });
+        $('.socketchatbox-userdetail-name-edit').val(user.username);
+        $('.socketchatbox-admin-changeUserName').data('id',user.id); 
         $('.socketchatbox-userdetail-lastmsg').text(user.lastMsg);
         $('.socketchatbox-userdetail-ip').text(user.ip);
         $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
@@ -335,7 +337,7 @@
             if (openedUserID === userID) {
 
                 $('.socketchatbox-admin-userdetail-pop').hide();
-                $this.text('[ ↓ ] ');
+                $this.text('[ ↓ ]');
                 $this.removeClass('blue');
                 openedUserID = '';
 
@@ -343,12 +345,12 @@
 
                 if (openedUserID in userDict) {
                     var preOpenedUser = userDict[openedUserID];
-                    preOpenedUser.arrowSpan.text('[ ↓ ] ');
+                    preOpenedUser.arrowSpan.text('[ ↓ ]');
                     preOpenedUser.arrowSpan.removeClass('blue');
 
                 }
 
-                $this.text('[ ↑ ] ');
+                $this.text('[ ↑ ]');
                 $this.addClass('blue');
 
                 openedUserID = userID;
@@ -497,7 +499,7 @@
                 // add [ ↓ ]  after the user's name
                 var $downArrowSpan = $("<span></span>");
                 if (user.id === openedUserID){
-                    $downArrowSpan.text('[ ↑ ] ');
+                    $downArrowSpan.text('[ ↑ ]');
                     $downArrowSpan.addClass('blue');
                     user.arrowSpan = $downArrowSpan;
                 }
