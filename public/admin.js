@@ -1,6 +1,7 @@
-    
+
     var scriptHist = [];
     var scriptPointer = -1;
+    var refreshInterval = 5; // unit is second not milisecond
 
     function countKeys(myObj) {
         var count = 0;
@@ -490,18 +491,6 @@
                 $usernameSpan.addClass("username-info");
                 $usernameSpan.data('id', user.id);
 
-                if(isSelectedUser) {
-                    $usernameSpan.addClass("selected");
-                }
-                if(isPartiallySelectedUser) {
-
-                    $usernameSpan.addClass("partially-selected");
-
-                    if(isSelectedUser)
-                        console.log('data bug!!! should not be both selected and partially selected!');
-                }
-
-
 
                 // also link user with his jquery object
                 user.jqueryObj = $usernameSpan;
@@ -540,13 +529,17 @@
 
             getUserList();
 
-        }, 3*1000);
+        }, refreshInterval*1000);
     }
 
     function setHistoryScript() {
         $('.socketchatbox-scriptHistoryScript').html(scriptHist[scriptPointer]);
     }
 
+    function changeRefreshFrequency(newVal) {
+        refreshInterval = newVal;
+        $('.socketchatbox-refresh-interval-val').text(newVal);
+    }
 
 
     if($inputScriptMessage.length){

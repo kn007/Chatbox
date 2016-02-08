@@ -153,23 +153,23 @@ ul {
 
 #socketchatbox-checkAdmin {
   border: 1px solid lightgray;
-  padding: 5px;
+  padding: 20px;
 }
 #socketchatbox-online {
   border: 1px solid lightgray;
-  padding: 5px;
+  padding: 20px;
   background: white;
 
 }
 .socketchatbox-scriptHistory {
   border: 1px solid lightgray;
-  padding: 5px;
+  padding: 20px;
   background: white;
 
 }
 #socketchatbox-help {
   border: 1px solid lightgray;
-  padding: 5px;
+  padding: 20px;
   width: 40%;
   position: fixed;
   word-wrap: break-word;
@@ -258,6 +258,11 @@ button {
   margin:0px;
 }
 
+
+.socketchatbox-refresh-interval  {
+    margin-left:30px;
+
+}
 
 .error {
   background: red !important;

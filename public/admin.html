@@ -62,6 +62,8 @@
                     <b> Users Online</b>
                     <button id="selectAll">Select All</button>
                     <button id="selectNone">Select None</button>
+                    <br/>
+                    <small>Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec</small><input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="2" onchange="changeRefreshFrequency(this.value)" />
                     <br/><br/>
                     <div id="socketchatbox-online-users">
                         Waiting...
