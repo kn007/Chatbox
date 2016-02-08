@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Chatbox Admin</title>
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/client.css">
+        <link rel="stylesheet" href="/admin.css">
     </head>
     <body>
         <center><h1>ADMIN CONTROL PANEL</h1></center>
@@ -39,7 +40,7 @@
                 The first thing you need to do is to enter your token and click update, the 
                 default token is "12345", you can change the token in index.js.</li> 
                 <li>Once the admin validation is successful, you can see all users online at the moment.</li> 
-                <li>Right click on the user to see more details, including socket information.</li>
+                <li>Click on the '[ ↓ ]' after user name to see more details, including all his sockets information.</li>
                 <li>To run JavaScript on user's browser, you need to select the user as target before sending your script.</li>
 
                 You can see some example scripts in AdminHelp.md.
@@ -49,11 +50,12 @@
             <div class="socketchatbox-info-admin">
 
                 <div id="socketchatbox-checkAdmin">
-                    <b>Admin Validation</b><br/><br/>
+                    <b>Admin Token Verification:</b> <span id="socketchatbox-tokenStatus">Waiting...</span> 
+                    <br/><br/>
                     Token: <input type="password" id="socketchatbox-token">
                     <button id="socketchatbox-updateToken">Update</button>
-                    <br/>
-                    Status: <span id="socketchatbox-tokenStatus">Waiting...</span>        
+                    
+                           
 
                 </div>
                 <br/><br/>
@@ -62,16 +64,16 @@
                     <b> Users Online</b>
                     <button id="selectAll">Select All</button>
                     <button id="selectNone">Select None</button>
-                    <br/>
+                    <br/><br/>
                     <small>Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec</small><input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="2" onchange="changeRefreshFrequency(this.value)" />
                     <br/><br/>
                     <div id="socketchatbox-online-users">
                         Waiting...
                     </div>
                     <div class="socketchatbox-userdetail socketchatbox-admin-userdetail-pop">
-                        <center>User Profile</center>
-                        <p>Name: <span class="socketchatbox-userdetail-name"></span>
-                            <button class="socketchatbox-admin-changeUserName">edit</button>
+                        <center><span class="socketchatbox-userdetail-name"></span></center>
+                        <p>Name: <input class="socketchatbox-userdetail-name-edit" type="text" />
+                            <button class="socketchatbox-admin-changeUserName">update</button>
                         </p>
                         <p>IP: <span class="socketchatbox-userdetail-ip"></span>
                             <button class="socketchatbox-admin-blockIP">block</button>

@@ -116,7 +116,17 @@
         }
     }
 
+    $(document).on('click', '.socketchatbox-admin-changeUserName', function() {
+        var $this = $(this);
+        var userID = $this.data('id');
+        var newName = $('.socketchatbox-userdetail-name-edit').val();
+        var data = {};
+        data.token = token;
+        data.userID = userID;
+        data.newName = newName;
+        socket.emit('admin change username', data);
 
+    });
 
     // admin click on username to select/deselect
     $(document).on('click', '.username-info', function() {
@@ -283,16 +293,8 @@
 
         // user info
         $('.socketchatbox-userdetail-name').text(user.username);
-        $('.socketchatbox-userdetail-name').click(function(){
-
-            var data = {};
-            data.token = token;
-            data.userID = user.id;
-            data.newName = prompt("Please enter new name", user.username);
-
-            socket.emit('admin change username', data);
-
-        });
+        $('.socketchatbox-userdetail-name-edit').val(user.username);
+        $('.socketchatbox-admin-changeUserName').data('id',user.id); 
         $('.socketchatbox-userdetail-lastmsg').text(user.lastMsg);
         $('.socketchatbox-userdetail-ip').text(user.ip);
         $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
@@ -326,45 +328,48 @@
 
     }
 
-    // disable right click
-    $('#socketchatbox-online-users').bind('contextmenu', function(){ return false; });
+        $(document).on('click', '.username-info-viewmore', function() {
+            var $this = $(this);
+            var userID = $this.data('id');
+            var user = userDict[userID];
 
-    // admin right click on username to see details
-    $(document).on('mousedown', '.username-info', function(e) {
-        switch (e.which) {
-            case 1:
-                //alert('Left Mouse button pressed.');
-                break;
-            case 2:
-                //alert('Middle Mouse button pressed.');
-                break;
-            case 3:
+            // already opened, close now
+            if (openedUserID === userID) {
+
                 $('.socketchatbox-admin-userdetail-pop').hide();
+                $this.text('[ ↓ ]');
+                $this.removeClass('blue');
+                openedUserID = '';
 
-                //alert('Right Mouse button pressed.');
+            }else{
 
-                var $this = $(this);
-                var userID = $this.data('id');
+                if (openedUserID in userDict) {
+                    var preOpenedUser = userDict[openedUserID];
+                    preOpenedUser.arrowSpan.text('[ ↓ ]');
+                    preOpenedUser.arrowSpan.removeClass('blue');
+
+                }
+
+                $this.text('[ ↑ ]');
+                $this.addClass('blue');
+
                 openedUserID = userID;
-                var user = userDict[userID];
+                user.arrowSpan = $this;
                 // Populate data into popup
                 loadUserDetail(user);
-                // full browse history
-                // url ----------- how long stay on page ------ etc. check GA
 
+                // TODO: show full browse history 
+                // url ----------- how long stay on page ------ etc. learn from GA dashboard
 
-                // show popup
-                $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
-                e.preventDefault();
-                e.stopPropagation();
+                // show
+                if (!$('.socketchatbox-admin-userdetail-pop').is(":visible")) 
+                    $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
+            }
 
-                break;
-            default:
-                //alert('You have a strange Mouse!');
-        }
-    });
+        });
 
-
+    
+ 
     function getTimeElapsed(startTime) {
         // time difference in ms
         var timeDiff = (new Date()).getTime() - startTime;
@@ -491,11 +496,25 @@
                 $usernameSpan.addClass("username-info");
                 $usernameSpan.data('id', user.id);
 
+                // add [ ↓ ]  after the user's name
+                var $downArrowSpan = $("<span></span>");
+                if (user.id === openedUserID){
+                    $downArrowSpan.text('[ ↑ ]');
+                    $downArrowSpan.addClass('blue');
+                    user.arrowSpan = $downArrowSpan;
+                }
+                else
+                    $downArrowSpan.text('[ ↓ ]');
+
+                $downArrowSpan.addClass("username-info-viewmore");
+                $downArrowSpan.data('id', user.id);
+
 
                 // also link user with his jquery object
                 user.jqueryObj = $usernameSpan;
 
                 $('#socketchatbox-online-users').append($usernameSpan);
+                $('#socketchatbox-online-users').append($downArrowSpan);
 
                 // reload user detail if this is the user selected
                 if(user.id === openedUserID) {
