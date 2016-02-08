@@ -1,3 +1,4 @@
+$(function() {
     var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
@@ -59,7 +60,7 @@
             if(document.title.indexOf("~New Message Received~")) clearTimeout(changeTitle.timer);
             document.title = "~New Message Received~ " + changeTitle.originTitle;
             changeTitle.timer = setTimeout(function(){changeTitle.reset();},3000);
-            changeTitle.done = 0;
+            changeTitle.done = 0; //Always be 0
         },
         flash: function() {
             changeTitle.timer = setTimeout(function () {
@@ -79,6 +80,32 @@
             changeTitle.done = 0;
         }
     };
+
+    var chatboxClient = {
+
+        getCookie : function (cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1);
+                if (c.indexOf(name) === 0) return c.substring(name.length,c.length);
+            }
+            return "";
+        },
+
+        addCookie : function (cname, cvalue) {
+            exdays = 365;
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
+        }
+    };
+
+    window.chatboxClient = chatboxClient;
+    window.socket = socket;
+
 
     init();
 
@@ -184,30 +211,30 @@
         if(initialize !== 0) return;
 
         // Read old uuid from cookie if exist
-        if(getCookie('chatuuid')!=='') {
-            uuid = getCookie('chatuuid');
+        if(chatboxClient.getCookie('chatuuid')!=='') {
+            uuid = chatboxClient.getCookie('chatuuid');
         }else{
             uuid = guid();
-            addCookie('chatuuid', uuid);
+            chatboxClient.addCookie('chatuuid', uuid);
         }
 
         // For Wordpress to get username from cookie if exist
-        if(getCookie(wordpress_cookie)!=='') {
-            comment_author = decodeURI(getCookie(wordpress_cookie));
-            addCookie('chatname', comment_author);
+        if(chatboxClient.getCookie(wordpress_cookie)!=='') {
+            comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
+            chatboxClient.addCookie('chatname', comment_author);
         }
 
         // Read old username from cookie if exist
-        if(getCookie('chatname')!=='') {
-            username = getCookie('chatname');
+        if(chatboxClient.getCookie('chatname')!=='') {
+            username = chatboxClient.getCookie('chatname');
         }else{
-            addCookie('chatname', username);
+            chatboxClient.addCookie('chatname', username);
         }
 
         loadHistoryChatFromCookie();
 
         // Show/hide chatbox base on cookie value
-        if(getCookie('chatboxOpen')==='1') {
+        if(chatboxClient.getCookie('chatboxOpen')==='1') {
             initialize = 1;
             show();
         }else{
@@ -218,8 +245,8 @@
 
     function syncCommentAuthorName() {
         setTimeout(function(){syncCommentAuthorName();},3000);
-        if(getCookie(wordpress_cookie)==='') return;
-        comment_author = decodeURI(getCookie(wordpress_cookie));
+        if(chatboxClient.getCookie(wordpress_cookie)==='') return;
+        comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
         if(username===comment_author) return;
         askServerToChangeName(comment_author);
     }
@@ -467,7 +494,7 @@
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text('Changing your name...');
+        if(chatboxClient.getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text('Changing your name...');
     }
 
 
@@ -475,8 +502,8 @@
     function changeLocalUsername(name) {
         if(name) {
             username = name;
-            addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);
+            chatboxClient.addCookie('chatname', name);
+            if(chatboxClient.getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);
         }
     }
 
@@ -496,7 +523,7 @@
     function writeChatHistoryIntoCookie(username, msg) {
         var chatHistory = [];
         try{
-            chatHistory = JSON.parse(getCookie('chathistory'));
+            chatHistory = JSON.parse(chatboxClient.getCookie('chathistory'));
         }catch(e){}
 
         if (chatHistory.length===0||
@@ -510,14 +537,14 @@
             chatHistory.push(dataToSaveIntoCookie);
             // keep most recent 20 messages only
             chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0));
-            addCookie('chathistory',JSON.stringify(chatHistory));
+            chatboxClient.addCookie('chathistory',JSON.stringify(chatHistory));
         }
     }
 
     function loadHistoryChatFromCookie() {
         var chatHistory = [];
         try{
-            chatHistory = JSON.parse(getCookie('chathistory'));
+            chatHistory = JSON.parse(chatboxClient.getCookie('chathistory'));
         }catch(e){}
         if(chatHistory.length){
           log("----Chat History----");
@@ -561,24 +588,7 @@
     }
 
 
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1);
-            if (c.indexOf(name) === 0) return c.substring(name.length,c.length);
-        }
-        return "";
-    }
 
-    function addCookie(cname, cvalue) {
-        exdays = 365;
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
-    }
 
 
     function doNothing(e){
@@ -586,9 +596,30 @@
         e.stopPropagation();
     }
 
+    function fileTooBig(data){
+
+        var fileSize = data.size/1024/1024; //MB
+        var File_Size_Limit = 5;
+        if (fileSize > File_Size_Limit){
+
+            alert("Don't upload file larger than "+File_Size_Limit+" MB!");
+            return true;
+        }
+
+        return false;
+
+    }
+
     function readThenSendFile(data){
-        if(sendingFile)
+
+        if(sendingFile){
+            alert('Still sending last file!');
             return;
+        }
+
+        if(fileTooBig(data))
+            return;
+
 
         var reader = new FileReader();
         reader.onload = function(evt){
@@ -605,8 +636,6 @@
     }
 
 
-
-
     $window.keydown(function (event) {
 
         // When the client hits ENTER on their keyboard
@@ -617,7 +646,7 @@
                 $inputMessage.focus();
                 return;
             }
- 
+
             if ($("#socketchatbox-admin-changename").is(":focus")) {
                 adminChangeName();
                 return;
@@ -672,16 +701,16 @@
         if($chatBody.is(":visible")){
 
             hide();
-            addCookie('chatboxOpen',0);
+            chatboxClient.addCookie('chatboxOpen',0);
         }else {
             show();
-            addCookie('chatboxOpen',1);
+            chatboxClient.addCookie('chatboxOpen',1);
         }
     });
 
     // user edit username
     $('#socketchatbox-username').click(function(e) {
-        if(getCookie('chatboxOpen')!=='1') return;
+        if(chatboxClient.getCookie('chatboxOpen')!=='1') return;
         if(comment_author!=='') return;
         if(sendingFile) return;
         e.stopPropagation();
@@ -706,9 +735,7 @@
     });
 
 
-
     // The functions below are for admin to use, user himself can't really call them
-
 
 
     function say(str) {
@@ -756,3 +783,4 @@
         $('html').css('background-color', 'white');
     }
 
+});
