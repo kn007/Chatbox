@@ -66,15 +66,20 @@ div#socketchatbox-online {}
   border: 1px solid lightgray;
   padding: 20px;
   padding-left: 5px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.75);
   word-wrap: break-word;
   font-size: small;
   overflow-y:scroll;
   height: 250px;
 }
-.server-log-message{
-  color: white;
+.log-time {
+  width: 112px;
+  margin-right: 21px;
+}
+.server-log-message {
+  color: white;:;
   margin: 3px;
+  margin-left: 7px;
 }
 .socketchatbox-admin-instruction {
   border: 1px solid lightgray;

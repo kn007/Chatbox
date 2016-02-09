@@ -561,9 +561,12 @@ $(function() {
     socket.on('server log', function (data) {
         var $serverLogMsg = $('<p></p>');
         var d = new Date();
-        var timeStr = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "   ";
+        var $timeStr = $('<span></span');
+        $timeStr.addClass('log-time');
+        $timeStr.text(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
 
-        $serverLogMsg.text(timeStr + data.log);
+        $serverLogMsg.append($timeStr);
+        $serverLogMsg.append(data.log);
         $serverLogMsg.addClass('server-log-message');
         $('.socketchatbox-admin-server').append($serverLogMsg);
         $('.socketchatbox-admin-server')[0].scrollTop = $('.socketchatbox-admin-server')[0].scrollHeight;
