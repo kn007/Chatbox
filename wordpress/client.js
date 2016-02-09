@@ -4,7 +4,7 @@ $(function() {
     // change this to your port
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
-    var socket = io(domain);
+    var socket;
 	
     var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
 
