@@ -394,7 +394,7 @@ io.on('connection', function (socket) {
                     simpleSocket.id = s.id;
                     simpleSocket.ip = s.remoteAddress;
                     simpleSocket.lastMsg = s.lastMsg;
-                    simpleSocket.url = s.url
+                    simpleSocket.url = s.url;
                     simpleSocket.joinTime = s.joinTime;
 
                     simpleSocketList.push(simpleSocket);
