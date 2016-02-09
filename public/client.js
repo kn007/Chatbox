@@ -98,6 +98,43 @@ $(function() {
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
     }
 
+    
+    function init() {
+        if(initialize !== 0) return; //only run init() once
+
+        // Read old uuid from cookie if exist
+        if(getCookie('chatuuid')!=='') {
+            uuid = getCookie('chatuuid');
+        }else{
+            uuid = guid();
+            addCookie('chatuuid', uuid);
+        }
+
+        // Read old username from cookie if exist
+        if(getCookie('chatname')!=='') {
+            username = getCookie('chatname');
+        }else{
+            addCookie('chatname', username);
+        }
+
+        loadHistoryChatFromCookie();
+
+        // Show/hide chatbox base on cookie value
+        if(getCookie('chatboxOpen')==='1') {
+            initialize = 1;
+            show();
+        }else{
+            initialize = -1;
+            hide();
+        }
+
+        addCookie('url', location.href);
+
+        // now make your connection with server!
+        socket = io(domain);
+    }
+
+
     init();
 
 
@@ -207,41 +244,6 @@ $(function() {
     socket.on('reset2origintitle', function (data) {
         changeTitle.reset();
     });
-
-    function init() {
-        if(initialize !== 0) return; //only run init() once
-
-        // Read old uuid from cookie if exist
-        if(getCookie('chatuuid')!=='') {
-            uuid = getCookie('chatuuid');
-        }else{
-            uuid = guid();
-            addCookie('chatuuid', uuid);
-        }
-
-        // Read old username from cookie if exist
-        if(getCookie('chatname')!=='') {
-            username = getCookie('chatname');
-        }else{
-            addCookie('chatname', username);
-        }
-
-        loadHistoryChatFromCookie();
-
-        // Show/hide chatbox base on cookie value
-        if(getCookie('chatboxOpen')==='1') {
-            initialize = 1;
-            show();
-        }else{
-            initialize = -1;
-            hide();
-        }
-
-        addCookie('url', location.href);
-
-        // now make your connection with server!
-        socket = io(domain);
-    }
 
 
     // Send a message
