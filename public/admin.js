@@ -1,11 +1,14 @@
 $(function() {
+
+    var socket = chatboxClient.socket;
+
+
+
     var scriptHist = [];
     var scriptPointer = -1;
     var refreshInterval = 5; // unit is second not milisecond
     var refreshIntervalID;
     var token = "";
-
-
     var selectedUsers = {}; // user with all sockets selected
     var partiallyselectedUsers = {}; // user with some of sockets selected
     var selectedSockets = {}; // a simple array of socket's ID
@@ -78,6 +81,14 @@ $(function() {
     }
 
 
+    $('.socketchatbox-admin-blockIP').click(function() {
+        console.log("not available in this version, please wait and update.");
+    });
+
+
+    $('.socketchatbox-admin-lookupIP').click(function() {
+        window.open("https://geoiptool.com/en/?ip=");
+    });
 
 
     $('#sendScript').click(function() {
@@ -424,15 +435,16 @@ $(function() {
 
 
         if(!data.success){
-            console.log('bad token: '+token);
+            console.log('bad token: '+ token);
             $('#socketchatbox-online-users').html('Invalid Token!');
             $tokenStatus.html('Invalid Token!');
             $tokenStatus.addClass('error');
             $tokenStatus.removeClass('green');
+            //$('.socketchatbox-admin-server').hide();
 
         }else{
 
-
+            //$('.socketchatbox-admin-server').show();
             $tokenStatus.html('Valid Token');
             $tokenStatus.removeClass('error');
             $tokenStatus.addClass('green');
@@ -543,6 +555,21 @@ $(function() {
             // update view
             syncHightlightGUI();
         }
+
+    });
+
+    socket.on('server log', function (data) {
+        var $serverLogMsg = $('<p></p>');
+        var d = new Date();
+        var $timeStr = $('<span></span');
+        $timeStr.addClass('log-time');
+        $timeStr.text(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+
+        $serverLogMsg.append($timeStr);
+        $serverLogMsg.append(data.log);
+        $serverLogMsg.addClass('server-log-message');
+        $('.socketchatbox-admin-server').append($serverLogMsg);
+        $('.socketchatbox-admin-server')[0].scrollTop = $('.socketchatbox-admin-server')[0].scrollHeight;
 
     });
 

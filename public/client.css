@@ -107,6 +107,7 @@ ul {
 .socketchatbox-username {
   float: left;
   font-weight: 700;
+  font-size: small;
   overflow: hidden;
   padding-right: 15px;
   text-align: right;
