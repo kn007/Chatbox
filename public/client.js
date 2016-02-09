@@ -98,7 +98,7 @@ $(function() {
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
     }
 
-    
+
     function init() {
         if(initialize !== 0) return; //only run init() once
 

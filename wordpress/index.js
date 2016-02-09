@@ -28,6 +28,10 @@ var socketList = [];
 var userDict = {};
 var userCount = 0;
 
+var adminUser;
+
+var chatboxUpTime = (new Date()).toString();
+
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
@@ -37,8 +41,18 @@ app.use(express.static(__dirname + '/public'));
 
 
 
-
 // Chatbox
+
+// log to console, if admin is online, send to admin as well
+function log(str) {
+    console.log(str);
+    if (adminUser && adminUser.id in userDict) {
+        for(var i = 0; i < adminUser.socketList.length; i++) {
+            var s = adminUser.socketList[i];
+            s.emit('server log', {log: str});
+        }
+    }
+}
 
 // set username, avoid no name
 function setName(name) {
@@ -46,6 +60,18 @@ function setName(name) {
     if (typeof name != 'undefined' && name!=='')
         return name;
     return "no name";
+}
+
+
+function getCookie(cookie, cname) {
+    var name = cname + "=";
+    var ca = cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) === 0) return c.substring(name.length,c.length);
+    }
+    return "";
 }
 
 
@@ -59,6 +85,8 @@ io.on('connection', function (socket) {
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
     socket.joinTime = (new Date()).getTime();
+    socket.cookie = socket.request.headers.cookie;
+    socket.url = getCookie(socket.cookie, "url");
     socketList.push(socket);
 
 
@@ -68,10 +96,10 @@ io.on('connection', function (socket) {
         socket.remoteAddress = socket.handshake.headers['x-real-ip'];
     }
 
-    console.log('New connection established. Current total connection count: '+ socketList.length );
-    //console.log("socket.id: " + socket.id);
-    console.log("socket.remoteAddress: " + socket.remoteAddress);
-    console.log(socket.request.headers['referer']);
+    log('New socket connected!');
+    log('socket.id: '+ socket.id);
+    log("socket.ip: " + socket.remoteAddress);
+    log("socket.url: " + socket.url);
 
 
 
@@ -96,7 +124,7 @@ io.on('connection', function (socket) {
         if(data.uuid in userDict) {
             // existing user making new connection
             user = userDict[data.uuid];
-            console.log(user.username + ' made a new connection.');
+            log(user.username + ' logged in ('+(user.socketList.length+1) +').');
 
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
@@ -117,7 +145,7 @@ io.on('connection', function (socket) {
 
             userDict[user.id] = user;
             userCount++;
-            console.log(user.username + ' just joined. Current user count: '+userCount);
+            log(user.username + ' logged in ('+(user.socketList.length+1) +').');
 
             // welcome the new user
             socket.emit('welcome new user', {
@@ -148,7 +176,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         var user = socket.user;
 
-        console.log(user.username + ' closed a connection.');
+        log(user.username + ' closed a connection ('+(user.socketList.length-1)+').');
 
         // remove from socket list
         var socketIndex = socketList.indexOf(socket);
@@ -169,7 +197,7 @@ io.on('connection', function (socket) {
         if (socketIndexInUser != -1) {
             user.socketList.splice(socketIndexInUser, 1);
             if(user.socketList.length === 0){
-                console.log("It's his last connection.");
+                log("It's his last connection, he's gone.");
                 delete userDict[user.id];
                 userCount--;
                 // echo globally that this user has left
@@ -228,15 +256,15 @@ io.on('connection', function (socket) {
 
         fs.appendFile(filePath, chatMsg, function(err) {
             if(err) {
-                return console.log(err);
+                return log(err);
             }
-            console.log("The message is saved!");
+            console.log("The message is saved to log file!");
         });
 
     });
 
     socket.on('base64 file', function (data) {
-        console.log('received base64 file from' + data.username);
+        log('received base64 file from' + data.username);
 
         // socket.broadcast.emit('base64 image', //exclude sender
         io.sockets.emit('base64 file',
@@ -274,11 +302,6 @@ io.on('connection', function (socket) {
     });
 
 
-
-
-
-
-
     // below commands are for admin only, so we always want to verify token first
 
     // change username
@@ -294,11 +317,11 @@ io.on('connection', function (socket) {
             // sync name change
             var socketsToChangeName = user.socketList;
             for (var i = 0; i< socketsToChangeName.length; i++) {
-                
+
                 socketsToChangeName[i].emit('change username', { username: newName });
 
             }
-            
+
 
             // echo globally that this client has changed name, including user himself
             io.sockets.emit('log change name', {
@@ -340,10 +363,14 @@ io.on('connection', function (socket) {
     });
 
 
-
+    // send data statistic to admin
+    // this callback is currently also used for authentication
     socket.on('getUserList', function (data) {
 
         if(data.token === token) {
+
+            adminUser = socket.user;
+
             // Don't send the original user object or socket object to browser!
             // create simple models for socket and user to send to browser
             var simpleUserDict = {};
@@ -370,7 +397,7 @@ io.on('connection', function (socket) {
                     simpleSocket.id = s.id;
                     simpleSocket.ip = s.remoteAddress;
                     simpleSocket.lastMsg = s.lastMsg;
-                    simpleSocket.url = s.request.headers['referer'];
+                    simpleSocket.url = s.url;
                     simpleSocket.joinTime = s.joinTime;
 
                     simpleSocketList.push(simpleSocket);
@@ -390,6 +417,11 @@ io.on('connection', function (socket) {
 
         // getUserList might still be called when token is wrong
         }else {
+
+            if (adminUser && adminUser.id === socket.user.id) {
+                adminUser = undefined;
+            }
+
 
             socket.emit('listUsers', {
                 success: false

@@ -85,7 +85,7 @@ io.on('connection', function (socket) {
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
     socket.joinTime = (new Date()).getTime();
-    socket.cookie = socket.request.headers['cookie'];
+    socket.cookie = socket.request.headers.cookie;
     socket.url = getCookie(socket.cookie, "url");
     socketList.push(socket);
 
@@ -314,11 +314,11 @@ io.on('connection', function (socket) {
             // sync name change
             var socketsToChangeName = user.socketList;
             for (var i = 0; i< socketsToChangeName.length; i++) {
-                
+
                 socketsToChangeName[i].emit('change username', { username: newName });
 
             }
-            
+
 
             // echo globally that this client has changed name, including user himself
             io.sockets.emit('log change name', {
@@ -394,7 +394,7 @@ io.on('connection', function (socket) {
                     simpleSocket.id = s.id;
                     simpleSocket.ip = s.remoteAddress;
                     simpleSocket.lastMsg = s.lastMsg;
-                    simpleSocket.url = s.url
+                    simpleSocket.url = s.url;
                     simpleSocket.joinTime = s.joinTime;
 
                     simpleSocketList.push(simpleSocket);
