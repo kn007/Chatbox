@@ -126,6 +126,7 @@ div#socketchatbox-online {}
 .socketchatbox-userdetail-sockets {
   /*max-height: 300px;
   overflow-y: scroll;*/
+  margin: 10px;
 }
 
 .socketchatbox-socketdetail {
