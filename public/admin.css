@@ -3,15 +3,22 @@
 /* ======================================================= */
 
 html {
-  background: #D0F0FF;
+  background: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: "Times New Roman", Times, serif; */
 }
 
-h1 {
+.socketchatbox-admin-title h1 {
 
-    color: #00B8FF;
-    font-size: 40px;
+color: #3D3D3D;
+
+margin: 50px;
+
+font-size: 55px;
 }
-
+.socketchatbox-admin-instruction li{
+  margin:10px
+}
 #wrapper {
   /*min-height: 1000px; *//* we always want to show scroll bar */
   max-width: 604px;
@@ -41,21 +48,21 @@ h1 {
 }
 
 #socketchatbox-checkAdmin {
-  background: lightskyblue;
+  background: white;
   border: 1px solid lightgray;
   padding: 20px;
 }
 #socketchatbox-online {
   border: 1px solid lightgray;
   padding: 20px;
-  background: lightgoldenrodyellow;
+  background: white;
 }
 
 div#socketchatbox-online {}
 .socketchatbox-scriptHistory {
   border: 1px solid lightgray;
   padding: 20px;
-  background: lightgrey;
+  background: #EDEDED;
 }
 .socketchatbox-admin-leftside {
   width: 36%;
@@ -83,7 +90,7 @@ div#socketchatbox-online {}
 }
 .socketchatbox-admin-instruction {
   border: 1px solid lightgray;
-  background: lightgreen;
+  background: #FCFF8C;
   padding: 20px;
 }
 .socketchatbox-scriptHistoryScript {
@@ -115,7 +122,7 @@ div#socketchatbox-online {}
 
 .socketchatbox-userdetail {
   border: 1px solid lightgray;
-  background: #E8FFFF;
+  background: #F9F9F9;
   margin: 10px;
   display:none;
   font-size: small;
@@ -184,14 +191,14 @@ button {
 }
 
 .blue {
-  background: #E8FFFF;
+  background: #EDEDED;
 }
 
 .error {
   background: red !important;
 }
 .green {
-  background: yellowgreen;
+  background: #C0FF3F;
 }
 .redFont {
   color: red;
