@@ -63,6 +63,18 @@ function setName(name) {
 }
 
 
+function getCookie(cookie, cname) {
+    var name = cname + "=";
+    var ca = cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) === 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+
 
 
 io.on('connection', function (socket) {
@@ -73,6 +85,8 @@ io.on('connection', function (socket) {
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
     socket.joinTime = (new Date()).getTime();
+    socket.cookie = socket.request.headers['cookie'];
+    socket.url = getCookie(socket.cookie, "url");
     socketList.push(socket);
 
 
@@ -85,7 +99,7 @@ io.on('connection', function (socket) {
     log('New socket connected!');
     log('socket.id: '+ socket.id);
     log("socket.ip: " + socket.remoteAddress);
-    log("socket.url: " + socket.request.headers['referer']);
+    log("socket.url: " + socket.url);
 
 
 

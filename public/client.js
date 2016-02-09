@@ -4,7 +4,7 @@ $(function() {
     // change this to your port
     var port = 4321;
     var domain = location.protocol + "//" + location.hostname + ":" + port;
-    var socket = io(domain);
+    var socket;
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
     var COLORS = [
@@ -32,7 +32,7 @@ $(function() {
     var lastTypingTime;
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
     var comment_author = '';
-
+    var totalUser = 0;
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
     // And this uuid should always be passed on login, it's used to identify/combine user,
@@ -98,6 +98,7 @@ $(function() {
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
     }
 
+    init();
 
 
     // Add function/variables into chatboxClient for other js file to access
@@ -112,7 +113,6 @@ $(function() {
 
     window.chatboxClient = chatboxClient; // expose it so admin.js can see it
 
-    init();
 
     // Socket events
 
@@ -209,7 +209,7 @@ $(function() {
     });
 
     function init() {
-        if(initialize !== 0) return;
+        if(initialize !== 0) return; //only run init() once
 
         // Read old uuid from cookie if exist
         if(getCookie('chatuuid')!=='') {
@@ -236,6 +236,11 @@ $(function() {
             initialize = -1;
             hide();
         }
+
+        addCookie('url', location.href);
+
+        // now make your connection with server!
+        socket = io(domain);
     }
 
 
@@ -401,6 +406,8 @@ $(function() {
 
 
     function addParticipantsMessage (numUsers) {
+        totalUser = numUsers;
+        return;
         var message = '';
         if (numUsers === 1) {
             message += "You are the only user online";
