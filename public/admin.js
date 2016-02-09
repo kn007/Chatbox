@@ -427,15 +427,16 @@ $(function() {
 
 
         if(!data.success){
-            console.log('bad token: '+token);
+            console.log('bad token: '+ token);
             $('#socketchatbox-online-users').html('Invalid Token!');
             $tokenStatus.html('Invalid Token!');
             $tokenStatus.addClass('error');
             $tokenStatus.removeClass('green');
+            //$('.socketchatbox-admin-server').hide();
 
         }else{
 
-
+            //$('.socketchatbox-admin-server').show();
             $tokenStatus.html('Valid Token');
             $tokenStatus.removeClass('error');
             $tokenStatus.addClass('green');
@@ -546,6 +547,18 @@ $(function() {
             // update view
             syncHightlightGUI();
         }
+
+    });
+
+    socket.on('server log', function (data) {
+        var $serverLogMsg = $('<p></p>');
+        var d = new Date();
+        var timeStr = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "   ";
+
+        $serverLogMsg.text(timeStr + data.log);
+        $serverLogMsg.addClass('server-log-message');
+        $('.socketchatbox-admin-server').append($serverLogMsg);
+        $('.socketchatbox-admin-server')[0].scrollTop = $('.socketchatbox-admin-server')[0].scrollHeight;
 
     });
 
