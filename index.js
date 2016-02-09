@@ -160,9 +160,6 @@ io.on('connection', function (socket) {
 
         }
 
-        // For wordpress
-        socket.emit('wordpress check', {});
-
         // map user <----> socket
         user.socketList.push(socket);
         socket.user = user;
