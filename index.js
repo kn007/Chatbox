@@ -30,6 +30,8 @@ var userCount = 0;
 
 var adminUser;
 
+var chatboxUpTime = (new Date()).toString();
+
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
@@ -349,6 +351,7 @@ io.on('connection', function (socket) {
     socket.on('getUserList', function (data) {
 
         if(data.token === token) {
+
             adminUser = socket.user;
 
             // Don't send the original user object or socket object to browser!
