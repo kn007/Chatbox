@@ -2,15 +2,15 @@
 /* ================  Chatbox Admin Style =================*/
 /* ======================================================= */
 
+html {
+  background: #D0F0FF;
+}
 
 
 #wrapper {
   /*min-height: 1000px; *//* we always want to show scroll bar */
+  max-width: 604px;
 }
-.socketchatbox-admin {
-  width:40%;
-}
-
 
 
 #sendScript {
@@ -21,13 +21,12 @@
 }
 
 .socketchatbox-info-admin {
-  right: 15px;
+  right: 5%;
   width: 50%;
   position: absolute;
+  /* max-width: 618px; */
   word-wrap: break-word;
-  background: white;
-
-
+  /* background: rgba(255, 255, 255, 0.5); */
 }
 
 
@@ -36,36 +35,36 @@
 }
 
 #socketchatbox-checkAdmin {
+  background: lightskyblue;
   border: 1px solid lightgray;
   padding: 20px;
 }
 #socketchatbox-online {
   border: 1px solid lightgray;
   padding: 20px;
-  background: white;
-
+  background: lightgoldenrodyellow;
 }
+
+div#socketchatbox-online {}
 .socketchatbox-scriptHistory {
   border: 1px solid lightgray;
   padding: 20px;
-  background: white;
-
+  background: lightgrey;
 }
 .socketchatbox-admin-leftside {
-  width: 40%;
+  width: 36%;
+  margin-left: 5%;
   position: fixed;
-
 }
 .socketchatbox-admin-server {
   border: 1px solid lightgray;
   padding: 20px;
   padding-left: 5px;
-  background: #3A3A3A;
+  background: rgba(41, 41, 41, 0.69);
   word-wrap: break-word;
   font-size: small;
   overflow-y:scroll;
   height: 250px;
-
 }
 .server-log-message{
   color: white;
@@ -73,9 +72,8 @@
 }
 .socketchatbox-admin-instruction {
   border: 1px solid lightgray;
+  background: lightgreen;
   padding: 20px;
-
-
 }
 .socketchatbox-scriptHistoryScript {
   max-height: 100px;

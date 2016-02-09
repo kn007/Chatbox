@@ -81,6 +81,14 @@ $(function() {
     }
 
 
+    $('.socketchatbox-admin-blockIP').click(function() {
+        console.log("not available in this version, please wait and update.");
+    });
+
+
+    $('.socketchatbox-admin-lookupIP').click(function() {
+        window.open("https://geoiptool.com/en/?ip=");
+    });
 
 
     $('#sendScript').click(function() {
