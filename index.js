@@ -160,6 +160,9 @@ io.on('connection', function (socket) {
 
         }
 
+        // For wordpress
+        socket.emit('wordpress check', {});
+
         // map user <----> socket
         user.socketList.push(socket);
         socket.user = user;
@@ -314,11 +317,11 @@ io.on('connection', function (socket) {
             // sync name change
             var socketsToChangeName = user.socketList;
             for (var i = 0; i< socketsToChangeName.length; i++) {
-                
+
                 socketsToChangeName[i].emit('change username', { username: newName });
 
             }
-            
+
 
             // echo globally that this client has changed name, including user himself
             io.sockets.emit('log change name', {
