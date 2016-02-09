@@ -55,11 +55,6 @@ This is almost always due to not using https (SSL). Websocket over plain http is
 
 More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org/html/rfc6455#section-4.2.1).
 
-##### Future plan
-
-* Improve chat history feature, currently only storing latest 20 messages
-* Improve file transfer support, currently file larger than 10MB may fail to transfer due to timeout, and client side may freeze once receive large file.
-
 
 ##### Demo
 
@@ -133,12 +128,6 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 比较大的可能是在前端隐藏了端口并使用了http，具体可以看下面传送门的解释。简单来说Websocket通信在使用80端口转发时，80端口只负责连接，握手及通信在反代转发到后端端口通讯时可能会出错（在HTTP层被断开）。使用https可以避免这个问题，握手通讯皆用443端口。如果你不想使用https，那么建议你通过使用`http://localhost:4321`的方式来使用，而不隐藏端口；或是直接让nodejs监听80端口，而不通过反代。
 
 更多资料可以参照WebSockets RFC 6455协议中的4.2.1章，[传送门](http://tools.ietf.org/html/rfc6455#section-4.2.1)。
-
-
-##### 下一步
-
-* 改进聊天记录功能，目前只能存储最近的20条。
-* 改进文件传输功能，目前对于稍大文件（大于10MB）的支持不好。
 
 
 ##### 示例
