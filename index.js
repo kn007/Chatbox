@@ -85,7 +85,7 @@ io.on('connection', function (socket) {
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
     socket.joinTime = (new Date()).getTime();
-    socket.cookie = socket.request.headers['cookie'];
+    socket.cookie = socket.request.headers.cookie;
     socket.url = getCookie(socket.cookie, "url");
     socketList.push(socket);
 
