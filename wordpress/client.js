@@ -101,7 +101,7 @@ $(function() {
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
     }
 
-    
+
     function init() {
         if(initialize !== 0) return; //only run init() once
 
@@ -176,7 +176,12 @@ $(function() {
     // Once connected, user will receive the invitation to login using uuid
     socket.on('login', function (data) {
 
-        socket.emit('login', {username:username, uuid:uuid});
+        socket.emit('login', {
+            username: username, 
+            uuid: uuid,
+            url: location.href,
+            referrer: document.referrer
+        });
 
         // handle corner case when user disconnect when sending file earlier
         receivedFileSentByMyself();
@@ -433,7 +438,7 @@ $(function() {
 
     function addParticipantsMessage (numUsers) {
         totalUser = numUsers;
-        return;
+        
         var message = '';
         if (numUsers === 1) {
             message += "You are the only user online";
