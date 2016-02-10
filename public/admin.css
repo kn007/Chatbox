@@ -67,7 +67,7 @@ div#socketchatbox-online {}
 .socketchatbox-admin-leftside {
   width: 36%;
   margin-left: 5%;
-  position: fixed;
+  position: absolute;
 }
 .socketchatbox-admin-server {
   border: 1px solid lightgray;
@@ -94,6 +94,7 @@ div#socketchatbox-online {}
   padding: 20px;
 }
 .socketchatbox-scriptHistoryScript {
+  margin-top: 20px;
   max-height: 100px;
   overflow-y: scroll;
 }
@@ -130,6 +131,10 @@ div#socketchatbox-online {}
   padding: 15px;
 }
 
+.socketchatbox-admin-userprofile {
+  margin: 20px;
+}
+
 .socketchatbox-userdetail-name {
   font-size: larger;
   font-weight: bold;
@@ -159,7 +164,9 @@ div#socketchatbox-online {}
   background: #fafafa;
 }
 
-
+#socketchatbox-scriptSentStatus {
+  margin: 10px;
+}
 
 .socketchatbox-admin-input {
 

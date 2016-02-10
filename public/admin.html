@@ -82,6 +82,7 @@
                     </div>
                     <div class="socketchatbox-userdetail socketchatbox-admin-userdetail-pop">
                         <center><span class="socketchatbox-userdetail-name"></span></center>
+                        <div class="socketchatbox-admin-userprofile">
                         <p>Name: <input class="socketchatbox-userdetail-name-edit" type="text" />
                             <button class="socketchatbox-admin-changeUserName">update</button>
                         </p>
@@ -93,6 +94,7 @@
                         <p>Join Time: <span class="socketchatbox-userdetail-jointime"></span>
                         </p>
                         <p>User-Agent:  <span class="socketchatbox-userdetail-useragent"></span></p>
+                        </div>
                         <div class="socketchatbox-socketdetail">
                             <center>Live Connection</center>
 
@@ -115,7 +117,7 @@
                         <button class="prevScript">prev</button>
                         <button class="nextScript">next</button>
                         <button class="cloneScript">clone</button>
-                        <br/><br/>
+                        
 
 
                         <div class="socketchatbox-scriptHistoryScript">
@@ -124,9 +126,10 @@
 
                         
                     </div>
-                    <center><div id="socketchatbox-scriptSentStatus"></div></center>
                     <textarea placeholder="Type script here..." rows="4" cols="50"></textarea>
-                    <button id='sendScript'>Send Script To User!</button>
+                    <button id='sendScript'>Send Script!</button>
+                    <div id="socketchatbox-scriptSentStatus"></div>
+
                 </div>
             
 
