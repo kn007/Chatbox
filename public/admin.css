@@ -131,12 +131,16 @@ div#socketchatbox-online {}
   padding: 15px;
 }
 
+.socketchatbox-admin-userprofile p{
+  margin: 7px;
+}
+
 .socketchatbox-admin-userprofile {
   margin: 20px;
 }
 
 .socketchatbox-userdetail-name {
-  font-size: larger;
+  font-size: large;
   font-weight: bold;
 }
 
@@ -154,6 +158,10 @@ div#socketchatbox-online {}
   padding: 15px;
   cursor: pointer;
   border: 1px solid lightgray;
+}
+
+.socketchatbox-socketdetail-each p{
+  margin:5px
 }
 
 .socketchatbox-socketdetail-each:nth-child(odd) {

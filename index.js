@@ -4,8 +4,6 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-
-
 //set chat history log file
 var fs = require('fs');
 var filePath = __dirname+"/chat-log.txt";
@@ -74,6 +72,21 @@ function getCookie(cookie, cname) {
     return "";
 }
 
+function getTime() {
+    return (new Date()).getTime().toString();
+}
+
+
+
+function recordActionTime(socket, msg) {
+    socket.lastActive = getTime();
+    socket.user.lastActive = socket.lastActive;
+    if(msg){
+        socket.lastMsg = msg;
+        socket.user.lastMsg = msg;
+    }
+}
+
 
 
 
@@ -84,9 +97,8 @@ io.on('connection', function (socket) {
     defaultUser.username = "default name";
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
-    socket.joinTime = (new Date()).getTime();
-    socket.cookie = socket.request.headers.cookie;
-    socket.url = getCookie(socket.cookie, "url");
+    socket.joinTime = getTime();
+    socket.lastActive = socket.joinTime;
     socketList.push(socket);
 
 
@@ -99,9 +111,6 @@ io.on('connection', function (socket) {
     log('New socket connected!');
     log('socket.id: '+ socket.id);
     log("socket.ip: " + socket.remoteAddress);
-    log("socket.url: " + socket.url);
-
-
 
 
     // once the new user is connected, we ask him to tell us his name
@@ -118,12 +127,18 @@ io.on('connection', function (socket) {
     // then we'll map the user and the socket
     socket.on('login', function (data) {
 
+        // url and referrer are from client-side script
+        socket.url = data.url;
+        socket.referrer = data.referrer;
+
+
         var user; // the user for this socket
 
         // the user already exists, this is just a new connection from him
         if(data.uuid in userDict) {
             // existing user making new connection
             user = userDict[data.uuid];
+
             log(user.username + ' logged in ('+(user.socketList.length+1) +').');
 
             // force sync all user's client side usernames
@@ -138,7 +153,10 @@ io.on('connection', function (socket) {
             user.id = data.uuid;
             user.username = setName(data.username);
             user.ip = socket.remoteAddress;
+            user.url = socket.url;
+            user.referrer = socket.referrer;
             user.joinTime = socket.joinTime;
+            user.lastActive = socket.joinTime;
             user.userAgent = socket.request.headers['user-agent'];
             user.socketList = [];
 
@@ -211,6 +229,7 @@ io.on('connection', function (socket) {
     // this is when one user want to change his name
     // enforce that all his socket connections change name too
     socket.on('user edits name', function (data) {
+        recordActionTime(socket);
 
         var oldName = socket.user.username;
         var newName =  data.newName;
@@ -237,14 +256,14 @@ io.on('connection', function (socket) {
     socket.on('new message', function (data) {
 
 
+       recordActionTime(socket, data.msg);
+
+
         // socket.broadcast.emit('new message', {//send to everybody but sender
         io.sockets.emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
-
-        socket.lastMsg = data.msg;
-        socket.user.lastMsg = data.msg;
 
 
         // log the message in chat history file
@@ -261,6 +280,8 @@ io.on('connection', function (socket) {
     });
 
     socket.on('base64 file', function (data) {
+        recordActionTime(socket);
+
         log('received base64 file from' + data.username);
 
         // socket.broadcast.emit('base64 image', //exclude sender
@@ -278,6 +299,8 @@ io.on('connection', function (socket) {
 
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
+        recordActionTime(socket);
+
         socket.broadcast.emit('typing', {
             username: socket.user.username
         });
@@ -285,6 +308,8 @@ io.on('connection', function (socket) {
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on('stop typing', function (data) {
+        recordActionTime(socket);
+
         socket.broadcast.emit('stop typing', {
             username: socket.user.username
         });
@@ -299,7 +324,12 @@ io.on('connection', function (socket) {
     });
 
 
-    // below commands are for admin only, so we always want to verify token first
+
+    //==========================================================================
+    //==========================================================================
+    // code below are for admin only, so we always want to verify token first
+    //==========================================================================
+    //==========================================================================
 
     // change username
     socket.on('admin change username', function (data) {
@@ -344,7 +374,7 @@ io.on('connection', function (socket) {
             }
 
 
-            // handle whole users
+            // handle users and all their sockets
             for (var i = 0; i < data.userKeyList.length; i++) {
                 var userKey = data.userKeyList[i];
                 if(userKey in userDict) { // in case is already gone
@@ -377,13 +407,18 @@ io.on('connection', function (socket) {
 
                 // create simpleUser model
                 var simpleUser = {};
+                // is there a way to reduce code below?
                 simpleUser.id = user.id; // key = user.id
                 simpleUser.username = user.username;
                 simpleUser.lastMsg = user.lastMsg;
                 simpleUser.count = user.socketList.length;
                 simpleUser.ip = user.ip;
+                simpleUser.url = user.url;
+                simpleUser.referrer = user.referrer;
                 simpleUser.joinTime = user.joinTime;
+                simpleUser.lastActive = user.lastActive;
                 simpleUser.userAgent = user.userAgent;
+                
 
                 var simpleSocketList = [];
                 for (var i = 0; i < user.socketList.length; i++) {
@@ -394,7 +429,9 @@ io.on('connection', function (socket) {
                     simpleSocket.id = s.id;
                     simpleSocket.ip = s.remoteAddress;
                     simpleSocket.lastMsg = s.lastMsg;
+                    simpleSocket.lastActive = s.lastActive;
                     simpleSocket.url = s.url;
+                    simpleSocket.referrer = s.referrer;
                     simpleSocket.joinTime = s.joinTime;
 
                     simpleSocketList.push(simpleSocket);
