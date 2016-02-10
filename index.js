@@ -264,7 +264,6 @@ io.on('connection', function (socket) {
 
         recordActionTime(socket, data.msg);
 
-
         // socket.broadcast.emit('new message', {//send to everybody but sender
         io.sockets.emit('new message', {//send to everybody including sender
             username: socket.user.username,
@@ -432,7 +431,6 @@ io.on('connection', function (socket) {
                 simpleUser.joinTime = user.joinTime;
                 simpleUser.lastActive = user.lastActive;
                 simpleUser.userAgent = user.userAgent;
-
 
                 var simpleSocketList = [];
                 for (var i = 0; i < user.socketList.length; i++) {
