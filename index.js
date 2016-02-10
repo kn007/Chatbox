@@ -191,7 +191,6 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         var user = socket.user;
 
-        log(user.username + ' closed a connection ('+(user.socketList.length-1)+').');
 
         // remove from socket list
         var socketIndex = socketList.indexOf(socket);
@@ -202,9 +201,12 @@ io.on('connection', function (socket) {
 
         // the user only exist after login
         if(user.notLoggedIn){
+            log('Socket disconnected before logging in.');
+            log('socket.id: '+socket.id);
             return;
         }
 
+        log(user.username + ' closed a connection ('+(user.socketList.length-1)+').');
 
         // also need to remove socket from user's socketlist
         // when a user has 0 socket connection, remove the user
@@ -418,7 +420,7 @@ io.on('connection', function (socket) {
                 simpleUser.joinTime = user.joinTime;
                 simpleUser.lastActive = user.lastActive;
                 simpleUser.userAgent = user.userAgent;
-                
+
 
                 var simpleSocketList = [];
                 for (var i = 0; i < user.socketList.length; i++) {
