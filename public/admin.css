@@ -3,15 +3,22 @@
 /* ======================================================= */
 
 html {
-  background: #D0F0FF;
+  background: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: "Times New Roman", Times, serif; */
 }
 
-h1 {
+.socketchatbox-admin-title h1 {
 
-    color: #00B8FF;
-    font-size: 40px;
+color: #3D3D3D;
+
+margin: 50px;
+
+font-size: 55px;
 }
-
+.socketchatbox-admin-instruction li{
+  margin:10px
+}
 #wrapper {
   /*min-height: 1000px; *//* we always want to show scroll bar */
   max-width: 604px;
@@ -41,30 +48,29 @@ h1 {
 }
 
 #socketchatbox-checkAdmin {
-  background: lightskyblue;
+  background: white;
   border: 1px solid lightgray;
   padding: 20px;
 }
 #socketchatbox-online {
   border: 1px solid lightgray;
   padding: 20px;
-  background: lightgoldenrodyellow;
+  background: white;
 }
 
 div#socketchatbox-online {}
 .socketchatbox-scriptHistory {
   border: 1px solid lightgray;
   padding: 20px;
-  background: lightgrey;
+  background: #EDEDED;
 }
 .socketchatbox-admin-leftside {
   width: 36%;
   margin-left: 5%;
-  position: fixed;
+  position: absolute;
 }
 .socketchatbox-admin-server {
   border: 1px solid lightgray;
-  padding: 20px;
   padding-left: 5px;
   background: rgba(0, 0, 0, 0.75);
   word-wrap: break-word;
@@ -83,10 +89,11 @@ div#socketchatbox-online {}
 }
 .socketchatbox-admin-instruction {
   border: 1px solid lightgray;
-  background: lightgreen;
+  background: #FCFF8C;
   padding: 20px;
 }
 .socketchatbox-scriptHistoryScript {
+  margin-top: 20px;
   max-height: 100px;
   overflow-y: scroll;
 }
@@ -115,7 +122,7 @@ div#socketchatbox-online {}
 
 .socketchatbox-userdetail {
   border: 1px solid lightgray;
-  background: #E8FFFF;
+  background: #F9F9F9;
   margin: 10px;
   display:none;
   font-size: small;
@@ -123,8 +130,16 @@ div#socketchatbox-online {}
   padding: 15px;
 }
 
+.socketchatbox-admin-userprofile p{
+  margin: 7px;
+}
+
+.socketchatbox-admin-userprofile {
+  margin: 20px;
+}
+
 .socketchatbox-userdetail-name {
-  font-size: larger;
+  font-size: large;
   font-weight: bold;
 }
 
@@ -144,6 +159,10 @@ div#socketchatbox-online {}
   border: 1px solid lightgray;
 }
 
+.socketchatbox-socketdetail-each p{
+  margin:5px
+}
+
 .socketchatbox-socketdetail-each:nth-child(odd) {
   background: #ededed;
 }
@@ -152,7 +171,9 @@ div#socketchatbox-online {}
   background: #fafafa;
 }
 
-
+#socketchatbox-scriptSentStatus {
+  margin: 10px;
+}
 
 .socketchatbox-admin-input {
 
@@ -184,14 +205,14 @@ button {
 }
 
 .blue {
-  background: #E8FFFF;
+  background: #EDEDED;
 }
 
 .error {
   background: red !important;
 }
 .green {
-  background: yellowgreen;
+  background: #C0FF3F;
 }
 .redFont {
   color: red;

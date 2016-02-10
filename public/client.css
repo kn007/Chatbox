@@ -70,6 +70,7 @@ ul {
   resize: horizontal;
   background: white;
   z-index: 9999;
+  font-family: Arial, Helvetica, sans-serif;
   
 }
 .socketchatbox-messages img{
@@ -107,7 +108,6 @@ ul {
 .socketchatbox-username {
   float: left;
   font-weight: 700;
-  font-size: small;
   overflow: hidden;
   padding-right: 15px;
   text-align: right;

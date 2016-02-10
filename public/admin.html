@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/admin.css">
     </head>
     <body>
-        <center><h1>Chatbox Control Panel</h1></center>
+        <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
         <div id = "wrapper">
             <div class="socketchatbox-page socketchatbox-admin">
 
@@ -43,7 +43,7 @@
 
                 <br/><br/>
 
-                <div class = "socketchatbox-admin-instruction"
+                <div class = "socketchatbox-admin-instruction">
                     <b>Instructions</b><br/><br/>
                     <li>
                     The first thing you need to do is to enter your token and click update, the 
@@ -82,17 +82,22 @@
                     </div>
                     <div class="socketchatbox-userdetail socketchatbox-admin-userdetail-pop">
                         <center><span class="socketchatbox-userdetail-name"></span></center>
+                        <div class="socketchatbox-admin-userprofile">
                         <p>Name: <input class="socketchatbox-userdetail-name-edit" type="text" />
                             <button class="socketchatbox-admin-changeUserName">update</button>
+                        </p>
+                        <p>Last Message: <span class="socketchatbox-userdetail-lastmsg"></span></p>
+                        <p>Landing Page: <span class="socketchatbox-userdetail-landingpage"></span></p>
+                        <p>Referrer: <span class="socketchatbox-userdetail-referrer"></span></p>
+                        <p>Idle Time: <span class="socketchatbox-userdetail-lastactive"></span></p>
+                        <p>Join Time: <span class="socketchatbox-userdetail-jointime"></span>
                         </p>
                         <p>IP: <span class="socketchatbox-userdetail-ip"></span>
                             <button class="socketchatbox-admin-blockIP">block</button>
                             <button class="socketchatbox-admin-lookupIP">look up</button>
                         </p>
-                        <p>Last Message: <span class="socketchatbox-userdetail-lastmsg"></span></p>
-                        <p>Join Time: <span class="socketchatbox-userdetail-jointime"></span>
-                        </p>
                         <p>User-Agent:  <span class="socketchatbox-userdetail-useragent"></span></p>
+                        </div>
                         <div class="socketchatbox-socketdetail">
                             <center>Live Connection</center>
 
@@ -111,22 +116,23 @@
 
                 <div class="socketchatbox-admin-input">
                     <div class="socketchatbox-scriptHistory">
-                        <b> History Script</b>
+                        <b>Client-Side Scripting</b>
                         <button class="prevScript">prev</button>
                         <button class="nextScript">next</button>
                         <button class="cloneScript">clone</button>
-                        <br/><br/>
+                        
 
 
                         <div class="socketchatbox-scriptHistoryScript">
-                            Empty
+                             
                         </div>
 
                         
                     </div>
-                    <center><div id="socketchatbox-scriptSentStatus"></div></center>
                     <textarea placeholder="Type script here..." rows="4" cols="50"></textarea>
-                    <button id='sendScript'>Send Script To User!</button>
+                    <button id='sendScript'>Send Script!</button>
+                    <div id="socketchatbox-scriptSentStatus"></div>
+
                 </div>
             
 

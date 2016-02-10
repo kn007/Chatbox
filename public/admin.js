@@ -1,7 +1,7 @@
 $(function() {
 
     var socket = chatboxClient.socket;
-
+    var verified = false;
 
 
     var scriptHist = [];
@@ -313,14 +313,16 @@ $(function() {
 
     function loadUserDetail (user) {
 
-
         // user info
         $('.socketchatbox-userdetail-name').text(user.username);
         $('.socketchatbox-userdetail-name-edit').val(user.username);
         $('.socketchatbox-admin-changeUserName').data('id',user.id); 
-        $('.socketchatbox-userdetail-lastmsg').text(user.lastMsg);
+        $('.socketchatbox-userdetail-landingpage').text(user.url);
+        $('.socketchatbox-userdetail-referrer').text(user.referrer);
         $('.socketchatbox-userdetail-ip').text(user.ip);
         $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
+        $('.socketchatbox-userdetail-lastmsg').text("\""+user.lastMsg+"\"");
+        $('.socketchatbox-userdetail-lastactive').text(getTimeElapsed(user.lastActive));
         $('.socketchatbox-userdetail-useragent').text(user.userAgent);
 
 
@@ -331,12 +333,14 @@ $(function() {
         for (var i = 0; i< user.socketList.length; i++) {
             var s = user.socketList[i];
             var $socketInfo = $("<div></div");
-            var socketInfoHTML = "sockets[" + i + "]<br/>";
-            socketInfoHTML += "ID: " + s.id + "<br/>";
-            socketInfoHTML += "IP: " + s.ip + "<br/>";
-            socketInfoHTML += "URL: " + s.url + "<br/>";
-            socketInfoHTML += "Connection Time: " + getTimeElapsed(s.joinTime) + "<br/>";
-            socketInfoHTML += "Last Message: " + s.lastMsg + "<br/>";
+            var socketInfoHTML = "<center>[" + i + "]</center></p>";
+            socketInfoHTML += "<p>ID: " + s.id + "</p>";
+            socketInfoHTML += "<p>URL: " + s.url + "</p>";
+            socketInfoHTML += "<p>Referrer: " + s.referrer + "</p>";
+            socketInfoHTML += "<p>IP: " + s.ip + "</p>";
+            socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
+            socketInfoHTML += "<p>Idle Time: " + getTimeElapsed(s.lastActive) + "</p>";
+            socketInfoHTML += "<p>Connection Time: " + getTimeElapsed(s.joinTime) + "</p>";
 
             $socketInfo.html(socketInfoHTML);
             $socketInfo.addClass('socketchatbox-socketdetail-each');
@@ -434,7 +438,7 @@ $(function() {
         $('#socketchatbox-online-users').html('');
 
 
-        if(!data.success){
+        if (!data.success) {
             console.log('bad token: '+ token);
             $('#socketchatbox-online-users').html('Invalid Token!');
             $tokenStatus.html('Invalid Token!');
@@ -442,12 +446,17 @@ $(function() {
             $tokenStatus.removeClass('green');
             //$('.socketchatbox-admin-server').hide();
 
-        }else{
+        } else {
 
             //$('.socketchatbox-admin-server').show();
             $tokenStatus.html('Valid Token');
             $tokenStatus.removeClass('error');
             $tokenStatus.addClass('green');
+
+            if (!verified){
+                verified = true;
+                getServerStat();
+            }
 
             // load new data about users and their sockets
             userDict = data.userdict;
@@ -557,6 +566,15 @@ $(function() {
         }
 
     });
+    socket.on('server stat', function (data) {
+        var $serverStatMsg = $('<p></p>');
+        $serverStatMsg.append("<p>Chatbox has been running since "+data.chatboxUpTime+".</p>");
+        $serverStatMsg.append("<p>There have been "+data.totalUsers +
+            " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
+        $serverStatMsg.addClass('server-log-message');
+
+        $('.socketchatbox-admin-server').append($serverStatMsg);
+    });
 
     socket.on('server log', function (data) {
         var $serverLogMsg = $('<p></p>');
@@ -580,7 +598,10 @@ $(function() {
         restartGetUserList();
     }
 
- 
+    function getServerStat() {
+        socket.emit('getServerStat', {token: token});
+    }
+
     function getUserList() {
 
         socket.emit('getUserList', {token: token});
