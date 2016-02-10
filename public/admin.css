@@ -71,7 +71,6 @@ div#socketchatbox-online {}
 }
 .socketchatbox-admin-server {
   border: 1px solid lightgray;
-  padding: 20px;
   padding-left: 5px;
   background: rgba(0, 0, 0, 0.75);
   word-wrap: break-word;

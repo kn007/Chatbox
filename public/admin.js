@@ -1,7 +1,7 @@
 $(function() {
 
     var socket = chatboxClient.socket;
-
+    var verified = false;
 
 
     var scriptHist = [];
@@ -339,7 +339,7 @@ $(function() {
             socketInfoHTML += "<p>Referrer: " + s.referrer + "</p>";
             socketInfoHTML += "<p>IP: " + s.ip + "</p>";
             socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
-            socketInfoHTML += "<p>Idle: " + getTimeElapsed(s.lastActive) + "</p>";
+            socketInfoHTML += "<p>Idle Time: " + getTimeElapsed(s.lastActive) + "</p>";
             socketInfoHTML += "<p>Connection Time: " + getTimeElapsed(s.joinTime) + "</p>";
 
             $socketInfo.html(socketInfoHTML);
@@ -438,7 +438,7 @@ $(function() {
         $('#socketchatbox-online-users').html('');
 
 
-        if(!data.success){
+        if (!data.success) {
             console.log('bad token: '+ token);
             $('#socketchatbox-online-users').html('Invalid Token!');
             $tokenStatus.html('Invalid Token!');
@@ -446,12 +446,17 @@ $(function() {
             $tokenStatus.removeClass('green');
             //$('.socketchatbox-admin-server').hide();
 
-        }else{
+        } else {
 
             //$('.socketchatbox-admin-server').show();
             $tokenStatus.html('Valid Token');
             $tokenStatus.removeClass('error');
             $tokenStatus.addClass('green');
+
+            if (!verified){
+                verified = true;
+                getServerStat();
+            }
 
             // load new data about users and their sockets
             userDict = data.userdict;
@@ -561,6 +566,15 @@ $(function() {
         }
 
     });
+    socket.on('server stat', function (data) {
+        var $serverStatMsg = $('<p></p>');
+        $serverStatMsg.append("<p>Chatbox has been running since "+data.chatboxUpTime+".</p>");
+        $serverStatMsg.append("<p>There have been "+data.totalUsers +
+            " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
+        $serverStatMsg.addClass('server-log-message');
+
+        $('.socketchatbox-admin-server').append($serverStatMsg);
+    });
 
     socket.on('server log', function (data) {
         var $serverLogMsg = $('<p></p>');
@@ -584,7 +598,10 @@ $(function() {
         restartGetUserList();
     }
 
- 
+    function getServerStat() {
+        socket.emit('getServerStat', {token: token});
+    }
+
     function getUserList() {
 
         socket.emit('getUserList', {token: token});

@@ -29,7 +29,9 @@ var userCount = 0;
 var adminUser;
 
 var chatboxUpTime = (new Date()).toString();
-
+var totalUsers = 0;
+var totalSockets = 0;
+var totalMsg = 0;
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
@@ -92,6 +94,7 @@ function recordActionTime(socket, msg) {
 
 io.on('connection', function (socket) {
 
+    totalSockets++;
 
     var defaultUser = {};
     defaultUser.username = "default name";
@@ -148,6 +151,7 @@ io.on('connection', function (socket) {
             });
 
         }else{
+            totalUsers++;
             // a new user is joining
             user = {};
             user.id = data.uuid;
@@ -256,9 +260,9 @@ io.on('connection', function (socket) {
 
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
+        totalMsg++;
 
-
-       recordActionTime(socket, data.msg);
+        recordActionTime(socket, data.msg);
 
 
         // socket.broadcast.emit('new message', {//send to everybody but sender
@@ -391,8 +395,16 @@ io.on('connection', function (socket) {
 
     });
 
+    socket.on('getServerStat', function (data) {
+        socket.emit('server stat', {
+            chatboxUpTime: chatboxUpTime,
+            totalUsers: totalUsers,
+            totalSockets: totalSockets,
+            totalMsg: totalMsg
+        });
+    });
 
-    // send data statistic to admin
+    // send real time data statistic to admin
     // this callback is currently also used for authentication
     socket.on('getUserList', function (data) {
 
