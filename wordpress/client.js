@@ -437,8 +437,6 @@ $(function() {
 
 
     function addParticipantsMessage (numUsers) {
-        totalUser = numUsers;
-        
         var message = '';
         if (numUsers === 1) {
             message += "You are the only user online";
@@ -446,6 +444,8 @@ $(function() {
             message += "There are " + numUsers + " users online";
         }
         log(message);
+
+        totalUser = numUsers;
     }
 
     // Adds the visual chat typing message
