@@ -157,7 +157,7 @@ $(function() {
     socket.on('login', function (data) {
 
         socket.emit('login', {
-            username: username, 
+            username: username,
             uuid: uuid,
             url: location.href,
             referrer: document.referrer
