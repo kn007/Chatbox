@@ -6,7 +6,7 @@ var io = require('socket.io')(server);
 
 //set chat history log file
 var fs = require('fs');
-var filePath = __dirname+"/chat-log.txt";
+var filePath = __dirname+"/public/chat-log.txt";
 
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
@@ -280,7 +280,7 @@ io.on('connection', function (socket) {
         var chatMsg = socket.user.username+": "+data.msg+'\n';
         console.log(chatMsg);
 
-        fs.appendFile(filePath, chatMsg, function(err) {
+        fs.appendFile(filePath, new Date() + "\t"+ chatMsg, function(err) {
             if(err) {
                 return log(err);
             }
