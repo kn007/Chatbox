@@ -78,6 +78,10 @@ $(function() {
             $('#socketchatbox-scriptSentStatus').addClass('redFont');
 
         }
+            
+        // need to scroll down to really see this message
+        window.scrollTo(0,document.body.scrollHeight);
+
     }
 
 
@@ -192,28 +196,28 @@ $(function() {
         var s = socketDict[socketID];
         var user = s.user;
 
-        console.log('click a socket, sid: '+s.id);
+        //console.log('click a socket, sid: '+s.id);
 
         if (user.id in selectedUsers) {
-            console.log('the user was already selected.');
+            //console.log('the user was already selected.');
             delete selectedUsers[user.id];
 
             user.selectedSocketCount--;
             if (user.selectedSocketCount > 0) {
-                console.log('add to partiallyselectedUsers');
+                //console.log('add to partiallyselectedUsers');
 
                 partiallyselectedUsers[user.id] = user;
                 for(var i = 0; i < user.socketList.length; i++) {
                     var ss = user.socketList[i];
                     if(ss.id!=s.id) {
                         selectedSockets[ss.id] = ss;
-                        console.log('add socket to selectedSockets, sid: '+ ss.id);
+                        //console.log('add socket to selectedSockets, sid: '+ ss.id);
 
                     }
                 }
             }
         }else{
-            console.log('the user was not selected.');
+            //console.log('the user was not selected.');
 
 
             if (socketID in selectedSockets) { // user must be in the partiallySelectedUserList
@@ -251,7 +255,7 @@ $(function() {
         }
 
 
-        console.log(user.selectedSocketCount);
+        //console.log(user.selectedSocketCount);
         syncHightlightGUI();
 
 
