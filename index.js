@@ -160,7 +160,6 @@ io.on('connection', function (socket) {
             user.url = socket.url;
             user.referrer = socket.referrer;
             user.joinTime = socket.joinTime;
-            user.lastActive = socket.joinTime;
             user.userAgent = socket.request.headers['user-agent'];
             user.socketList = [];
 
@@ -187,7 +186,7 @@ io.on('connection', function (socket) {
         socket.user = user;
 
 
-
+        recordActionTime(socket);
 
     });
 
