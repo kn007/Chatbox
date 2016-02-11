@@ -585,9 +585,9 @@ $(function() {
     });
     socket.on('server stat', function (data) {
         var $serverStatMsg = $('<p></p>');
-        $serverStatMsg.append("<p>Chatbox was started on "+data.chatboxUpTime+".</p>");
-        $serverStatMsg.append("<p>There have been "+data.totalUsers +
-            " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
+        $serverStatMsg.html("<p>Welcome, Admin! </p><p>The Chatbox was started on "+data.chatboxUpTime + 
+            ".</p>There have been "+data.totalUsers +
+            " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.");
         $serverStatMsg.addClass('server-log-message');
 
         $('.socketchatbox-admin-server').append($serverStatMsg);
