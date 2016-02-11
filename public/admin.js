@@ -227,7 +227,7 @@ $(function() {
                 if(user.selectedSocketCount<0) {
                     console.log(user.selectedSocketCount<0);
                 }
-                if(user.selectedSocketCount==0)
+                if(user.selectedSocketCount===0)
                     delete partiallyselectedUsers[user.id];
 
 

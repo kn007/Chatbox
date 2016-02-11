@@ -19,7 +19,9 @@ $(function() {
     // Initialize variables
     var d = new Date();
     var $window = $(window);
+    var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
+    var $txt_fullname = $('#socketchatbox-txt_fullname');
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
@@ -147,7 +149,7 @@ $(function() {
     }
 
     function syncCommentAuthorName() {
-        setTimeout(function(){syncCommentAuthorName();},3000);
+        setTimeout(function(){syncCommentAuthorName();},2000);
         if(chatboxClient.getCookie(wordpress_cookie)==='') return;
         comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
         if(username===comment_author) return;
@@ -177,7 +179,7 @@ $(function() {
     socket.on('login', function (data) {
 
         socket.emit('login', {
-            username: username, 
+            username: username,
             uuid: uuid,
             url: location.href,
             referrer: document.referrer
@@ -295,6 +297,13 @@ $(function() {
         socket.emit('new message', data);
     }
 
+    // Different from sendMessageToServer(), only admin can see the message
+    function reportToServer (msg) {
+        var data = {};
+        data.username = username;
+        data.msg = msg+'';//cast string
+        socket.emit('report', data);
+    }
 
     function receivedFileSentByMyself() {
         sendingFile = false;
@@ -511,15 +520,19 @@ $(function() {
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
-        var name = $("#socketchatbox-txt_fullname").val();
-        if(!sendingFile&&name.length &&  $.trim(name) !== '' ) {
+        var name = $txt_fullname.val();
+        name = $.trim(name);
+        if (name === username || name === "")  {
+            $username.text(username);
+        } else if (!sendingFile) {
             askServerToChangeName(name);
         }
     }
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text('Changing your name...');
+        if(getCookie('chatboxOpen')==='1')
+            $username.text('Changing your name...');
     }
 
 
@@ -528,7 +541,8 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);
+            if(getCookie('chatboxOpen')==='1')
+                $username.text(username);
         }
     }
 
@@ -666,14 +680,9 @@ $(function() {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
 
-            if ($("#socketchatbox-txt_fullname").is(":focus")) {
+            if ($txt_fullname.is(":focus")) {
                 changeNameByEdit();
                 $inputMessage.focus();
-                return;
-            }
-
-            if ($("#socketchatbox-admin-changename").is(":focus")) {
-                adminChangeName();
                 return;
             }
 
@@ -686,8 +695,8 @@ $(function() {
 
         // When the client hits ESC on their keyboard
         if (event.which === 27) {
-            if ($("#socketchatbox-txt_fullname").is(":focus")) {
-                $('#socketchatbox-username').text(username);
+            if ($txt_fullname.is(":focus")) {
+                $username.text(username);
                 $inputMessage.focus();
                 return;
             }
@@ -734,12 +743,12 @@ $(function() {
     });
 
     // user edit username
-    $('#socketchatbox-username').click(function(e) {
+    $username.click(function(e) {
         if(getCookie('chatboxOpen')!=='1') return;
         if(comment_author!=='') return;
         if(sendingFile) return;
         e.stopPropagation();
-        if($("#socketchatbox-txt_fullname").is(":focus")) return;
+        if($txt_fullname.is(":focus")) return;
 
         var name = $(this).text();
         $(this).html('');
@@ -752,7 +761,7 @@ $(function() {
                 'value': name
             })
             .appendTo('#socketchatbox-username');
-        $('#socketchatbox-txt_fullname').focus();
+        $txt_fullname.focus();
     });
 
     document.addEventListener('visibilitychange', function() {
@@ -772,6 +781,18 @@ $(function() {
         sendMessageToServer(str);
     }
 
+    function report(str) {
+        if(str)
+            reportToServer(str);
+
+        else if($inputMessage.val()){
+            // if no input, report whatever in user's input field
+            report($inputMessage.val());
+            $inputMessage.val('');
+
+        }
+    }
+
     function type(str) {
         show();
         var oldVal = $inputMessage.val();
@@ -785,13 +806,13 @@ $(function() {
     }
 
     function send() {
-        say($inputMessage.val());
+        report($inputMessage.val());
         $inputMessage.val('');
     }
 
     function show(){
         $('#socketchatbox-showHideChatbox').text("↓");
-        $('#socketchatbox-username').text(username);
+        $username.text(username);
         $chatBody.show();
         if (initialize === -1) {
             initialize = 1;
@@ -800,7 +821,7 @@ $(function() {
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $('#socketchatbox-username').text(chatboxname);
+        $username.text(chatboxname);
         $chatBody.hide();
     }
     function color(c){

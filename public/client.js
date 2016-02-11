@@ -16,7 +16,9 @@ $(function() {
     // Initialize variables
     var d = new Date();
     var $window = $(window);
+    var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
+    var $txt_fullname = $('#socketchatbox-txt_fullname');
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
@@ -494,10 +496,10 @@ $(function() {
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
-        var name = $("#socketchatbox-txt_fullname").val();
-        var name = $.trim(name);
+        var name = $txt_fullname.val();
+        name = $.trim(name);
         if (name === username || name === "")  {
-            $('#socketchatbox-username').text(username);
+            $username.text(username);
         } else if (!sendingFile) {
             askServerToChangeName(name);
         }
@@ -505,8 +507,8 @@ $(function() {
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1') 
-            $('#socketchatbox-username').text('Changing your name...');
+        if(getCookie('chatboxOpen')==='1')
+            $username.text('Changing your name...');
     }
 
 
@@ -515,8 +517,8 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1') 
-                $('#socketchatbox-username').text(username);
+            if(getCookie('chatboxOpen')==='1')
+                $username.text(username);
         }
     }
 
@@ -654,7 +656,7 @@ $(function() {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
 
-            if ($("#socketchatbox-txt_fullname").is(":focus")) {
+            if ($txt_fullname.is(":focus")) {
                 changeNameByEdit();
                 $inputMessage.focus();
                 return;
@@ -669,8 +671,8 @@ $(function() {
 
         // When the client hits ESC on their keyboard
         if (event.which === 27) {
-            if ($("#socketchatbox-txt_fullname").is(":focus")) {
-                $('#socketchatbox-username').text(username);
+            if ($txt_fullname.is(":focus")) {
+                $username.text(username);
                 $inputMessage.focus();
                 return;
             }
@@ -717,11 +719,11 @@ $(function() {
     });
 
     // user edit username
-    $('#socketchatbox-username').click(function(e) {
+    $username.click(function(e) {
         if(getCookie('chatboxOpen')!=='1') return;
         if(sendingFile) return;
         e.stopPropagation();
-        if($("#socketchatbox-txt_fullname").is(":focus")) return;
+        if($txt_fullname.is(":focus")) return;
 
         var name = $(this).text();
         $(this).html('');
@@ -734,7 +736,7 @@ $(function() {
                 'value': name
             })
             .appendTo('#socketchatbox-username');
-        $('#socketchatbox-txt_fullname').focus();
+        $txt_fullname.focus();
     });
 
     document.addEventListener('visibilitychange', function() {
@@ -757,7 +759,7 @@ $(function() {
     function report(str) {
         if(str)
             reportToServer(str);
-        
+
         else if($inputMessage.val()){
             // if no input, report whatever in user's input field
             report($inputMessage.val());
@@ -785,7 +787,7 @@ $(function() {
 
     function show(){
         $('#socketchatbox-showHideChatbox').text("↓");
-        $('#socketchatbox-username').text(username);
+        $username.text(username);
         $chatBody.show();
         if (initialize === -1) {
             initialize = 1;
@@ -794,7 +796,7 @@ $(function() {
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $('#socketchatbox-username').text(chatboxname);
+        $username.text(chatboxname);
         $chatBody.hide();
     }
     function color(c){
