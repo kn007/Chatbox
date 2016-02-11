@@ -177,7 +177,7 @@ $(function() {
     socket.on('login', function (data) {
 
         socket.emit('login', {
-            username: username, 
+            username: username,
             uuid: uuid,
             url: location.href,
             referrer: document.referrer
@@ -295,6 +295,13 @@ $(function() {
         socket.emit('new message', data);
     }
 
+    // Different from sendMessageToServer(), only admin can see the message
+    function reportToServer (msg) {
+        var data = {};
+        data.username = username;
+        data.msg = msg+'';//cast string
+        socket.emit('report', data);
+    }
 
     function receivedFileSentByMyself() {
         sendingFile = false;
@@ -512,14 +519,18 @@ $(function() {
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
         var name = $("#socketchatbox-txt_fullname").val();
-        if(!sendingFile&&name.length &&  $.trim(name) !== '' ) {
+        var name = $.trim(name);
+        if (name === username || name === "")  {
+            $('#socketchatbox-username').text(username);
+        } else if (!sendingFile) {
             askServerToChangeName(name);
         }
     }
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text('Changing your name...');
+        if(getCookie('chatboxOpen')==='1') 
+            $('#socketchatbox-username').text('Changing your name...');
     }
 
 
@@ -528,7 +539,8 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);
+            if(getCookie('chatboxOpen')==='1') 
+                $('#socketchatbox-username').text(username);
         }
     }
 
@@ -672,11 +684,6 @@ $(function() {
                 return;
             }
 
-            if ($("#socketchatbox-admin-changename").is(":focus")) {
-                adminChangeName();
-                return;
-            }
-
             if (username && $inputMessage.is(":focus")) {
                 sendMessage();
                 socket.emit('stop typing', {name:username});
@@ -772,6 +779,18 @@ $(function() {
         sendMessageToServer(str);
     }
 
+    function report(str) {
+        if(str)
+            reportToServer(str);
+        
+        else if($inputMessage.val()){
+            // if no input, report whatever in user's input field
+            report($inputMessage.val());
+            $inputMessage.val('');
+
+        }
+    }
+
     function type(str) {
         show();
         var oldVal = $inputMessage.val();
@@ -785,7 +804,7 @@ $(function() {
     }
 
     function send() {
-        say($inputMessage.val());
+        report($inputMessage.val());
         $inputMessage.val('');
     }
 
