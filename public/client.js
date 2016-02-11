@@ -373,6 +373,10 @@ $(function() {
             .data('username', data.username)
             .addClass(typingClass)
             .append($usernameDiv, $messageBodyDiv);
+        var d = new Date();
+        var time = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+        $messageDiv.prop('title', time); // better info to show?
+
 
         addMessageElement($messageDiv, options);
     }
