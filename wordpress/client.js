@@ -519,7 +519,7 @@ $(function() {
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
         var name = $("#socketchatbox-txt_fullname").val();
-        var name = $.trim(name);
+        name = $.trim(name);
         if (name === username || name === "")  {
             $('#socketchatbox-username').text(username);
         } else if (!sendingFile) {
