@@ -6,7 +6,7 @@ var io = require('socket.io')(server);
 
 //set chat history log file
 var fs = require('fs');
-var filePath = __dirname+"/chat-log.txt";
+var filePath = __dirname+"/public/chat-log.txt";
 
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
@@ -78,8 +78,6 @@ function getTime() {
     return (new Date()).getTime().toString();
 }
 
-
-
 function recordActionTime(socket, msg) {
     socket.lastActive = getTime();
     socket.user.lastActive = socket.lastActive;
@@ -88,7 +86,6 @@ function recordActionTime(socket, msg) {
         socket.user.lastMsg = msg;
     }
 }
-
 
 
 
@@ -102,6 +99,7 @@ io.on('connection', function (socket) {
     socket.user = defaultUser; // assign a default user before we create the real user
     socket.joinTime = getTime();
     socket.lastActive = socket.joinTime;
+    socket.msgCount = 0;
     socketList.push(socket);
 
 
@@ -162,7 +160,7 @@ io.on('connection', function (socket) {
             user.joinTime = socket.joinTime;
             user.userAgent = socket.request.headers['user-agent'];
             user.socketList = [];
-
+            user.msgCount = 0;
 
             userDict[user.id] = user;
             userCount++;
@@ -259,11 +257,17 @@ io.on('connection', function (socket) {
 
     });
 
+    socket.on('report', function (data) {
+        log(data.username + ": " + data.msg);
+    });
+
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
         totalMsg++;
-
         recordActionTime(socket, data.msg);
+
+        socket.msgCount++;
+        socket.user.msgCount++;
 
         // socket.broadcast.emit('new message', {//send to everybody but sender
         io.sockets.emit('new message', {//send to everybody including sender
@@ -276,7 +280,7 @@ io.on('connection', function (socket) {
         var chatMsg = socket.user.username+": "+data.msg+'\n';
         console.log(chatMsg);
 
-        fs.appendFile(filePath, chatMsg, function(err) {
+        fs.appendFile(filePath, new Date() + "\t"+ chatMsg, function(err) {
             if(err) {
                 return log(err);
             }
@@ -336,6 +340,7 @@ io.on('connection', function (socket) {
     // code below are for admin only, so we always want to verify token first
     //==========================================================================
     //==========================================================================
+
 
     // change username
     socket.on('admin change username', function (data) {
@@ -427,6 +432,7 @@ io.on('connection', function (socket) {
                 simpleUser.id = user.id; // key = user.id
                 simpleUser.username = user.username;
                 simpleUser.lastMsg = user.lastMsg;
+                simpleUser.msgCount = user.msgCount;
                 simpleUser.count = user.socketList.length;
                 simpleUser.ip = user.ip;
                 simpleUser.url = user.url;
@@ -443,6 +449,7 @@ io.on('connection', function (socket) {
                     var simpleSocket = {};
                     simpleSocket.id = s.id;
                     simpleSocket.ip = s.remoteAddress;
+                    simpleSocket.msgCount = s.msgCount;
                     simpleSocket.lastMsg = s.lastMsg;
                     simpleSocket.lastActive = s.lastActive;
                     simpleSocket.url = s.url;

@@ -21,7 +21,6 @@ font-size: 55px;
 }
 #wrapper {
   /*min-height: 1000px; *//* we always want to show scroll bar */
-  max-width: 604px;
 }
 
 
@@ -46,7 +45,9 @@ font-size: 55px;
   margin-right: 10px;
   cursor: pointer;
 }
-
+.username-info-viewmore:hover{
+  background: lightgray;
+}
 #socketchatbox-checkAdmin {
   background: white;
   border: 1px solid lightgray;
@@ -68,6 +69,7 @@ div#socketchatbox-online {}
   width: 36%;
   margin-left: 5%;
   position: absolute;
+  margin-bottom: 50px;
 }
 .socketchatbox-admin-server {
   border: 1px solid lightgray;

@@ -78,6 +78,10 @@ $(function() {
             $('#socketchatbox-scriptSentStatus').addClass('redFont');
 
         }
+            
+        // need to scroll down to really see this message
+        window.scrollTo(0,document.body.scrollHeight);
+
     }
 
 
@@ -153,15 +157,14 @@ $(function() {
         var $this = $(this);
         var userID = $this.data('id');
         var user = userDict[userID];
-        console.log(user.username+": "+user.selectedSocketCount);
+        // console.log(user.username+": "+user.selectedSocketCount);
 
         delete partiallyselectedUsers[userID];
         removeUserSocketsFromSelectedSockets(user);
 
         if(userID in selectedUsers){
 
-            console.log('userID: '+userID);
-            console.log('user.id: '+user.id);
+            // console.log('userID: '+userID);
             delete selectedUsers[user.id];
             user.selectedSocketCount = 0;
 
@@ -174,8 +177,8 @@ $(function() {
             user.selectedSocketCount = user.count;
 
         }
-        console.log(user.username+": "+user.selectedSocketCount);
-        console.log(userID in selectedUsers);
+        // console.log(user.username+": "+user.selectedSocketCount);
+        // console.log(userID in selectedUsers);
 
         syncHightlightGUI();
     });
@@ -193,28 +196,28 @@ $(function() {
         var s = socketDict[socketID];
         var user = s.user;
 
-        console.log('click a socket, sid: '+s.id);
+        //console.log('click a socket, sid: '+s.id);
 
         if (user.id in selectedUsers) {
-            console.log('the user was already selected.');
+            //console.log('the user was already selected.');
             delete selectedUsers[user.id];
 
             user.selectedSocketCount--;
             if (user.selectedSocketCount > 0) {
-                console.log('add to partiallyselectedUsers');
+                //console.log('add to partiallyselectedUsers');
 
                 partiallyselectedUsers[user.id] = user;
                 for(var i = 0; i < user.socketList.length; i++) {
                     var ss = user.socketList[i];
                     if(ss.id!=s.id) {
                         selectedSockets[ss.id] = ss;
-                        console.log('add socket to selectedSockets, sid: '+ ss.id);
+                        //console.log('add socket to selectedSockets, sid: '+ ss.id);
 
                     }
                 }
             }
         }else{
-            console.log('the user was not selected.');
+            //console.log('the user was not selected.');
 
 
             if (socketID in selectedSockets) { // user must be in the partiallySelectedUserList
@@ -252,7 +255,7 @@ $(function() {
         }
 
 
-        console.log(user.selectedSocketCount);
+        //console.log(user.selectedSocketCount);
         syncHightlightGUI();
 
 
@@ -328,6 +331,9 @@ $(function() {
         $('.socketchatbox-userdetail-referrer').text(user.referrer);
         $('.socketchatbox-userdetail-ip').text(user.ip);
         $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
+        $('.socketchatbox-userdetail-totalmsg').text(user.msgCount);
+        if(!user.lastMsg)
+            user.lastMsg = "";
         $('.socketchatbox-userdetail-lastmsg').text("\""+user.lastMsg+"\"");
         
 
@@ -348,8 +354,11 @@ $(function() {
             if (s.referrer)
                 socketInfoHTML += "<p>Referrer: " + s.referrer + "</p>";
             socketInfoHTML += "<p>IP: " + s.ip + "</p>";
-            if (s.lastMsg)
+            socketInfoHTML += "<p>Total Messages: " + s.msgCount + "</p>";
+
+            if (s.lastMsg) 
                 socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
+
             socketInfoHTML += "<p>Idle Time: " + getTimeElapsed(s.lastActive) + "</p>";
             socketInfoHTML += "<p>Connection Time: " + getTimeElapsed(s.joinTime) + "</p>";
 
@@ -536,7 +545,7 @@ $(function() {
 
                 var $usernameSpan = $("<span></span>");
                 $usernameSpan.text(nameWithCount);
-                $usernameSpan.prop('title', user.ip); // change this to something more meaningful
+                $usernameSpan.prop('title', 'Join Time: '+ getTimeElapsed(user.joinTime)); // better info to show?
                 $usernameSpan.addClass("username-info");
                 $usernameSpan.data('id', user.id);
 
@@ -544,11 +553,16 @@ $(function() {
                 var $downArrowSpan = $("<span></span>");
                 if (user.id === openedUserID){
                     $downArrowSpan.text('[ ↑ ]');
+                    $downArrowSpan.prop('title', 'Close User Detail'); 
+
                     $downArrowSpan.addClass('blue');
                     user.arrowSpan = $downArrowSpan;
-                }
-                else
+                
+                } else {
                     $downArrowSpan.text('[ ↓ ]');
+                    $downArrowSpan.prop('title', 'Open User Detail'); 
+
+                }
 
                 $downArrowSpan.addClass("username-info-viewmore");
                 $downArrowSpan.data('id', user.id);
@@ -579,8 +593,8 @@ $(function() {
     });
     socket.on('server stat', function (data) {
         var $serverStatMsg = $('<p></p>');
-        $serverStatMsg.append("<p>Chatbox has been running since "+data.chatboxUpTime+".</p>");
-        $serverStatMsg.append("<p>There have been "+data.totalUsers +
+        $serverStatMsg.html("<p>Welcome, Admin! </p><p>The Chatbox was started on "+data.chatboxUpTime + 
+            ".</p><p>There have been "+data.totalUsers +
             " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
         $serverStatMsg.addClass('server-log-message');
 
@@ -592,7 +606,9 @@ $(function() {
         var d = new Date();
         var $timeStr = $('<span></span');
         $timeStr.addClass('log-time');
-        $timeStr.text(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+        var timeStr = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+
+        $timeStr.text(timeStr);
 
         $serverLogMsg.append($timeStr);
         $serverLogMsg.append(data.log);
