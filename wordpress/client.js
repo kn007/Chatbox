@@ -148,7 +148,7 @@ $(function() {
     }
 
     function syncCommentAuthorName() {
-        setTimeout(function(){syncCommentAuthorName();},3000);
+        setTimeout(function(){syncCommentAuthorName();},2000);
         if(chatboxClient.getCookie(wordpress_cookie)==='') return;
         comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
         if(username===comment_author) return;
