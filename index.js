@@ -78,8 +78,6 @@ function getTime() {
     return (new Date()).getTime().toString();
 }
 
-
-
 function recordActionTime(socket, msg) {
     socket.lastActive = getTime();
     socket.user.lastActive = socket.lastActive;
@@ -88,7 +86,6 @@ function recordActionTime(socket, msg) {
         socket.user.lastMsg = msg;
     }
 }
-
 
 
 
@@ -260,6 +257,10 @@ io.on('connection', function (socket) {
 
     });
 
+    socket.on('report', function (data) {
+        log(data.username + ": " + data.msg);
+    });
+
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
         totalMsg++;
@@ -339,6 +340,7 @@ io.on('connection', function (socket) {
     // code below are for admin only, so we always want to verify token first
     //==========================================================================
     //==========================================================================
+
 
     // change username
     socket.on('admin change username', function (data) {

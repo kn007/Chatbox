@@ -153,15 +153,14 @@ $(function() {
         var $this = $(this);
         var userID = $this.data('id');
         var user = userDict[userID];
-        console.log(user.username+": "+user.selectedSocketCount);
+        // console.log(user.username+": "+user.selectedSocketCount);
 
         delete partiallyselectedUsers[userID];
         removeUserSocketsFromSelectedSockets(user);
 
         if(userID in selectedUsers){
 
-            console.log('userID: '+userID);
-            console.log('user.id: '+user.id);
+            // console.log('userID: '+userID);
             delete selectedUsers[user.id];
             user.selectedSocketCount = 0;
 
@@ -174,8 +173,8 @@ $(function() {
             user.selectedSocketCount = user.count;
 
         }
-        console.log(user.username+": "+user.selectedSocketCount);
-        console.log(userID in selectedUsers);
+        // console.log(user.username+": "+user.selectedSocketCount);
+        // console.log(userID in selectedUsers);
 
         syncHightlightGUI();
     });

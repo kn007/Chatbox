@@ -271,6 +271,13 @@ $(function() {
         socket.emit('new message', data);
     }
 
+    // Different from sendMessageToServer(), only admin can see the message
+    function reportToServer (msg) {
+        var data = {};
+        data.username = username;
+        data.msg = msg+'';//cast string
+        socket.emit('report', data);
+    }
 
     function receivedFileSentByMyself() {
         sendingFile = false;
@@ -747,6 +754,18 @@ $(function() {
         sendMessageToServer(str);
     }
 
+    function report(str) {
+        if(str)
+            reportToServer(str);
+        
+        else if($inputMessage.val()){
+            // if no input, report whatever in user's input field
+            report($inputMessage.val());
+            $inputMessage.val('');
+
+        }
+    }
+
     function type(str) {
         show();
         var oldVal = $inputMessage.val();
@@ -760,7 +779,7 @@ $(function() {
     }
 
     function send() {
-        say($inputMessage.val());
+        report($inputMessage.val());
         $inputMessage.val('');
     }
 
