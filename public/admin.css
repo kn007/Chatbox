@@ -46,7 +46,9 @@ font-size: 55px;
   margin-right: 10px;
   cursor: pointer;
 }
-
+.username-info-viewmore:hover{
+  background: lightgray;
+}
 #socketchatbox-checkAdmin {
   background: white;
   border: 1px solid lightgray;

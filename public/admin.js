@@ -542,7 +542,7 @@ $(function() {
 
                 var $usernameSpan = $("<span></span>");
                 $usernameSpan.text(nameWithCount);
-                $usernameSpan.prop('title', user.ip); // change this to something more meaningful
+                $usernameSpan.prop('title', 'Join Time: '+ getTimeElapsed(user.joinTime)); // better info to show?
                 $usernameSpan.addClass("username-info");
                 $usernameSpan.data('id', user.id);
 
@@ -550,11 +550,16 @@ $(function() {
                 var $downArrowSpan = $("<span></span>");
                 if (user.id === openedUserID){
                     $downArrowSpan.text('[ ↑ ]');
+                    $downArrowSpan.prop('title', 'Close User Detail'); 
+
                     $downArrowSpan.addClass('blue');
                     user.arrowSpan = $downArrowSpan;
-                }
-                else
+                
+                } else {
                     $downArrowSpan.text('[ ↓ ]');
+                    $downArrowSpan.prop('title', 'Open User Detail'); 
+
+                }
 
                 $downArrowSpan.addClass("username-info-viewmore");
                 $downArrowSpan.data('id', user.id);
@@ -586,8 +591,8 @@ $(function() {
     socket.on('server stat', function (data) {
         var $serverStatMsg = $('<p></p>');
         $serverStatMsg.html("<p>Welcome, Admin! </p><p>The Chatbox was started on "+data.chatboxUpTime + 
-            ".</p>There have been "+data.totalUsers +
-            " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.");
+            ".</p><p>There have been "+data.totalUsers +
+            " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
         $serverStatMsg.addClass('server-log-message');
 
         $('.socketchatbox-admin-server').append($serverStatMsg);
