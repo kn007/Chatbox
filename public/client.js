@@ -507,7 +507,7 @@ $(function() {
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1') 
+        if(getCookie('chatboxOpen')==='1')
             $username.text('Changing your name...');
     }
 
@@ -517,7 +517,7 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1') 
+            if(getCookie('chatboxOpen')==='1')
                 $username.text(username);
         }
     }
@@ -759,7 +759,7 @@ $(function() {
     function report(str) {
         if(str)
             reportToServer(str);
-        
+
         else if($inputMessage.val()){
             // if no input, report whatever in user's input field
             report($inputMessage.val());
