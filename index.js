@@ -240,6 +240,8 @@ io.on('connection', function (socket) {
         var newName =  data.newName;
         socket.user.username = newName;
 
+        if (newName === oldName) return;
+
         // sync name change
         var socketsToChangeName = socket.user.socketList;
         for (var i = 0; i< socketsToChangeName.length; i++) {
@@ -344,6 +346,8 @@ io.on('connection', function (socket) {
             var newName =  data.newName;
             var oldName = user.username;
             user.username = newName;
+
+            if (newName === oldName) return;
 
             // sync name change
             var socketsToChangeName = user.socketList;

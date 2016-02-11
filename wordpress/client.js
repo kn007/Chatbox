@@ -757,6 +757,11 @@ $(function() {
 
     document.addEventListener('visibilitychange', function() {
         if(!document.hidden) clearNewMessageNotification();
+        if(getCookie('chatboxOpen')==='1') {
+            show();
+        }else{
+            hide();
+        }
     });
 
 
