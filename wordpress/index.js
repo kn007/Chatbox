@@ -160,7 +160,6 @@ io.on('connection', function (socket) {
             user.url = socket.url;
             user.referrer = socket.referrer;
             user.joinTime = socket.joinTime;
-            user.lastActive = socket.joinTime;
             user.userAgent = socket.request.headers['user-agent'];
             user.socketList = [];
 
@@ -190,7 +189,7 @@ io.on('connection', function (socket) {
         socket.user = user;
 
 
-
+        recordActionTime(socket);
 
     });
 
@@ -243,6 +242,8 @@ io.on('connection', function (socket) {
         var oldName = socket.user.username;
         var newName =  data.newName;
         socket.user.username = newName;
+
+        if (newName === oldName) return;
 
         // sync name change
         var socketsToChangeName = socket.user.socketList;
@@ -348,6 +349,8 @@ io.on('connection', function (socket) {
             var newName =  data.newName;
             var oldName = user.username;
             user.username = newName;
+
+            if (newName === oldName) return;
 
             // sync name change
             var socketsToChangeName = user.socketList;
