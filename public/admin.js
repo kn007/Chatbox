@@ -602,7 +602,9 @@ $(function() {
         var d = new Date();
         var $timeStr = $('<span></span');
         $timeStr.addClass('log-time');
-        $timeStr.text(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+        var timeStr = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+
+        $timeStr.text(timeStr);
 
         $serverLogMsg.append($timeStr);
         $serverLogMsg.append(data.log);
