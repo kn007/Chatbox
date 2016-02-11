@@ -495,14 +495,18 @@ $(function() {
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
         var name = $("#socketchatbox-txt_fullname").val();
-        if(!sendingFile&&name.length &&  $.trim(name) !== '' ) {
+        var name = $.trim(name);
+        if (name === username || name === "")  {
+            $('#socketchatbox-username').text(username);
+        } else if (!sendingFile) {
             askServerToChangeName(name);
         }
     }
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text('Changing your name...');
+        if(getCookie('chatboxOpen')==='1') 
+            $('#socketchatbox-username').text('Changing your name...');
     }
 
 
@@ -511,7 +515,8 @@ $(function() {
         if(name) {
             username = name;
             addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1') $('#socketchatbox-username').text(username);
+            if(getCookie('chatboxOpen')==='1') 
+                $('#socketchatbox-username').text(username);
         }
     }
 
@@ -652,11 +657,6 @@ $(function() {
             if ($("#socketchatbox-txt_fullname").is(":focus")) {
                 changeNameByEdit();
                 $inputMessage.focus();
-                return;
-            }
-
-            if ($("#socketchatbox-admin-changename").is(":focus")) {
-                adminChangeName();
                 return;
             }
 
