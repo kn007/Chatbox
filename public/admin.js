@@ -328,6 +328,9 @@ $(function() {
         $('.socketchatbox-userdetail-referrer').text(user.referrer);
         $('.socketchatbox-userdetail-ip').text(user.ip);
         $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
+        $('.socketchatbox-userdetail-totalmsg').text(user.msgCount);
+        if(!user.lastMsg)
+            user.lastMsg = "";
         $('.socketchatbox-userdetail-lastmsg').text("\""+user.lastMsg+"\"");
         
 
@@ -348,8 +351,11 @@ $(function() {
             if (s.referrer)
                 socketInfoHTML += "<p>Referrer: " + s.referrer + "</p>";
             socketInfoHTML += "<p>IP: " + s.ip + "</p>";
-            if (s.lastMsg)
+            socketInfoHTML += "<p>Total Messages: " + s.msgCount + "</p>";
+
+            if (s.lastMsg) 
                 socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
+
             socketInfoHTML += "<p>Idle Time: " + getTimeElapsed(s.lastActive) + "</p>";
             socketInfoHTML += "<p>Connection Time: " + getTimeElapsed(s.joinTime) + "</p>";
 
@@ -579,7 +585,7 @@ $(function() {
     });
     socket.on('server stat', function (data) {
         var $serverStatMsg = $('<p></p>');
-        $serverStatMsg.append("<p>Chatbox has been running since "+data.chatboxUpTime+".</p>");
+        $serverStatMsg.append("<p>Chatbox was started on "+data.chatboxUpTime+".</p>");
         $serverStatMsg.append("<p>There have been "+data.totalUsers +
             " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
         $serverStatMsg.addClass('server-log-message');
