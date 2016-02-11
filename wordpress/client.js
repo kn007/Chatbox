@@ -19,6 +19,7 @@ $(function() {
     // Initialize variables
     var d = new Date();
     var $window = $(window);
+    var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
@@ -521,7 +522,7 @@ $(function() {
         var name = $("#socketchatbox-txt_fullname").val();
         name = $.trim(name);
         if (name === username || name === "")  {
-            $('#socketchatbox-username').text(username);
+            $username.text(username);
         } else if (!sendingFile) {
             askServerToChangeName(name);
         }
@@ -530,7 +531,7 @@ $(function() {
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
         if(getCookie('chatboxOpen')==='1') 
-            $('#socketchatbox-username').text('Changing your name...');
+            $username.text('Changing your name...');
     }
 
 
@@ -540,7 +541,7 @@ $(function() {
             username = name;
             addCookie('chatname', name);
             if(getCookie('chatboxOpen')==='1') 
-                $('#socketchatbox-username').text(username);
+                $username.text(username);
         }
     }
 
@@ -694,7 +695,7 @@ $(function() {
         // When the client hits ESC on their keyboard
         if (event.which === 27) {
             if ($("#socketchatbox-txt_fullname").is(":focus")) {
-                $('#socketchatbox-username').text(username);
+                $username.text(username);
                 $inputMessage.focus();
                 return;
             }
@@ -741,7 +742,7 @@ $(function() {
     });
 
     // user edit username
-    $('#socketchatbox-username').click(function(e) {
+    $username.click(function(e) {
         if(getCookie('chatboxOpen')!=='1') return;
         if(comment_author!=='') return;
         if(sendingFile) return;
@@ -810,7 +811,7 @@ $(function() {
 
     function show(){
         $('#socketchatbox-showHideChatbox').text("↓");
-        $('#socketchatbox-username').text(username);
+        $username.text(username);
         $chatBody.show();
         if (initialize === -1) {
             initialize = 1;
@@ -819,7 +820,7 @@ $(function() {
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $('#socketchatbox-username').text(chatboxname);
+        $username.text(chatboxname);
         $chatBody.hide();
     }
     function color(c){
