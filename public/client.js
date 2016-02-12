@@ -753,6 +753,68 @@ $(function() {
     });
 
 
+
+    //resize
+
+    var prev_x = -1;
+    var prev_y = -1;
+    var dir = null;
+    $(".socketchatbox-resize").mousedown(function(e){
+        prev_x = e.clientX;
+        prev_y = e.clientY;
+        dir = $(this).attr('id');
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    
+    $(document).mousemove(function(e){
+
+        if (prev_x == -1)
+            return;
+        
+        var boxW = $(".socketchatbox-chatArea").outerWidth();
+        var boxH = $(".socketchatbox-chatArea").outerHeight();
+        var dx = e.clientX - prev_x;
+        var dy = e.clientY - prev_y;
+        console.log('b boxW '+boxW);
+        console.log('b boxH '+boxH);
+        
+        console.log('dx '+dx);
+        console.log('dy '+dy);
+        //Check directions
+        if (dir.indexOf('n') > -1) //north
+        {
+            boxH -= dy;
+        }
+
+        if (dir.indexOf('w') > -1) //west
+        {
+            boxW -= dx;
+        }
+        if (dir.indexOf('e') > -1) //east
+        {
+            boxW += dx;
+        }
+                
+        console.log('boxW '+boxW);
+        console.log('boxH '+boxH);
+
+            
+        $(".socketchatbox-chatArea").css({
+            "width":(boxW)+"px",
+            "height":(boxH)+"px",
+        });
+
+        prev_x = e.clientX;
+        prev_y = e.clientY;
+    });
+    
+    $(document).mouseup(function(){
+        prev_x = -1;
+        prev_y = -1;
+    });
+
+
     // The functions below are for admin to use, user himself can't really call them
 
 
@@ -797,11 +859,18 @@ $(function() {
             initialize = 1;
             log();
         }
+
+        //show resize cursor
+        $('.socketchatbox-resize').css('z-index', 99999);
+
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
         $username.text(chatboxname);
         $chatBody.hide();
+
+        //hide resize cursor
+        $('.socketchatbox-resize').css('z-index', -999);
     }
     function color(c){
         $('html').css('background-color', c);

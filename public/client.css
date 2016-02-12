@@ -12,6 +12,26 @@ ul {
   list-style: none;
   word-wrap: break-word;
 }
+.socketchatbox-resize {
+
+  top:0px;
+  height:20px;
+  width:20px;
+/*  background-color:#000;
+*/  position:absolute;
+  z-index: 99999;
+
+}
+
+#socketchatbox-nw {
+  left:0px; 
+  cursor:nw-resize; 
+}
+
+#socketchatbox-ne{
+  right:0px;
+  cursor:ne-resize; 
+}
 
 #socketchatbox-imagefile {
   width:100%;
@@ -37,17 +57,18 @@ ul {
 
 #socketchatbox-showHideChatbox {
   float:right;
-  margin-right: 15px;
+  margin-right: 25px;
 }
 
 #socketchatbox-username {
   float:left;
-  margin-left: 10px;
+  margin-left: 20px;
   min-width: 20%;
   max-width:60%;
 }
  
 #socketchatbox-top {
+  min-width: 150px;
   cursor: pointer; 
   height: 30px;
   background: lightgrey;
@@ -63,12 +84,11 @@ ul {
 .socketchatbox-page {
   margin: 0;
   padding: 0;
-  width: 300px;
   position: fixed;
   bottom: 0px;
   overflow: auto;
-  resize: horizontal;
-  background: white;
+/*  resize: horizontal;
+*/  background: white;
   z-index: 9999;
   font-family: Arial, Helvetica, sans-serif;
   
@@ -90,7 +110,9 @@ ul {
 
 
 .socketchatbox-chatArea {
-  height: 340px;
+  height: 350px;
+  width: 300px;
+
   border: 1px solid lightgray;
 }
 
