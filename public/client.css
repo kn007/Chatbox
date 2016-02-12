@@ -151,6 +151,7 @@ ul {
   padding: 10px 18px;
   position: relative;
   vertical-align: top;
+  word-break: break-all;
 }
 
 .socketchatbox-messageBody::before {
