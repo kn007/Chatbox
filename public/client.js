@@ -314,10 +314,14 @@ $(function() {
         }
 
         var $usernameDiv = $('<span class="socketchatbox-username"/>')
-            .text(data.username+':')
+            .text(data.username)
             .css('color', getUsernameColor(data.username));
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
-
+        if (data.username === username) {
+            $messageBodyDiv.addClass('socketchatbox-messageBody-me');
+        } else {
+            $messageBodyDiv.addClass('socketchatbox-messageBody-others');
+        }
         var messageToSaveIntoCookie = "";
 
         // receiving image file in base64
@@ -350,8 +354,8 @@ $(function() {
         // receiving new message
         if (!options.loadFromCookie && !options.typing) {
 
-            // play new msg sound and change chatbox color to notice users
-            if (data.username!==username) {
+            // play new msg sound and change chatbox color to notify users
+            if (data.username !== username) {
                 newMsgBeep();
                 if(document.hidden && changeTitleMode === 1 && changeTitle.done === 0) changeTitle.change();
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
@@ -369,16 +373,22 @@ $(function() {
 
 
         var typingClass = options.typing ? 'socketchatbox-typing' : '';
-        var $messageDiv = $('<li class="socketchatbox-message"/>')
+        var $messageWrapper = $("<div class='socketchatbox-message-wrapper'></div>");
+        var $messageDiv = $("<div class='socketchatbox-message'></div>")
             .data('username', data.username)
             .addClass(typingClass)
             .append($usernameDiv, $messageBodyDiv);
         var d = new Date();
         var time = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
         $messageDiv.prop('title', time); // better info to show?
+        $messageWrapper.append($messageDiv);
+        if (data.username === username) {
+            $messageDiv.addClass('socketchatbox-message-me');
+        } else {
+            $messageDiv.addClass('socketchatbox-message-others');
+        }
 
-
-        addMessageElement($messageDiv, options);
+        addMessageElement($messageWrapper, options);
     }
 
 
