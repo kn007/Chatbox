@@ -8,9 +8,7 @@ $(function() {
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
     var COLORS = [
-        '#e21400', '#91580f', '#f8a700', '#f78b00',
-        '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-        '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+        'black'
     ];
 
     // Initialize variables
@@ -18,7 +16,7 @@ $(function() {
     var $window = $(window);
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
-    var $txt_fullname = $('#socketchatbox-txt_fullname');
+    //var $txt_fullname = $('#socketchatbox-txt_fullname');
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
@@ -511,7 +509,7 @@ $(function() {
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
-        var name = $txt_fullname.val();
+        var name = $('#socketchatbox-txt_fullname').val();
         name = $.trim(name);
         if (name === username || name === "")  {
             $username.text(username);
@@ -671,7 +669,7 @@ $(function() {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
 
-            if ($txt_fullname.is(":focus")) {
+            if ($('#socketchatbox-txt_fullname').is(":focus")) {
                 changeNameByEdit();
                 $inputMessage.focus();
                 return;
@@ -686,7 +684,7 @@ $(function() {
 
         // When the client hits ESC on their keyboard
         if (event.which === 27) {
-            if ($txt_fullname.is(":focus")) {
+            if ($('#socketchatbox-txt_fullname').is(":focus")) {
                 $username.text(username);
                 $inputMessage.focus();
                 return;
@@ -738,7 +736,8 @@ $(function() {
         if(getCookie('chatboxOpen')!=='1') return;
         if(sendingFile) return;
         e.stopPropagation();
-        if($txt_fullname.is(":focus")) return;
+        if($('#socketchatbox-txt_fullname').length > 0) return;
+        //if($('#socketchatbox-txt_fullname').is(":focus")) return;
 
         var name = $(this).text();
         $(this).html('');
@@ -751,7 +750,7 @@ $(function() {
                 'value': name
             })
             .appendTo('#socketchatbox-username');
-        $txt_fullname.focus();
+        $('#socketchatbox-txt_fullname').focus();
     });
 
     document.addEventListener('visibilitychange', function() {
@@ -787,11 +786,7 @@ $(function() {
         var boxH = $(".socketchatbox-chatArea").outerHeight();
         var dx = e.clientX - prev_x;
         var dy = e.clientY - prev_y;
-        console.log('b boxW '+boxW);
-        console.log('b boxH '+boxH);
-        
-        console.log('dx '+dx);
-        console.log('dy '+dy);
+       
         //Check directions
         if (dir.indexOf('n') > -1) //north
         {

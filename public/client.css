@@ -57,6 +57,7 @@ ul {
 
 #socketchatbox-showHideChatbox {
   float:right;
+  color: white;
   margin-right: 25px;
 }
 
@@ -64,20 +65,20 @@ ul {
   float:left;
   margin-left: 20px;
   min-width: 20%;
+  color: white;
   max-width:60%;
 }
  
 #socketchatbox-top {
   min-width: 200px;
-  cursor: pointer; 
+  cursor: pointer;
   height: 30px;
-  background: lightgrey;
+  background: black;
   color: black;
   font-size: 90%;
-  border: 1px solid lightgray;
+  border: 1px solid black;
   opacity: 0.7;
   line-height: 30px;
-
 }
 
 
@@ -103,7 +104,7 @@ ul {
 
 .socketchatbox-log {
   color: gray;
-  font-size: 95%;
+  font-size: smaller;
   margin: 5px;
   text-align: center;
 }
@@ -112,7 +113,7 @@ ul {
 .socketchatbox-chatArea {
   height: 350px;
   width: 400px;
-
+  background: #EDEDED;
   border: 1px solid lightgray;
 }
 
@@ -129,23 +130,26 @@ ul {
 }
 
 .socketchatbox-message-me >.socketchatbox-username{
-  display: none;
+  /*display: none;*/
+  text-align: left;
+}
+
+.socketchatbox-message {
+  margin-bottom: 30px;
 }
 
 
-
 .socketchatbox-message-others {
-  float: right;;
-  margin-bottom: 20px;
+  float: right;
 }
 
 
 
 .socketchatbox-messageBody {
-  margin:10px;
-  margin-left: 20px;
-  margin-right: 20px;
-  background-color: #F2F2F2;
+  margin-top: 7px;
+  margin-left: 3px;
+  margin-right: 3px;
+  background-color: #FFFFFF;
   border-radius: 5px;
   box-shadow: 0 0 6px #B2B2B2;
   display: inline-block;
@@ -156,33 +160,32 @@ ul {
 }
 
 .socketchatbox-messageBody::before {
-    background-color: #F2F2F2;
+/*    background-color: #F2F2F2;
     content: "\00a0";
     display: block;
     height: 16px;
     position: absolute;
     top: 11px;
-    transform:             rotate( 0deg ) skew( -45deg );
-        -moz-transform:    rotate( 0deg ) skew( -45deg );
-        -ms-transform:     rotate( 0deg ) skew( -45deg );
-        -o-transform:      rotate( 0deg ) skew( -45deg );
-        -webkit-transform: rotate( 0deg ) skew( -45deg );
-    width:  20px;
+    transform:             rotate( 29deg ) skew( -25deg );
+        -moz-transform:    rotate( 29deg ) skew( -25deg );
+        -ms-transform:     rotate( 29deg ) skew( -25deg );
+        -o-transform:      rotate( 29deg ) skew( -25deg );
+        -webkit-transform: rotate( 29deg ) skew( -25deg );
+    width:  20px;*/
 }
 
 
 .socketchatbox-messageBody-me {
-    background: #C8FF56;
-
+    background: #BBFF00;
 }
 .socketchatbox-messageBody-me::before {
-    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+/*    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
     left: -9px;  
-    background: #C8FF56;
+    background: #C8FF56;*/
 }
 .socketchatbox-messageBody-others::before {
-    box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
-    right: -9px;    
+/*    box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
+    right: -9px;   */ 
 }
 
 .socketchatbox-typing {
