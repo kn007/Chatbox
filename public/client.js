@@ -313,9 +313,10 @@ $(function() {
             $typingMessages.remove();
         }
 
-        var $usernameDiv = $('<span class="socketchatbox-username"/>')
+        var $usernameDiv = $('<div></div>')
             .text(data.username)
             .css('color', getUsernameColor(data.username));
+        $usernameDiv.addClass('socketchatbox-username');
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
         if (data.username === username) {
             $messageBodyDiv.addClass('socketchatbox-messageBody-me');

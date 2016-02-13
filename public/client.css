@@ -136,6 +136,7 @@ ul {
 
 .socketchatbox-message-others {
   float: right;;
+  margin-bottom: 20px;
 }
 
 
@@ -189,8 +190,9 @@ ul {
 }
 
 .socketchatbox-username {
-  float: right;
   font-weight: 700; 
+  text-align: right;
+  font-size: smaller;
 }
 
  
