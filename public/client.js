@@ -810,6 +810,7 @@ $(function() {
         //console.log('boxW '+boxW);
         //console.log('boxH '+boxH);
         if(boxW<210) boxW = 210;
+        if(boxH<30) boxH = 30;
 
         $(".socketchatbox-chatArea").css({
             "width":(boxW)+"px",
