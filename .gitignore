@@ -216,6 +216,9 @@ pip-log.txt
 .mr.developer.cfg
 node_modules/
 chat-log.txt
-chat-log.txt
+
 
 public/socket.io.js
+
+#Chat Log
+public/chat-log.txt
