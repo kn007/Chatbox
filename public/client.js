@@ -703,6 +703,10 @@ $(function() {
         $inputMessage.focus();
     });
 
+    $('#socketchatbox-closeChatbox').click(function() {
+        $chatBox.hide();
+    });
+
 
 
     // Prepare file drop box.

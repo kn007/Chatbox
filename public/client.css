@@ -58,9 +58,13 @@ ul {
 #socketchatbox-showHideChatbox {
   float:right;
   color: white;
+  margin-right: 15px;
+}
+#socketchatbox-closeChatbox {
+  float:right;
+  color: white;
   margin-right: 25px;
 }
-
 #socketchatbox-username {
   float:left;
   margin-left: 20px;
@@ -115,7 +119,7 @@ ul {
 
 .socketchatbox-chatArea {
   height: 350px;
-  width: 400px;
+  width: 350px;
   max-width: 100%;
   background: #EDEDED;
   border: 1px solid lightgray;
@@ -162,6 +166,7 @@ ul {
   padding: 10px 18px;
   position: relative;
   vertical-align: top;
+  line-height: 1em;
   word-break: break-all;
 }
 
