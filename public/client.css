@@ -89,6 +89,8 @@ ul {
   position: fixed;
   bottom: 0px;
   overflow: auto;
+  max-width: 100%;
+
 /*  resize: horizontal;
 */  background: white;
   z-index: 9999;
@@ -114,7 +116,7 @@ ul {
 .socketchatbox-chatArea {
   height: 350px;
   width: 400px;
-  max-width: 90%;
+  max-width: 100%;
   background: #EDEDED;
   border: 1px solid lightgray;
 }
