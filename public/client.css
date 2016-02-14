@@ -114,7 +114,7 @@ ul {
 .socketchatbox-chatArea {
   height: 350px;
   width: 400px;
-  max-width: 100%;
+  max-width: 90%;
   background: #EDEDED;
   border: 1px solid lightgray;
 }
