@@ -83,6 +83,7 @@ ul {
 
 
 .socketchatbox-page {
+  font-size: 80%; 
   margin: 0;
   padding: 0;
   position: fixed;
@@ -113,6 +114,7 @@ ul {
 .socketchatbox-chatArea {
   height: 350px;
   width: 400px;
+  max-width: 100%;
   background: #EDEDED;
   border: 1px solid lightgray;
 }
@@ -128,7 +130,9 @@ ul {
   overflow-y: scroll;
   padding: 10px;
 }
-
+##socketchatbox-txt_fullname {
+  color: black;
+}
 .socketchatbox-message-me >.socketchatbox-username{
   /*display: none;*/
   text-align: left;
