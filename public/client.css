@@ -130,6 +130,10 @@ ul {
   overflow: auto;
 }
 
+.socketchatbox-messagetime {
+  color: gray;
+}
+
 .socketchatbox-messages {
   height: 100%;
   margin: 0;
