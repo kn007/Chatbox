@@ -1,6 +1,6 @@
 {
   "name": "socket.io-chatbox",
-  "version": "0.0.0",
+  "version": "beta@274",
   "description": "A simple chatbox using socket.io",
   "main": "index.js",
   "contributors": [
@@ -12,6 +12,11 @@
       "website": "lifeislikeaboat.com"
     }
   ],
+  "homepage": "https://arch1tect.github.io/Chatbox",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Arch1tect/Chatbox.git"
+  },
   "license": "BSD",
   "dependencies": {
     "express": "3.4.8",
