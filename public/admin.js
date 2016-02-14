@@ -371,6 +371,31 @@ $(function() {
             $('.socketchatbox-userdetail-sockets').append($socketInfo);
         }
 
+        // action history
+        var $actionHistoryDiv = $('.socketchatbox-userdetail-actions');
+        $actionHistoryDiv.html('');
+
+        for (var i = 0; i < user.actionList.length; i++) {
+            var action = user.actionList[i];
+            var $actionDiv = $('<div></div>');
+            //new Date(Number(action.time)) // full time format
+            var d = new Date(Number(action.time));
+            var str = d.getHours() +":"+d.getMinutes()+":"+d.getSeconds() + "  ";
+            str += "<span class = 'socketchatbox-actionhistory-url'>" + action.url + "</span>";
+            str += "<br/>Action: " + action.type ;
+            if (action.detail) {
+                str += "<br/>Detail: " + action.detail;
+            }         
+
+            $actionDiv.html(str);
+            $actionDiv.addClass('socketchatbox-userdetail-actions-each');
+   
+            $actionHistoryDiv.append($actionDiv);
+        }
+
+
+        
+
         syncHightlightGUI();
 
     }
@@ -415,11 +440,13 @@ $(function() {
 
     });
 
-    
- 
-    function getTimeElapsed(startTime) {
+
+    function getTimeElapsed(startTime, fromTime) {
+
         // time difference in ms
-        var timeDiff = (new Date()).getTime() - startTime;
+        var timeDiff = startTime - fromTime;
+        if (fromTime!==0)
+            timeDiff = (new Date()).getTime() - startTime;
         // strip the ms
         timeDiff /= 1000;
         var seconds = Math.round(timeDiff % 60);

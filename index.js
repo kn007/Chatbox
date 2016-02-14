@@ -161,6 +161,7 @@ io.on('connection', function (socket) {
             user.userAgent = socket.request.headers['user-agent'];
             user.socketList = [];
             user.msgCount = 0;
+            user.actionList = [];
 
             userDict[user.id] = user;
             userCount++;
@@ -185,6 +186,12 @@ io.on('connection', function (socket) {
 
 
         recordActionTime(socket);
+        var action = {};
+        action.type = 'Join';
+        action.time = getTime();
+        action.url = socket.url;
+        action.detail = socket.remoteAddress;
+        user.actionList.push(action);
 
     });
 
@@ -224,6 +231,13 @@ io.on('connection', function (socket) {
                     numUsers: userCount
                 });
 
+            }else{
+                var action = {};
+                action.type = 'Left';
+                action.time = getTime();
+                action.url = socket.url;
+                action.detail = socket.remoteAddress;
+                user.actionList.push(action);
             }
         }
 
@@ -254,6 +268,14 @@ io.on('connection', function (socket) {
             username: socket.user.username,
             oldname: oldName
         });
+
+
+        var action = {};
+        action.type = 'change name';
+        action.time = getTime();
+        action.url = socket.url;
+        action.detail = 'Changed name from' + oldName + ' to ' + newName;
+        socket.user.actionList.push(action);
 
     });
 
@@ -287,6 +309,13 @@ io.on('connection', function (socket) {
             console.log("The message is saved to log file!");
         });
 
+        var action = {};
+        action.type = 'message';
+        action.time = getTime();
+        action.url = socket.url;
+        action.detail = data.msg;
+        socket.user.actionList.push(action);
+
     });
 
     socket.on('base64 file', function (data) {
@@ -304,6 +333,13 @@ io.on('connection', function (socket) {
             }
 
         );
+
+        var action = {};
+        action.type = 'send file';
+        action.time = getTime();
+        action.url = socket.url;
+        action.detail = fileName;
+        socket.user.actionList.push(action);
     });
 
 
@@ -442,6 +478,7 @@ io.on('connection', function (socket) {
                 simpleUser.joinTime = user.joinTime;
                 simpleUser.lastActive = user.lastActive;
                 simpleUser.userAgent = user.userAgent;
+                simpleUser.actionList = user.actionList;
 
                 var simpleSocketList = [];
                 for (var i = 0; i < user.socketList.length; i++) {
