@@ -217,3 +217,5 @@ pip-log.txt
 node_modules/
 chat-log.txt
 chat-log.txt
+
+public/socket.io.js
