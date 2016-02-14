@@ -144,6 +144,11 @@ ul {
   text-align: left;
 }
 
+.socketchatbox-username {
+line-height: 1em;
+}
+
+
 .socketchatbox-message {
   margin-bottom: 15px;
 }
@@ -166,7 +171,7 @@ ul {
   padding: 10px 18px;
   position: relative;
   vertical-align: top;
-  line-height: 1em;
+  line-height: 1.5em;
   word-break: break-all;
 }
 
