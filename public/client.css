@@ -199,6 +199,9 @@ line-height: 1em;
     left: -9px;  
     background: #C8FF56;*/
 }
+.socketchatbox-messageBody-others {
+  float: right;
+}
 .socketchatbox-messageBody-others::before {
 /*    box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
     right: -9px;   */ 
