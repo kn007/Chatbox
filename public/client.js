@@ -808,9 +808,9 @@ $(function() {
             boxW += dx;
         }
                 
-        console.log('boxW '+boxW);
-        console.log('boxH '+boxH);
-
+        //console.log('boxW '+boxW);
+        //console.log('boxH '+boxH);
+        if(boxW<210) boxW = 210;
             
         $(".socketchatbox-chatArea").css({
             "width":(boxW)+"px",
