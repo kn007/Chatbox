@@ -3,7 +3,9 @@ $(function() {
     var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
-    var domain = location.protocol + "//" + location.hostname + ":" + port;
+    var hostname = location.hostname;
+    //hostname="lifeislikeaboat.com";
+    var domain = location.protocol + "//" + hostname + ":" + port;
     var socket;
 	
     var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
@@ -11,9 +13,7 @@ $(function() {
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
     var COLORS = [
-        '#e21400', '#91580f', '#f8a700', '#f78b00',
-        '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-        '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+        'black'
     ];
 
     // Initialize variables
@@ -21,7 +21,6 @@ $(function() {
     var $window = $(window);
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
-    var $txt_fullname = $('#socketchatbox-txt_fullname');
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
@@ -337,11 +336,21 @@ $(function() {
             $typingMessages.remove();
         }
 
-        var $usernameDiv = $('<span class="socketchatbox-username"/>')
-            .text(data.username+':')
+        var d = new Date();
+        var posttime = '';
+        if (!options.loadFromCookie) {
+            posttime += '('+('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2)+')';
+        }
+        var $usernameDiv = $('<div></div>')
+            .text(data.username+posttime)
             .css('color', getUsernameColor(data.username));
+        $usernameDiv.addClass('socketchatbox-username');
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
-
+        if (data.username === username) {
+            $messageBodyDiv.addClass('socketchatbox-messageBody-me');
+        } else {
+            $messageBodyDiv.addClass('socketchatbox-messageBody-others');
+        }
         var messageToSaveIntoCookie = "";
 
         // receiving image file in base64
@@ -374,8 +383,8 @@ $(function() {
         // receiving new message
         if (!options.loadFromCookie && !options.typing) {
 
-            // play new msg sound and change chatbox color to notice users
-            if (data.username!==username) {
+            // play new msg sound and change chatbox color to notify users
+            if (data.username !== username) {
                 newMsgBeep();
                 if(document.hidden && changeTitleMode === 1 && changeTitle.done === 0) changeTitle.change();
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
@@ -393,12 +402,19 @@ $(function() {
 
 
         var typingClass = options.typing ? 'socketchatbox-typing' : '';
-        var $messageDiv = $('<li class="socketchatbox-message"/>')
+        var $messageWrapper = $("<div class='socketchatbox-message-wrapper'></div>");
+        var $messageDiv = $("<div class='socketchatbox-message'></div>")
             .data('username', data.username)
             .addClass(typingClass)
             .append($usernameDiv, $messageBodyDiv);
+        $messageWrapper.append($messageDiv);
+        if (data.username === username) {
+            $messageDiv.addClass('socketchatbox-message-me');
+        } else {
+            $messageDiv.addClass('socketchatbox-message-others');
+        }
 
-        addMessageElement($messageDiv, options);
+        addMessageElement($messageWrapper, options);
     }
 
 
@@ -520,7 +536,7 @@ $(function() {
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
-        var name = $txt_fullname.val();
+        var name = $('#socketchatbox-txt_fullname').val();
         name = $.trim(name);
         if (name === username || name === "")  {
             $username.text(username);
@@ -680,7 +696,7 @@ $(function() {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
 
-            if ($txt_fullname.is(":focus")) {
+            if ($('#socketchatbox-txt_fullname').is(":focus")) {
                 changeNameByEdit();
                 $inputMessage.focus();
                 return;
@@ -695,7 +711,7 @@ $(function() {
 
         // When the client hits ESC on their keyboard
         if (event.which === 27) {
-            if ($txt_fullname.is(":focus")) {
+            if ($('#socketchatbox-txt_fullname').is(":focus")) {
                 $username.text(username);
                 $inputMessage.focus();
                 return;
@@ -712,6 +728,10 @@ $(function() {
     // Focus input when clicking on the message input's border
     $inputMessage.click(function() {
         $inputMessage.focus();
+    });
+
+    $('#socketchatbox-closeChatbox').click(function() {
+        $chatBox.hide();
     });
 
 
@@ -748,7 +768,8 @@ $(function() {
         if(comment_author!=='') return;
         if(sendingFile) return;
         e.stopPropagation();
-        if($txt_fullname.is(":focus")) return;
+        if($('#socketchatbox-txt_fullname').length > 0) return;
+        //if($('#socketchatbox-txt_fullname').is(":focus")) return;
 
         var name = $(this).text();
         $(this).html('');
@@ -761,7 +782,7 @@ $(function() {
                 'value': name
             })
             .appendTo('#socketchatbox-username');
-        $txt_fullname.focus();
+        $('#socketchatbox-txt_fullname').focus();
     });
 
     document.addEventListener('visibilitychange', function() {
@@ -771,6 +792,65 @@ $(function() {
         }else{
             hide();
         }
+    });
+
+
+
+    //resize
+
+    var prev_x = -1;
+    var prev_y = -1;
+    var dir = null;
+    $(".socketchatbox-resize").mousedown(function(e){
+        prev_x = e.clientX;
+        prev_y = e.clientY;
+        dir = $(this).attr('id');
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
+    $(document).mousemove(function(e){
+
+        if (prev_x == -1)
+            return;
+
+        var boxW = $(".socketchatbox-chatArea").outerWidth();
+        var boxH = $(".socketchatbox-chatArea").outerHeight();
+        var dx = e.clientX - prev_x;
+        var dy = e.clientY - prev_y;
+
+        //Check directions
+        if (dir.indexOf('n') > -1) //north
+        {
+            boxH -= dy;
+        }
+
+        if (dir.indexOf('w') > -1) //west
+        {
+            boxW -= dx;
+        }
+        if (dir.indexOf('e') > -1) //east
+        {
+            boxW += dx;
+        }
+
+        //console.log('boxW '+boxW);
+        //console.log('boxH '+boxH);
+        if(boxW<210) boxW = 210;
+        if(boxH<30) boxH = 30;
+
+        $(".socketchatbox-chatArea").css({
+            "width":(boxW)+"px",
+            "height":(boxH)+"px",
+        });
+
+        prev_x = e.clientX;
+        prev_y = e.clientY;
+    });
+
+    $(document).mouseup(function(){
+        prev_x = -1;
+        prev_y = -1;
     });
 
 
@@ -818,11 +898,18 @@ $(function() {
             initialize = 1;
             log();
         }
+
+        //show resize cursor
+        $('.socketchatbox-resize').css('z-index', 99999);
+
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
         $username.text(chatboxname);
         $chatBody.hide();
+
+        //hide resize cursor
+        $('.socketchatbox-resize').css('z-index', -999);
     }
     function color(c){
         $('html').css('background-color', c);
