@@ -94,7 +94,7 @@ ul {
   bottom: 0px;
   overflow: auto;
   max-width: 100%;
-
+  line-height: 1em;
 /*  resize: horizontal;
 */  background: white;
   z-index: 9999;
