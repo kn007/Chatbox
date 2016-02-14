@@ -18,7 +18,6 @@ $(function() {
     var $window = $(window);
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
-    var $txt_fullname = $('#socketchatbox-txt_fullname');
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
@@ -511,7 +510,7 @@ $(function() {
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
-        var name = $txt_fullname.val();
+        var name = $('#socketchatbox-txt_fullname').val();
         name = $.trim(name);
         if (name === username || name === "")  {
             $username.text(username);
@@ -671,7 +670,7 @@ $(function() {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
 
-            if ($txt_fullname.is(":focus")) {
+            if ($('#socketchatbox-txt_fullname').is(":focus")) {
                 changeNameByEdit();
                 $inputMessage.focus();
                 return;
@@ -686,7 +685,7 @@ $(function() {
 
         // When the client hits ESC on their keyboard
         if (event.which === 27) {
-            if ($txt_fullname.is(":focus")) {
+            if ($('#socketchatbox-txt_fullname').is(":focus")) {
                 $username.text(username);
                 $inputMessage.focus();
                 return;
@@ -742,8 +741,8 @@ $(function() {
         if(getCookie('chatboxOpen')!=='1') return;
         if(sendingFile) return;
         e.stopPropagation();
-        if($txt_fullname.length > 0) return;
-        //if($txt_fullname.is(":focus")) return;
+        if($('#socketchatbox-txt_fullname').length > 0) return;
+        //if($('#socketchatbox-txt_fullname').is(":focus")) return;
 
         var name = $(this).text();
         $(this).html('');
@@ -756,7 +755,7 @@ $(function() {
                 'value': name
             })
             .appendTo('#socketchatbox-username');
-        $txt_fullname.focus();
+        $('#socketchatbox-txt_fullname').focus();
     });
 
     document.addEventListener('visibilitychange', function() {
