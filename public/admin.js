@@ -380,7 +380,7 @@ $(function() {
             var $actionDiv = $('<div></div>');
             //new Date(Number(action.time)) // full time format
             var d = new Date(Number(action.time));
-            var str = d.getHours() +":"+d.getMinutes()+":"+d.getSeconds() + "  ";
+            var str = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
             str += "<span class = 'socketchatbox-actionhistory-url'>" + action.url + "</span>";
             str += "<br/>Action: " + action.type ;
             if (action.detail) {
