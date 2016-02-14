@@ -3,7 +3,9 @@ $(function() {
     var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
-    var domain = location.protocol + "//" + location.hostname + ":" + port;
+    var hostname = location.hostname;
+    //hostname="lifeislikeaboat.com";
+    var domain = location.protocol + "//" + hostname + ":" + port;
     var socket;
 	
     var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
