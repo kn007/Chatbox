@@ -312,8 +312,10 @@ $(function() {
             $typingMessages.remove();
         }
 
+        var d = new Date();
+        var posttime = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
         var $usernameDiv = $('<div></div>')
-            .text(data.username)
+            .text(data.username+'('+posttime+')')
             .css('color', getUsernameColor(data.username));
         $usernameDiv.addClass('socketchatbox-username');
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
@@ -378,9 +380,6 @@ $(function() {
             .data('username', data.username)
             .addClass(typingClass)
             .append($usernameDiv, $messageBodyDiv);
-        var d = new Date();
-        var time = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
-        $messageDiv.prop('title', time); // better info to show?
         $messageWrapper.append($messageDiv);
         if (data.username === username) {
             $messageDiv.addClass('socketchatbox-message-me');
