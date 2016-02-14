@@ -348,7 +348,7 @@ io.on('connection', function (socket) {
 
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
-        return; 
+        return;
         recordActionTime(socket);
 
         socket.broadcast.emit('typing', {
