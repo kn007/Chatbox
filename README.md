@@ -4,7 +4,7 @@
 
 ## Chatbox
 
-A simple chatbox app based on Socket.IO that allows file transfer and features a control panel for admin to use.
+A simple and fast chatbox app based on Node.js and Socket.io that features a powerful control panel for admin to use.
 
 
 ##### How to use
@@ -65,12 +65,6 @@ The chatbox is usually minimized at left bottom by default.
 [https://kn007.net/](https://kn007.net/)
 
 
-##### Screenshot
-
-![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
-
-![screenshot](/screenshots/adminPanel.png?raw=true "AdminPanel")
-
 
 -----------------------------------------------------------
 # 中文介绍
@@ -79,7 +73,7 @@ The chatbox is usually minimized at left bottom by default.
 
 ## 聊天盒
 
-该聊天盒基于Socket.io，可以进行小型文件的传输，并有控制台功能，管理员可对全体游客或者特定游客进行操作。
+该聊天盒基于Node.js与Socket.io，充分利用了HTML5 Websocket双向通讯技术，在方便网站游客高速实时聊天的同时也提供网站管理员强大的控制面板，管理员可对全体游客或者特定游客进行各种操作。
 
 
 ##### 如何使用
@@ -142,5 +136,3 @@ failed: Error during WebSocket handshake: Unexpected response code: 400
 ##### 截图
 
 ![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
-
-![screenshot](/screenshots/adminPanel.png?raw=true "AdminPanel")
