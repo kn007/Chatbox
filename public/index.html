@@ -7,10 +7,13 @@
     </head>
     <body>
         <div class="socketchatbox-page">
-
+            <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
+            <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
             <div id='socketchatbox-top'>
                 <div id='socketchatbox-username'></div>
+                <div id='socketchatbox-closeChatbox'>x</div>
                 <div id='socketchatbox-showHideChatbox'>↓</div>
+
             </div>
             <div id='socketchatbox-body'>
                 <div class="socketchatbox-chatArea">
@@ -20,7 +23,7 @@
                 <form id="socketchatbox-sendMedia">
                     <div>
                         <label class="socketchatbox-filebutton">
-                            Drop file above to send
+                            Drop file above to send or click here
                             <input type="file" id="socketchatbox-imagefile" accept="image/*">
                         </label>
                     </div>

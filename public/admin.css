@@ -131,13 +131,30 @@ div#socketchatbox-online {}
   z-index: 9999;
   padding: 15px;
 }
+.socketchatbox-admin-userprofile {
+  margin: 20px;
+}
 
 .socketchatbox-admin-userprofile p{
   margin: 7px;
 }
 
-.socketchatbox-admin-userprofile {
+.socketchatbox-userdetail-actions {
   margin: 20px;
+  margin-top:0px;
+}
+.socketchatbox-userdetail-actions-each {
+  border: 1px solid lightgray;
+  padding: 10px;
+
+}
+
+.socketchatbox-userdetail-actions-each:nth-child(odd) {
+  background: #ededed;
+}
+
+.socketchatbox-userdetail-actions-each:nth-child(even) {
+  background: #fafafa;
 }
 
 .socketchatbox-userdetail-name {
@@ -172,6 +189,12 @@ div#socketchatbox-online {}
 .socketchatbox-socketdetail-each:nth-child(even) {
   background: #fafafa;
 }
+
+.socketchatbox-actionhistory-url {
+  float: right;
+}
+
+
 
 #socketchatbox-scriptSentStatus {
   margin: 10px;
