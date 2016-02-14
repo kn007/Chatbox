@@ -3,7 +3,9 @@ $(function() {
     var chatboxname = 'Chatbox';
     // change this to your port
     var port = 4321;
-    var domain = location.protocol + "//" + location.hostname + ":" + port;
+    var hostname = location.hostname;
+    //hostname="lifeislikeaboat.com";
+    var domain = location.protocol + "//" + hostname + ":" + port;
     var socket;
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
