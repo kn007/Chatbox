@@ -13,6 +13,7 @@ $.getScript('/client.js', function() {
             }
 
         }, 1000);
+        console.log("Waiting for client.js to load...");
     }
     function admin(){
         var socket = chatboxClient.socket;
