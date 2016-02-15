@@ -24,6 +24,8 @@ Now you can already visit `http://localhost:4321` to see your chatbox, but if yo
 <script src="http://yourwebsite.com:port/client.js"></script>
 ```
 
+The above scripts make ajax call to load Chatbox, if you want to load Chatbox in a synchronously, you just need to copy paste the HTML template in /public/chatbox.html into your page.
+
 
 ##### Demo
 
@@ -92,7 +94,7 @@ $ node index.js
 
 直接访问`http://localhost:4321`即可进入聊天盒。
 
-如果要嵌入你的网站中，则在页面引入下面的几个文件即可
+如果要嵌入你的网站中，直接在网页中引入下面的几个文件即可
     
 ```
 <link rel="stylesheet" href="http://你的域名.com:端口/client.css">
@@ -100,6 +102,8 @@ $ node index.js
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="http://你的域名.com:端口/client.js"></script>
 ```
+
+此时Chatbox是异步加载的，如果希望和网页同步加载，你只需将/public/chatbox.html中的模板复制粘贴到你网页中的任意位置即可，上面引入文件的代码不需要更改。
 
 ##### 示例
 
