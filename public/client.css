@@ -72,7 +72,10 @@ ul {
   color: white;
   max-width:60%;
 }
- 
+#socketchatbox-username a {
+  color: white;
+  text-decoration: none;
+}
 #socketchatbox-top {
   min-width: 200px;
   cursor: pointer;

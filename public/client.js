@@ -41,7 +41,7 @@ function loadChatbox()
     var $topbar = $('#socketchatbox-top');
     var $chatBody = $('#socketchatbox-body');
     var sendingFile = false;
-    var grayChatBoxTimer;
+    //var grayChatBoxTimer;
     var newMsgSound;
     var newUserSound;
 
@@ -385,11 +385,13 @@ function loadChatbox()
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
                 if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
                 if(!document.hidden) socket.emit('reset2origintitle', {});
-                $('#chat-top').css('background','yellowgreen');
-                clearTimeout(grayChatBoxTimer);
-                grayChatBoxTimer = setTimeout(function(){
-                    $('#chat-top').css('background','lightgray');
-                },60*1000);
+               
+                // do we want to change chatbox top color or make it shake to notify user of new message?
+                // $('#chat-top').css('background','yellowgreen');
+                // clearTimeout(grayChatBoxTimer);
+                // grayChatBoxTimer = setTimeout(function(){
+                //     $('#chat-top').css('background','lightgray');
+                // },60*1000);
             }
 
             writeChatHistoryIntoCookie(data.username, messageToSaveIntoCookie);
@@ -759,9 +761,12 @@ function loadChatbox()
 
     // user edit username
     $username.click(function(e) {
-        if(getCookie('chatboxOpen')!=='1') return;
+        e.stopPropagation(); //don't propagate event to topbar
+
+        if(getCookie('chatboxOpen')!=='1') {
+            return;
+        }
         if(sendingFile) return;
-        e.stopPropagation();
         if($('#socketchatbox-txt_fullname').length > 0) return;
         //if($('#socketchatbox-txt_fullname').is(":focus")) return;
 
