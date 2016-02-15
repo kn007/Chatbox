@@ -904,7 +904,7 @@ function loadChatbox()
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $username.html("<a href='http://arch1tect.github.io/Chatbox/'>" + chatboxname + '</a>');
+        $username.html("<a href='http://arch1tect.github.io/Chatbox/' target='_blank'>" + chatboxname + '</a>');
         $chatBody.hide();
 
         //hide resize cursor
