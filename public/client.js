@@ -21,7 +21,7 @@ if($('.socketchatbox-page').length>0){
 function loadChatbox()
 {
 
-    var chatboxname = "<a href='http://arch1tect.github.io/Chatbox/''>Chatbox</a>";
+    var chatboxname = 'Chatbox';
 
     var socket;
     var FADE_TIME = 150; // ms
@@ -899,7 +899,7 @@ function loadChatbox()
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $username.text(chatboxname);
+        $username.html("<a href='http://arch1tect.github.io/Chatbox/'>" + chatboxname + '</a>');
         $chatBody.hide();
 
         //hide resize cursor
