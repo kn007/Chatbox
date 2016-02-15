@@ -36,7 +36,18 @@ server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
 
+
+
 // Routing
+
+// allow ajax request from different domain, you can comment it out if you don't want it
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
+
+// server the public folder
 app.use(express.static(__dirname + '/public'));
 
 
