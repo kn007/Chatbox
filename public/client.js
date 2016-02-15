@@ -1,4 +1,4 @@
-$(function() {
+$('body').load("chatbox.html", function(){
 
     var chatboxname = 'Chatbox';
     // change this to your port
