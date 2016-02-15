@@ -3,7 +3,7 @@ var hostname = location.hostname;
 //hostname="lifeislikeaboat.com";
 var domain = location.protocol + "//" + hostname + ":" + port;
 
-$('body').append($('<div>')).load(domain+"/chatbox.html", function(){
+$('body').append($('<div>').load(domain+"/chatbox.html", function(){
 
     var chatboxname = 'Chatbox';
     // change this to your port
@@ -900,4 +900,4 @@ $('body').append($('<div>')).load(domain+"/chatbox.html", function(){
         $('html').css('background-color', 'white');
     }
 
-});
+}));
