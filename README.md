@@ -17,12 +17,12 @@ $ node index.js
 
 Now you can already visit `http://localhost:4321` to see your chatbox, but if you want to embed it into yout website, you need to include the following scripts to your web page:
 
-    ```
-    <link rel="stylesheet" href="http://yourwebsite.com:port/client.css">
-	<script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="http://yourwebsite.com:port/client.js"></script>
-    ```
+```
+<link rel="stylesheet" href="http://yourwebsite.com:port/client.css">
+<script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="http://yourwebsite.com:port/client.js"></script>
+```
 
 
 ##### Demo
@@ -94,12 +94,12 @@ $ node index.js
 
 如果要嵌入你的网站中，则在页面引入下面的几个文件即可
     
-    ```
-    <link rel="stylesheet" href="http://你的域名.com:端口/client.css">
-	<script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="http://你的域名.com:端口/client.js"></script>
-    ```
+```
+<link rel="stylesheet" href="http://你的域名.com:端口/client.css">
+<script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="http://你的域名.com:端口/client.js"></script>
+```
 
 ##### 示例
 
