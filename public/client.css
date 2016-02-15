@@ -130,6 +130,10 @@ ul {
   overflow: auto;
 }
 
+.socketchatbox-messagetime {
+  color: gray;
+}
+
 .socketchatbox-messages {
   height: 100%;
   margin: 0;
@@ -198,6 +202,9 @@ line-height: 1em;
 /*    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
     left: -9px;  
     background: #C8FF56;*/
+}
+.socketchatbox-messageBody-others {
+  float: right;
 }
 .socketchatbox-messageBody-others::before {
 /*    box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
