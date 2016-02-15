@@ -21,7 +21,7 @@ if($('.socketchatbox-page').length>0){
 function loadChatbox()
 {
 
-    var chatboxname = 'Chatbox';
+    var chatboxname = "<a href='http://arch1tect.github.io/Chatbox/''>Chatbox</a>";
 
     var socket;
     var FADE_TIME = 150; // ms
