@@ -1,12 +1,27 @@
+// change this to your port
 var port = 4321;
 var hostname = location.hostname;
-//hostname="lifeislikeaboat.com";
+// hostname="lifeislikeaboat.com";
 var domain = location.protocol + "//" + hostname + ":" + port;
 
-$('body').append($('<div>').load(domain+"/chatbox.html", function(){
+if($('.socketchatbox-page').length>0){
+
+    loadChatbox();
+
+// if it's not loaded already, use ajax to load the html template
+}else{
+    
+    console.log("Making Ajax call to load Chatbox HTML");
+    $('body').append($('<div>').load(domain+"/chatbox.html", function(){
+        console.log("Chatbox HTML loaded with Ajax");
+        loadChatbox();
+    });
+}
+
+function loadChatbox()
+{
 
     var chatboxname = 'Chatbox';
-    // change this to your port
 
     var socket;
     var FADE_TIME = 150; // ms
@@ -900,4 +915,4 @@ $('body').append($('<div>').load(domain+"/chatbox.html", function(){
         $('html').css('background-color', 'white');
     }
 
-}));
+}
