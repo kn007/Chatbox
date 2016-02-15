@@ -1,11 +1,13 @@
-$('body').load("chatbox.html", function(){
+var port = 4321;
+var hostname = location.hostname;
+//hostname="lifeislikeaboat.com";
+var domain = location.protocol + "//" + hostname + ":" + port;
+
+$('body').load(domain+"chatbox.html", function(){
 
     var chatboxname = 'Chatbox';
     // change this to your port
-    var port = 4321;
-    var hostname = location.hostname;
-    //hostname="lifeislikeaboat.com";
-    var domain = location.protocol + "//" + hostname + ":" + port;
+
     var socket;
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
