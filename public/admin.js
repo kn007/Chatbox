@@ -1,7 +1,8 @@
-$.getScript('/client.js', function() {
+$(function() {
 
     var socket = chatboxClient.socket;
     var verified = false;
+
 
     var scriptHist = [];
     var scriptPointer = -1;
