@@ -10,12 +10,12 @@ if($('.socketchatbox-page').length>0){
 
 // if it's not loaded already, use ajax to load the html template
 }else{
-    
+
     console.log("Making Ajax call to load Chatbox HTML");
     $('body').append($('<div>').load(domain+"/chatbox.html", function(){
         console.log("Chatbox HTML loaded with Ajax");
         loadChatbox();
-    });
+    }));
 }
 
 function loadChatbox()
