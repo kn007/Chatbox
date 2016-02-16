@@ -1,0 +1,236 @@
+/* ======================================================= */
+/* ================ General Chatbox Style =================*/
+/* ======================================================= */
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+}
+.socketchatbox-resize {
+
+  top:0px;
+  height:20px;
+  width:20px;
+/*  background-color:#000;
+*/  position:absolute;
+  z-index: 99999;
+
+}
+
+#socketchatbox-nw {
+  left:0px; 
+  cursor:nw-resize; 
+}
+
+#socketchatbox-ne{
+  right:0px;
+  cursor:ne-resize; 
+}
+
+#socketchatbox-imagefile {
+  width:100%;
+}
+#socketchatbox-body {
+  display: none
+}
+.socketchatbox-filebutton input[type="file"] {
+  position: fixed;
+  top: -1000px;
+}
+
+#socketchatbox-sendMedia {
+  background: lightgrey;
+  border: 1px solid lightgray;
+  color:gray;
+  padding: 5px
+}
+
+#socketchatbox-sendMedia :hover {
+  cursor:pointer;
+  color:black;
+}
+
+#socketchatbox-showHideChatbox {
+  float:right;
+  color: white;
+  margin-right: 15px;
+}
+#socketchatbox-closeChatbox {
+  float:right;
+  color: white;
+  margin-right: 25px;
+}
+#socketchatbox-username {
+  float:left;
+  margin-left: 20px;
+  min-width: 20%;
+  color: white;
+  max-width:60%;
+}
+#socketchatbox-username a {
+  color: white;
+  text-decoration: none;
+}
+#socketchatbox-top {
+  min-width: 200px;
+  cursor: pointer;
+  height: 30px;
+  background: black;
+  color: black;
+  font-size: 90%;
+  border: 1px solid black;
+  opacity: 0.7;
+  line-height: 30px;
+}
+
+
+.socketchatbox-page {
+  font-size: 80%; 
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  bottom: 0px;
+  overflow: auto;
+  max-width: 100%;
+  line-height: 1em;
+/*  resize: horizontal;
+*/  background: white;
+  z-index: 9999;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+.socketchatbox-messages img{
+  max-width: 100%;
+}
+
+.socketchatbox-messages video{
+  max-width: 100%;
+}
+
+.socketchatbox-log {
+  color: gray;
+  font-size: smaller;
+  margin: 5px;
+  text-align: center;
+}
+
+
+.socketchatbox-chatArea {
+  height: 350px;
+  width: 350px;
+  max-width: 100%;
+  background: #EDEDED;
+  border: 1px solid lightgray;
+}
+
+.socketchatbox-message-wrapper {
+  width: 100%;
+  overflow: auto;
+}
+
+.socketchatbox-messagetime {
+  color: gray;
+}
+
+.socketchatbox-messages {
+  height: 100%;
+  margin: 0;
+  overflow-y: scroll;
+  padding: 10px;
+}
+#socketchatbox-txt_fullname {
+  color: black;
+}
+.socketchatbox-message-me >.socketchatbox-username{
+  /*display: none;*/
+  text-align: left;
+}
+
+.socketchatbox-username {
+line-height: 1em;
+}
+
+
+.socketchatbox-message {
+  margin-bottom: 15px;
+}
+
+
+.socketchatbox-message-others {
+  float: right;
+}
+
+
+
+.socketchatbox-messageBody {
+  margin-top: 7px;
+  margin-left: 3px;
+  margin-right: 3px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 0 6px #B2B2B2;
+  display: inline-block;
+  padding: 10px 18px;
+  position: relative;
+  vertical-align: top;
+  line-height: 1.5em;
+  word-break: break-all;
+}
+
+.socketchatbox-messageBody::before {
+/*    background-color: #F2F2F2;
+    content: "\00a0";
+    display: block;
+    height: 16px;
+    position: absolute;
+    top: 11px;
+    transform:             rotate( 29deg ) skew( -25deg );
+        -moz-transform:    rotate( 29deg ) skew( -25deg );
+        -ms-transform:     rotate( 29deg ) skew( -25deg );
+        -o-transform:      rotate( 29deg ) skew( -25deg );
+        -webkit-transform: rotate( 29deg ) skew( -25deg );
+    width:  20px;*/
+}
+
+
+.socketchatbox-messageBody-me {
+    background: #BBFF00;
+}
+.socketchatbox-messageBody-me::before {
+/*    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+    left: -9px;  
+    background: #C8FF56;*/
+}
+.socketchatbox-messageBody-others {
+  float: right;
+}
+.socketchatbox-messageBody-others::before {
+/*    box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
+    right: -9px;   */ 
+}
+
+.socketchatbox-typing {
+  color: gray;
+}
+
+.socketchatbox-username {
+  font-weight: 700; 
+  text-align: right;
+  font-size: smaller;
+}
+
+ 
+.socketchatbox-inputMessage {
+  height: 40px;  
+  outline: none;
+  padding-left: 5px;  
+  width: 100%;
+  font-size: 100%;
+}
+

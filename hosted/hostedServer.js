@@ -193,6 +193,8 @@ io.on('connection', function (socket) {
             user.socketList = [];
             user.msgCount = 0;
             user.actionList = [];
+            user.room = data.room;
+
 
             userDict[user.id] = user;
             userCount++;
@@ -204,7 +206,7 @@ io.on('connection', function (socket) {
             });
 
             // echo to others that a new user just joined
-            socket.broadcast.emit('user joined', {
+            io.in(user.room).emit('user joined', {
                 username: user.username,
                 numUsers: userCount
             });
@@ -214,7 +216,8 @@ io.on('connection', function (socket) {
         // map user <----> socket
         user.socketList.push(socket);
         socket.user = user;
-
+        socket.join(user.room); // join the room
+        console.log(user.room);
 
         recordActionTime(socket);
         var action = {};
@@ -257,7 +260,7 @@ io.on('connection', function (socket) {
                 delete userDict[user.id];
                 userCount--;
                 // echo globally that this user has left
-                socket.broadcast.emit('user left', {
+                io.in(socket.user.room).emit('user left', {
                     username: socket.user.username,
                     numUsers: userCount
                 });
@@ -295,7 +298,7 @@ io.on('connection', function (socket) {
 
 
         // echo globally that this client has changed name, including user himself
-        io.sockets.emit('log change name', {
+        io.in(socket.user.room).emit('log change name', {
             username: socket.user.username,
             oldname: oldName
         });
@@ -323,7 +326,7 @@ io.on('connection', function (socket) {
         socket.user.msgCount++;
 
         // socket.broadcast.emit('new message', {//send to everybody but sender
-        io.sockets.emit('new message', {//send to everybody including sender
+        io.in(socket.user.room).emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
@@ -355,7 +358,7 @@ io.on('connection', function (socket) {
         log('received base64 file from' + data.username);
 
         // socket.broadcast.emit('base64 image', //exclude sender
-        io.sockets.emit('base64 file',
+        io.in(socket.user.room).emit('base64 file',
 
             {
               username: socket.user.username,
@@ -379,7 +382,7 @@ io.on('connection', function (socket) {
         return;
         recordActionTime(socket);
 
-        socket.broadcast.emit('typing', {
+        io.in(socket.user.room).emit('typing', {
             username: socket.user.username
         });
     });
@@ -389,7 +392,7 @@ io.on('connection', function (socket) {
         return;
         recordActionTime(socket);
 
-        socket.broadcast.emit('stop typing', {
+        io.in(socket.user.room).emit('stop typing', {
             username: socket.user.username
         });
     });
@@ -433,7 +436,7 @@ io.on('connection', function (socket) {
 
 
             // echo globally that this client has changed name, including user himself
-            io.sockets.emit('log change name', {
+            io.in(socket.user.room).emit('log change name', {
                 username: user.username,
                 oldname: oldName
             });
@@ -510,6 +513,7 @@ io.on('connection', function (socket) {
                 simpleUser.lastActive = user.lastActive;
                 simpleUser.userAgent = user.userAgent;
                 simpleUser.actionList = user.actionList;
+                simpleUser.room = user.room;
 
                 var simpleSocketList = [];
                 for (var i = 0; i < user.socketList.length; i++) {
