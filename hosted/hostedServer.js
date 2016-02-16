@@ -216,9 +216,10 @@ io.on('connection', function (socket) {
         // map user <----> socket
         user.socketList.push(socket);
         socket.user = user;
-        socket.room = data.room;
-        socket.join(data.room); // join the room
-        log('room: ' + data.room);
+        socket.room = user.room;
+        socket.join(user.room); // Important: sockets of a user should always join the same room 
+        log('user room: ' + user.room);
+        log('data.room: ' + data.room); // it would be odd if they are different but it's possible
 
         recordActionTime(socket);
         var action = {};
