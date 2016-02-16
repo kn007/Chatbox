@@ -1,3 +1,10 @@
+//====================================================
+//====================================================
+//================Hosted Version======================
+//====================================================
+//====================================================
+
+
 // Setup basic express server
 var express = require('express');
 var app = express();
@@ -12,7 +19,7 @@ var filePath = __dirname+"/public/chat-log.txt";
 //io.set("heartbeat timeout", 3*60*1000);
 
 //set which port this app runs on
-var port = 4321;
+var port = 2007;
 //set admin password
 var token = "12345";
 //set 1 if you using reverse proxy
