@@ -216,8 +216,9 @@ io.on('connection', function (socket) {
         // map user <----> socket
         user.socketList.push(socket);
         socket.user = user;
-        socket.join(user.room); // join the room
-        console.log(user.room);
+        socket.room = data.room;
+        socket.join(data.room); // join the room
+        log('room: ' + data.room);
 
         recordActionTime(socket);
         var action = {};
@@ -527,6 +528,7 @@ io.on('connection', function (socket) {
                     simpleSocket.lastMsg = s.lastMsg;
                     simpleSocket.lastActive = s.lastActive;
                     simpleSocket.url = s.url;
+                    simpleSocket.room = s.room;
                     simpleSocket.referrer = s.referrer;
                     simpleSocket.joinTime = s.joinTime;
 
