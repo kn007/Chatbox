@@ -339,12 +339,10 @@ $(function() {
         var d = new Date();
         var posttime = '';
         if (!options.loadFromCookie) {
-            posttime += "<span class='socketchatbox-messagetime'>";
             posttime += ' ('+('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2)+')';
-            posttime += "</span>";
         }
         var $usernameDiv = $('<div></div>')
-            .html(data.username+posttime)
+            .text(data.username+posttime)
             .css('color', getUsernameColor(data.username));
         $usernameDiv.addClass('socketchatbox-username');
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
