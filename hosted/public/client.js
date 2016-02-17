@@ -128,8 +128,8 @@ function loadChatbox()
     function init() {
         if(initialize !== 0) return; //only run init() once
 
-        if (typeof chatboxRoomKey != 'undefined')
-            chatboxRoom = chatboxRoomKey;
+        if (typeof chatboxRoomHash != 'undefined')
+            chatboxRoom = chatboxRoomHash;
         else
             console.log('Missing room key, going to lobby...');
 

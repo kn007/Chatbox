@@ -4,7 +4,7 @@ $.getScript('/client.js', function() {
 
     function waitToStart() {
         setTimeout(function(){
-            if(chatboxClient)
+            if(typeof chatboxClient !== "undefined")
                 admin();
             else{
                 setTimeout(function(){

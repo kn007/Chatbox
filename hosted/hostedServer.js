@@ -3,8 +3,11 @@
 //================Hosted Version======================
 //====================================================
 //====================================================
+ 
+var md5 = require('./md5.js');
 
 
+console.log(md5.encode('cool'));
 // Setup basic express server
 var express = require('express');
 var app = express();
