@@ -1,6 +1,6 @@
 {
   "name": "socket.io-chatbox",
-  "version": "beta@298",
+  "version": "stable@160216",
   "description": "A simple chatbox using socket.io",
   "main": "index.js",
   "contributors": [
