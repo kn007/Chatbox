@@ -34,10 +34,12 @@ var socketList = [];
 // therefore 1 connection is the smallest unique unit and 1 user is not.
 // 1 user may contain multiple connections when he opens multiple tabs in same browser.
 var userDict = {};
+
+var roomDict = {};
+
 var userCount = 0;
 
 var adminUser;
-
 var chatboxUpTime = (new Date()).toString();
 var totalUsers = 0;
 var totalSockets = 0;
@@ -182,7 +184,8 @@ io.on('connection', function (socket) {
                 count: user.socketList.length + 1
             });
 
-        }else{
+        } else {
+
             totalUsers++;
             // a new user is joining
             user = {};
@@ -198,7 +201,6 @@ io.on('connection', function (socket) {
             user.actionList = [];
             user.room = data.room;
 
-
             userDict[user.id] = user;
             userCount++;
             log(user.username + ' logged in ('+(user.socketList.length+1) +').');
@@ -213,6 +215,21 @@ io.on('connection', function (socket) {
                 username: user.username,
                 numUsers: userCount
             });
+
+            // add user to the roomDict
+            if (user.room in roomDict) {
+
+                (roomDict[user.room]).userlist.push(user);
+
+            } else {
+
+                var room = {};
+                room.id = user.room;
+                room.userlist = [];
+                room.userlist.push(user);
+                roomDict[user.room] = room;
+
+            }
 
         }
 
@@ -269,6 +286,17 @@ io.on('connection', function (socket) {
                     username: socket.user.username,
                     numUsers: userCount
                 });
+
+                // also remove user from the room
+                var room = roomDict[user.room];
+                var userIndexInRoom = room.userlist.indexOf(user);
+                if (userIndexInRoom != -1) {
+                    room.userlist.splice(userIndexInRoom, 1);
+                }
+                // shut the room when the last user is gone
+                if (room.userlist.length===0)
+                    delete roomDict[user.room];
+
 
             }else{
                 var action = {};
@@ -488,6 +516,51 @@ io.on('connection', function (socket) {
         });
     });
 
+    function createSimpleUser(user) {
+
+        // create simpleUser model
+        var simpleUser = {};
+        // is there a way to reduce code below?
+        simpleUser.id = user.id; // key = user.id
+        simpleUser.username = user.username;
+        simpleUser.lastMsg = user.lastMsg;
+        simpleUser.msgCount = user.msgCount;
+        simpleUser.count = user.socketList.length;
+        simpleUser.ip = user.ip;
+        simpleUser.url = user.url;
+        simpleUser.referrer = user.referrer;
+        simpleUser.joinTime = user.joinTime;
+        simpleUser.lastActive = user.lastActive;
+        simpleUser.userAgent = user.userAgent;
+        simpleUser.actionList = user.actionList;
+        simpleUser.room = user.room;
+
+        var simpleSocketList = [];
+
+        for (var i = 0; i < user.socketList.length; i++) {
+            var s = user.socketList[i];
+
+            // create simpleSocket model
+            var simpleSocket = {};
+            simpleSocket.id = s.id;
+            simpleSocket.ip = s.remoteAddress;
+            simpleSocket.msgCount = s.msgCount;
+            simpleSocket.lastMsg = s.lastMsg;
+            simpleSocket.lastActive = s.lastActive;
+            simpleSocket.url = s.url;
+            simpleSocket.room = s.room;
+            simpleSocket.referrer = s.referrer;
+            simpleSocket.joinTime = s.joinTime;
+
+            simpleSocketList.push(simpleSocket);
+        }
+
+        simpleUser.socketList = simpleSocketList;
+
+        return simpleUser;
+
+    }
+
     // send real time data statistic to admin
     // this callback is currently also used for authentication
     socket.on('getUserList', function (data) {
@@ -502,57 +575,32 @@ io.on('connection', function (socket) {
 
             for (var key in userDict) {
                 var user = userDict[key];
-
-                // create simpleUser model
-                var simpleUser = {};
-                // is there a way to reduce code below?
-                simpleUser.id = user.id; // key = user.id
-                simpleUser.username = user.username;
-                simpleUser.lastMsg = user.lastMsg;
-                simpleUser.msgCount = user.msgCount;
-                simpleUser.count = user.socketList.length;
-                simpleUser.ip = user.ip;
-                simpleUser.url = user.url;
-                simpleUser.referrer = user.referrer;
-                simpleUser.joinTime = user.joinTime;
-                simpleUser.lastActive = user.lastActive;
-                simpleUser.userAgent = user.userAgent;
-                simpleUser.actionList = user.actionList;
-                simpleUser.room = user.room;
-
-                var simpleSocketList = [];
-                for (var i = 0; i < user.socketList.length; i++) {
-                    var s = user.socketList[i];
-
-                    // create simpleSocket model
-                    var simpleSocket = {};
-                    simpleSocket.id = s.id;
-                    simpleSocket.ip = s.remoteAddress;
-                    simpleSocket.msgCount = s.msgCount;
-                    simpleSocket.lastMsg = s.lastMsg;
-                    simpleSocket.lastActive = s.lastActive;
-                    simpleSocket.url = s.url;
-                    simpleSocket.room = s.room;
-                    simpleSocket.referrer = s.referrer;
-                    simpleSocket.joinTime = s.joinTime;
-
-                    simpleSocketList.push(simpleSocket);
-                }
-
-                simpleUser.socketList = simpleSocketList;
-
-                simpleUserDict[simpleUser.id] = simpleUser;
+                simpleUserDict[user.id] = createSimpleUser(user);
             }
-
-
 
             socket.emit('listUsers', {
                 userdict: simpleUserDict,
                 success: true
             });
 
-        // getUserList might still be called when token is wrong
-        }else {
+
+        } else if (md5.encode(data.token) in roomDict) {
+
+            var room = roomDict[md5.encode(data.token)];
+            var simpleUserDict = {};
+
+            for (var i = 0; i < room.userlist.length; i++) {
+                var user = room.userlist[i];
+                simpleUserDict[user.id] = createSimpleUser(user);
+            }
+
+            socket.emit('listUsers', {
+                userdict: simpleUserDict,
+                success: true
+            });
+
+            
+        } else {
 
             if (adminUser && adminUser.id === socket.user.id) {
                 adminUser = undefined;

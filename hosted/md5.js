@@ -1,3 +1,4 @@
+// BY: CHRIS COYIER
 
 
 var MD5 = function (string) {
@@ -202,7 +203,6 @@ var MD5 = function (string) {
 }
 
 
-// BY: CHRIS COYIER
 module.exports = {
   encode: MD5
 };
