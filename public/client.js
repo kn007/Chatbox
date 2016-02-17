@@ -336,8 +336,9 @@ function loadChatbox()
             posttime += ' ('+('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2)+')';
             posttime += "</span>";
         }
+
         var $usernameDiv = $('<div></div>')
-            .html($(data.username).text()+posttime)
+            .html($("<div>").text(data.username).html()+posttime)
             .css('color', getUsernameColor(data.username));
         $usernameDiv.addClass('socketchatbox-username');
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
