@@ -344,6 +344,7 @@ $.getScript('/client.js', function() {
             $('.socketchatbox-admin-changeUserName').data('id',user.id); 
             $('.socketchatbox-userdetail-landingpage').text(user.url);
             $('.socketchatbox-userdetail-referrer').text(user.referrer);
+            $('.socketchatbox-userdetail-room').text(user.room);
             $('.socketchatbox-userdetail-ip').text(user.ip);
             $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
             $('.socketchatbox-userdetail-totalmsg').text(user.msgCount);
@@ -365,6 +366,7 @@ $.getScript('/client.js', function() {
                 var $socketInfo = $("<div></div");
                 var socketInfoHTML = "<center>[" + i + "]</center></p>";
                 socketInfoHTML += "<p>ID: " + s.id + "</p>";
+                socketInfoHTML += "<p>Room: " + s.room + "</p>";
                 socketInfoHTML += "<p>URL: " + s.url + "</p>";
                 if (s.referrer)
                     socketInfoHTML += "<p>Referrer: " + s.referrer + "</p>";

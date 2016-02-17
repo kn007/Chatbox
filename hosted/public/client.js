@@ -1,7 +1,15 @@
-// change this to your port
-var port = 4321;
+//====================================================
+//====================================================
+//================Hosted Version======================
+//====================================================
+//====================================================
+
+var chatboxRoom = "Chatbox Lobby"; // default room when not specified
+
+
+var port = 2007;
 var hostname = location.hostname;
-// hostname="lifeislikeaboat.com";
+// hostname="lifeislikeaboat.com"; // change to server hostname
 var domain = location.protocol + "//" + hostname + ":" + port;
 
 if($('.socketchatbox-page').length>0){
@@ -120,6 +128,12 @@ function loadChatbox()
     function init() {
         if(initialize !== 0) return; //only run init() once
 
+        if (typeof chatboxRoomHash != 'undefined')
+            chatboxRoom = chatboxRoomHash;
+        else
+            console.log('Missing room key, going to lobby...');
+
+
         // Read old uuid from cookie if exist
         if(getCookie('chatuuid')!=='') {
             uuid = getCookie('chatuuid');
@@ -178,7 +192,8 @@ function loadChatbox()
             username: username,
             uuid: uuid,
             url: location.href,
-            referrer: document.referrer
+            referrer: document.referrer,
+            room: chatboxRoom
         });
 
         // handle corner case when user disconnect when sending file earlier
@@ -336,7 +351,6 @@ function loadChatbox()
             posttime += ' ('+('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2)+')';
             posttime += "</span>";
         }
-
         var $usernameDiv = $('<div></div>')
             .html($("<div>").text(data.username).html()+posttime)
             .css('color', getUsernameColor(data.username));
