@@ -341,7 +341,7 @@ io.on('connection', function (socket) {
         action.type = 'send file';
         action.time = getTime();
         action.url = socket.url;
-        action.detail = fileName;
+        action.detail = data.fileName;
         socket.user.actionList.push(action);
     });
 
