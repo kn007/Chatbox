@@ -6,7 +6,7 @@ var io = require('socket.io')(server);
 
 //set chat history log file
 var fs = require('fs');
-var filePath = __dirname+"/public/chat-log.txt";
+var filePath = __dirname+"/../client/chat-log.txt";
 
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
@@ -60,8 +60,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-// server the public folder
-app.use(express.static(__dirname + '/public'));
+// server the client folder
+app.use(express.static(__dirname + '/../client'));
 
 
 
