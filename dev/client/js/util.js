@@ -1,11 +1,15 @@
-window.chatbox = window.chatbox || {};
-"use strict";
-
 (function() {
+
+    "use strict";
+
+    window.chatbox = window.chatbox || {};
+
+    var util = {};
+    chatbox.util = util;
 
 
     // generate a unique guid for each browser, will pass in cookie
-    chatbox.guid = function() {
+    util.guid = function() {
 
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
@@ -16,7 +20,7 @@ window.chatbox = window.chatbox || {};
     }
 
 
-    chatbox.getCookie = function(cname) {
+    function getCookie(cname) {
 
         var name = cname + "=";
         var ca = document.cookie.split(';');
@@ -29,7 +33,9 @@ window.chatbox = window.chatbox || {};
         return "";
     }
 
-    chatbox.addCookie = function(cname, cvalue) {
+    util.getCookie = getCookie;
+
+    function addCookie(cname, cvalue) {
 
         exdays = 365;
         var d = new Date();
@@ -38,6 +44,7 @@ window.chatbox = window.chatbox || {};
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
     }
 
+    util.addCookie = addCookie;
 
     function getCookieDomain() {
 
@@ -56,6 +63,30 @@ window.chatbox = window.chatbox || {};
             }
         }
         return '.' + host;
+    }
+
+
+
+    function checkImageUrl (url) {
+        return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    }
+
+
+    // Prevents input from having injected markup
+    function cleanInput (input) {
+        return $('<div/>').text(input).text();
+    }
+
+    // Gets the color of a username through our hash function
+    function getUsernameColor (username) {
+        // Compute hash code
+        var hash = 7;
+        for (var i = 0; i < username.length; i++) {
+            hash = username.charCodeAt(i) + (hash << 5) - hash;
+        }
+        // Calculate color
+        var index = Math.abs(hash % COLORS.length);
+        return COLORS[index];
     }
 
 

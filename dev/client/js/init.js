@@ -1,64 +1,69 @@
-window.chatbox = window.chatbox || {};
-"use strict";
+
 
 (function() {
+    "use strict";
+    window.chatbox = window.chatbox || {};
+    
+    var util = chatbox.util;
+    var ui = chatbox.ui; 
+    var chatHistory = chatbox.chatHistory;
+
     // change this to the port you want to use on server if you are hosting
-    chatbox.port = 4321;
-    chatbox.hostname = location.hostname;
-    // chatbox.hostname="lifeislikeaboat.com";
-    chatbox.domain = location.protocol + "//" + hostname + ":" + port;
+    // TODO: move to config file
+    var port = 4321;
+    var hostname = location.hostname;
+    // hostname="lifeislikeaboat.com";
+    var domain = location.protocol + "//" + hostname + ":" + port;
 
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
     // And this uuid should always be passed on login, it's used to identify/combine user,
     // multiple connections from same browser are regarded as same user.
     chatbox.uuid = "uuid not set!";
-    chatbox.name = 'Chatbox';
+    chatbox.NAME = 'Chatbox';
+
+    var d = new Date();
+    var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
+    var comment_author = '';
+    var totalUser = 0;
 
 
     var $window = $(window);
-    var $username = $('#socketchatbox-username');
-    var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
-    var $messages = $('.socketchatbox-messages'); // Messages area
-    var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
-    var $chatBox = $('.socketchatbox-page');
-    var $topbar = $('#socketchatbox-top');
-    var $chatBody = $('#socketchatbox-body');
 
 
     chatbox.init = function() {
 
         // Read old uuid from cookie if exist
-        if(getCookie('chatuuid')!=='') {
+        if(util.getCookie('chatuuid')!=='') {
             
-            uuid = getCookie('chatuuid');
+            chatbox.uuid = util.getCookie('chatuuid');
 
         }else {
 
-            uuid = guid();
-            addCookie('chatuuid', uuid);
+            uuid = util.guid();
+            util.addCookie('chatuuid', uuid);
         }
 
         // Read old username from cookie if exist
-        if(getCookie('chatname')!=='') {
+        if(util.getCookie('chatname')!=='') {
 
-            username = getCookie('chatname');
+            username = util.getCookie('chatname');
 
         }else {
 
-            addCookie('chatname', username);
+            util.addCookie('chatname', username);
         }
 
-        chatbox.loadHistory();
+        chatHistory.load();
 
         // Show/hide chatbox base on cookie value
         if(getCookie('chatboxOpen')==='1') {
 
-            show();
+            ui.show();
 
         }else{
 
-            hide();
+            ui.hide();
         }
 
         // now make your connection with server!

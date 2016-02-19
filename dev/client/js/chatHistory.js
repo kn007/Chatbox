@@ -1,16 +1,18 @@
-window.chatbox = window.chatbox || {};
-"use strict";
-
 (function() {
+    "use strict";
+    window.chatbox = window.chatbox || {};
+    var util = chatbox.util;
 
+    var chatHistory = {};
+    chatbox.chatHistory = chatHistory;
 
-    chatbox.loadHistory = function() {
+    chatHistory.load = function() {
 
         var chatHistory = [];
 
         try {
 
-            chatHistory = JSON.parse(getCookie('chathistory'));
+            chatHistory = JSON.parse(util.getCookie('chathistory'));
 
         }catch(e) {
 
@@ -34,13 +36,13 @@ window.chatbox = window.chatbox || {};
     }
 
 
-    chatbox.saveHistory = function(username, msg) {
+    chatHistory.save = function(username, msg) {
 
         var chatHistory = [];
 
         try{
 
-            chatHistory = JSON.parse(getCookie('chathistory'));
+            chatHistory = JSON.parse(util.getCookie('chathistory'));
 
         }catch(e) {
 
@@ -57,7 +59,7 @@ window.chatbox = window.chatbox || {};
             chatHistory.push(dataToSaveIntoCookie);
             // keep most recent 20 messages only
             chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0));
-            addCookie('chathistory',JSON.stringify(chatHistory));
+            util.addCookie('chathistory',JSON.stringify(chatHistory));
         }
     }
 

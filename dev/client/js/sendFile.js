@@ -2,6 +2,7 @@ window.chatbox = window.chatbox || {};
 "use strict";
 
 (function() {
+    var sendingFile = false;
 
     function readThenSendFile(data){
 
@@ -29,6 +30,13 @@ window.chatbox = window.chatbox || {};
     }
 
 
+    function receivedFileSentByMyself() {
+        sendingFile = false;
+        $inputMessage.val('');
+        $inputMessage.removeAttr('disabled');
+    }
+
+    
     function doNothing(e){
         e.preventDefault();
         e.stopPropagation();

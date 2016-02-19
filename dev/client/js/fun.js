@@ -40,27 +40,6 @@ window.chatbox = window.chatbox || {};
         $inputMessage.val('');
     }
 
-    function show(){
-        $('#socketchatbox-showHideChatbox').text("↓");
-        $username.text(username);
-        $chatBody.show();
-        if (initialize === -1) {
-            initialize = 1;
-            log();
-        }
-
-        //show resize cursor
-        $('.socketchatbox-resize').css('z-index', 99999);
-
-    }
-    function hide(){
-        $('#socketchatbox-showHideChatbox').text("↑");
-        $username.html("<a href='http://arch1tect.github.io/Chatbox/' target='_blank'>" + chatboxname + '</a>');
-        $chatBody.hide();
-
-        //hide resize cursor
-        $('.socketchatbox-resize').css('z-index', -999);
-    }
     function color(c){
         $('html').css('background-color', c);
     }

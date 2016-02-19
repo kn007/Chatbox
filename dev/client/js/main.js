@@ -1,7 +1,6 @@
-window.chatbox = window.chatbox || {};
-"use strict";
-
 (function() {
+    window.chatbox = window.chatbox || {};
+    "use strict";
 
     // Check if Chatbox HTML is loaded, if not, call Ajax to load the html template
     if($('.socketchatbox-page').length>0) {
