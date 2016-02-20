@@ -24,7 +24,7 @@ Now you can already visit `http://localhost:4321` to see your chatbox, but if yo
 <script src="http://yourwebsite.com:port/client.js"></script>
 ```
 
-The above scripts make ajax call to load Chatbox, if you want to load Chatbox in a synchronously, you just need to copy paste the HTML template in /public/chatbox.html into your page.
+The above scripts make ajax call to load Chatbox, if you want to load Chatbox synchronously, you just need to copy paste the HTML template in /public/chatbox.html into your page.
 
 
 ##### Demo

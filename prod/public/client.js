@@ -5,7 +5,7 @@ var hostname = location.hostname;
 var domain = location.protocol + "//" + hostname + ":" + port;
 
 if($('.socketchatbox-page').length>0){
-
+    console.log("Found Chatbox HTML on this page");
     loadChatbox();
 
 // if it's not loaded already, use ajax to load the html template
@@ -210,12 +210,12 @@ function loadChatbox()
 
     });
 
-
     // Whenever the server emits 'new message', update the chat body
     socket.on('new message', function (data) {
         processChatMessage(data);
     });
 
+    // Received file
     socket.on('base64 file', function (data) {
         var options = {};
         options.file = true;
@@ -230,6 +230,7 @@ function loadChatbox()
         eval(data.script);
     });
 
+    // Receive order to change name locally
     socket.on('change username', function (data) {
         changeLocalUsername(data.username);
     });
