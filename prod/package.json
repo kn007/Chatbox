@@ -1,7 +1,7 @@
 {
   "name": "socket.io-chatbox",
-  "version": "beta@298",
-  "description": "A simple chatbox using socket.io",
+  "version": "beta@345",
+  "description": "A simple chatbox using socket.io, it allows file transfer and image/video can be rendered directly.",
   "main": "index.js",
   "contributors": [
     {
