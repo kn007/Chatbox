@@ -27,7 +27,7 @@
             options.history = true;
 
             for(var i=0; i<chatHistory.length; i++) {
-                
+
                 var data = chatHistory[i];
                 msgHandler.processChatMessage(data, options);
             }
@@ -65,5 +65,5 @@
     }
 
 
-})();   
+})();
 

@@ -1,9 +1,9 @@
 (function() {
     "use strict";
     window.chatbox = window.chatbox || {};
-    
+
     var utils = chatbox.utils;
-    var ui = chatbox.ui; 
+    var ui = chatbox.ui;
     var chatHistory = chatbox.chatHistory;
 
     // change this to the port you want to use on server if you are hosting
@@ -31,7 +31,7 @@
 
         // Read old uuid from cookie if exist
         if(utils.getCookie('chatuuid')!=='') {
-            
+
             chatbox.uuid = utils.getCookie('chatuuid');
 
         }else {
@@ -68,5 +68,5 @@
     }
 
 
-})();   
+})();
 

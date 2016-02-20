@@ -3,7 +3,7 @@ window.chatbox = window.chatbox || {};
 
 (function() {
 
-   
+
     // Process message before displaying
     function processChatMessage (data, options) {
 
@@ -76,7 +76,7 @@ window.chatbox = window.chatbox || {};
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
                 if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
                 if(!document.hidden) socket.emit('reset2origintitle', {});
-               
+
                 // do we want to change chatbox top color or make it shake to notify user of new message?
                 // $('#chat-top').css('background','yellowgreen');
                 // clearTimeout(grayChatBoxTimer);
@@ -144,5 +144,5 @@ window.chatbox = window.chatbox || {};
     }
 
 
-})();   
+})();
 

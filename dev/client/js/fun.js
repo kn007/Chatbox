@@ -3,7 +3,7 @@ window.chatbox = window.chatbox || {};
 
 (function() {
 
-  
+
     // The functions below are for admin to use, user himself can't really call them
 
 
@@ -51,5 +51,5 @@ window.chatbox = window.chatbox || {};
     }
 
 
-})();   
+})();
 
