@@ -27,7 +27,6 @@ $(function() {
     var $topbar = $('#socketchatbox-top');
     var $chatBody = $('#socketchatbox-body');
     var sendingFile = false;
-    var grayChatBoxTimer;
     var newMsgSound;
     var newUserSound;
 
@@ -393,11 +392,6 @@ $(function() {
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
                 if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
                 if(!document.hidden) socket.emit('reset2origintitle', {});
-                $('#chat-top').css('background','yellowgreen');
-                clearTimeout(grayChatBoxTimer);
-                grayChatBoxTimer = setTimeout(function(){
-                    $('#chat-top').css('background','lightgray');
-                },60*1000);
             }
 
             writeChatHistoryIntoCookie(data.username, messageToSaveIntoCookie);
