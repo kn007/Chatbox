@@ -21,15 +21,6 @@ function loadChatbox()
 
 
 
-    // Change local username value and update local cookie
-    function changeLocalUsername(name) {
-        if(name) {
-            username = name;
-            addCookie('chatname', name);
-            if(getCookie('chatboxOpen')==='1')
-                $username.text(username);
-        }
-    }
 
 
 

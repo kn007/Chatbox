@@ -12,7 +12,7 @@
     var typing = false;
     var lastTypingTime;
 
-
+    var chatHistory = chatbox.chatHistory;
     var $messages = $('.socketchatbox-messages'); // Messages area
 
 
@@ -116,7 +116,7 @@
         if (!options.history && !options.typing) {
 
             // play new msg sound and change chatbox color to notify users
-            if (data.username !== username) {
+            if (data.username !== chatbox.username) {
                 newMsgBeep();
                 if(document.hidden && changeTitleMode === 1 && changeTitle.done === 0) changeTitle.change();
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
@@ -124,7 +124,7 @@
                 if(!document.hidden) socket.emit('reset2origintitle', {});
             }
 
-            writeChatHistoryIntoCookie(data.username, messageToSaveIntoCookie);
+            chatHistory.writeChatHistoryIntoCookie(data.username, messageToSaveIntoCookie);
         }
 
 
@@ -145,6 +145,38 @@
     }
 
     msgHandler.processChatMessage = processChatMessage;
+
+
+
+    // // Send a message
+    // function sendMessage() {
+    //     var message = $inputMessage.val();
+    //     // Prevent markup from being injected into the message
+    //     message = cleanInput(message);
+    //     // if there is a non-empty message
+    //     if (message) {
+    //         // empty the input field
+    //         $inputMessage.val('');
+    //         sendMessageToServer(message);
+    //     }
+    // }
+    // msgHandler.sendMessage = sendMessage;
+
+    // function sendMessageToServer (msg) {
+    //     var data = {};
+    //     data.username = username;
+    //     data.msg = msg+'';//cast string
+    //     socket.emit('new message', data);
+    // }
+
+    // // Different from sendMessageToServer(), only admin can see the message
+    // function reportToServer (msg) {
+    //     var data = {};
+    //     data.username = username;
+    //     data.msg = msg+'';//cast string
+    //     socket.emit('report', data);
+    // }
+
 
 
 

@@ -2,7 +2,10 @@
     "use strict";
     window.chatbox = window.chatbox || {};
 
-    
+    var ui = chatbox.ui;
+    var msgHandler = chatbox.msgHandler;
+
+
     chatbox.registerSocketEvents = function() {
         // Socket events
         var socket = chatbox.socket;
@@ -26,21 +29,19 @@
 
             // Display the welcome message
             var message = "Welcome, "+ chatbox.username;
-            log(message, {
-            });
-            addParticipantsMessage(data.numUsers);
+            msgHandler.addLog(message);
+            //addParticipantsMessage(data.numUsers);
         });
 
         // This is just a new connection of an existing online user
         socket.on('welcome new connection', function (data) {
 
             // sync username
-            changeLocalUsername(data.username);
+            ui.changeLocalUsername(data.username);
 
             // Display the welcome message
             var message = "Hey, "+ chatbox.username;
-            log(message, {
-            });
+            msgHandler.addLog(message);
 
             socket.emit('reset2origintitle', {});
 
@@ -48,7 +49,7 @@
 
         // Whenever the server emits 'new message', update the chat body
         socket.on('new message', function (data) {
-            processChatMessage(data);
+            msgHandler.processChatMessage(data);
         });
 
         // Received file
@@ -102,7 +103,7 @@
 
         // For New Message Notification
         socket.on('reset2origintitle', function (data) {
-            changeTitle.reset();
+            //changeTitle.reset();
         });
     }
 

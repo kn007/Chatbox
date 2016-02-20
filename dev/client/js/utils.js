@@ -65,8 +65,6 @@
         return '.' + host;
     }
 
-
-
     function checkImageUrl (url) {
         return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     }
@@ -76,18 +74,7 @@
     function cleanInput (input) {
         return $('<div/>').text(input).text();
     }
-
-    // Gets the color of a username through our hash function
-    function getUsernameColor (username) {
-        // Compute hash code
-        var hash = 7;
-        for (var i = 0; i < username.length; i++) {
-            hash = username.charCodeAt(i) + (hash << 5) - hash;
-        }
-        // Calculate color
-        var index = Math.abs(hash % COLORS.length);
-        return COLORS[index];
-    }
+    utils.cleanInput = cleanInput;
 
 
 })();   

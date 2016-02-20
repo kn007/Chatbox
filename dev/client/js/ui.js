@@ -2,6 +2,7 @@
 
     "use strict";
     window.chatbox = window.chatbox || {};
+    //var msgHandler = chatbox.msgHandler;
 
     var ui = {};
     var utils = chatbox.utils;
@@ -52,8 +53,49 @@
             askServerToChangeName(name);
         //}
     }
-
     ui.changeNameByEdit = changeNameByEdit;
+
+        // Change local username value and update local cookie
+    function changeLocalUsername(name) {
+        if(name) {
+            chatbox.username = name;
+            utils.addCookie('chatname', name);
+            if(utils.getCookie('chatboxOpen')==='1')
+                $username.text(chatbox.username);
+        }
+    }
+
+    ui.changeLocalUsername = changeLocalUsername;
+
+    // Send a message
+    function sendMessage() {
+        var message = $inputMessage.val();
+        // Prevent markup from being injected into the message
+        message = utils.cleanInput(message);
+        // if there is a non-empty message
+        if (message) {
+            // empty the input field
+            $inputMessage.val('');
+            sendMessageToServer(message);
+        }
+    }
+ 
+    function sendMessageToServer (msg) {
+        var data = {};
+        data.username = chatbox.username;
+        data.msg = msg+'';//cast string
+        chatbox.socket.emit('new message', data);
+    }
+
+    // Different from sendMessageToServer(), only admin can see the message
+    function reportToServer (msg) {
+        var data = {};
+        data.username = username;
+        data.msg = msg+'';//cast string
+        chatbox.socket.emit('report', data);
+    }
+
+
 
 
     $(window).keydown(function (event) {
@@ -69,8 +111,8 @@
 
             if (chatbox.username && $inputMessage.is(":focus")) {
                 sendMessage();
-                socket.emit('stop typing', {name:username});
-                typing = false;
+                chatbox.socket.emit('stop typing', {name: chatbox.username});
+                //typing = false;
             }
         }
 
