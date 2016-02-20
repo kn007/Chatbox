@@ -9,36 +9,7 @@
     <body>
         <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
         <div id = "wrapper">
-            <div class="socketchatbox-page socketchatbox-admin">
-
-                <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
-                <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
-                <div id='socketchatbox-top'>
-                    <div id='socketchatbox-username'></div>
-                    <div id='socketchatbox-closeChatbox'>x</div>
-                    <div id='socketchatbox-showHideChatbox'>↓</div>
-                </div>
-                <div id='socketchatbox-body'>
-                    <div class="socketchatbox-chatArea">
-                        <ul class="socketchatbox-messages"></ul>
-                    </div>
-
-                    <form id="socketchatbox-sendMedia">
-                        <div>
-                            <label class="socketchatbox-filebutton">
-                            Drop file above to send or click here
-                                <input type="file" id="socketchatbox-imagefile" accept="image/*">
-                            </label>
-                        </div>
-                    </form>       
-
-                    <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
-                </div>
-          
-            </div>
-
-
-
+ 
             <div class="socketchatbox-admin-leftside">
 
                 <div class="socketchatbox-admin-server">
@@ -95,6 +66,7 @@
                         <p>Total Messages: <span class="socketchatbox-userdetail-totalmsg"></span></p>
                         <p>Landing Page: <span class="socketchatbox-userdetail-landingpage"></span></p>
                         <p>Referrer: <span class="socketchatbox-userdetail-referrer"></span></p>
+                        <p>Room: <span class="socketchatbox-userdetail-room"></span></p>
                         <p>Idle Time: <span class="socketchatbox-userdetail-lastactive"></span></p>
                         <p>Join Time: <span class="socketchatbox-userdetail-jointime"></span>
                         </p>
@@ -151,7 +123,6 @@
 
     <script src="/jquery-1.9.0.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/client.js"></script>
     <script src="/admin.js"></script>
 
 </html>
