@@ -2,7 +2,7 @@
     "use strict";
     window.chatbox = window.chatbox || {};
 
-    
+
     chatbox.registerSocketEvents = function() {
         // Socket events
         var socket = chatbox.socket;
@@ -106,5 +106,5 @@
         });
     }
 
-})();   
+})();
 

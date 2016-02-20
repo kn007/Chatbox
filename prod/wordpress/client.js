@@ -24,7 +24,7 @@ function loadChatbox()
     var chatboxname = 'Chatbox';
 
     var socket;
-	
+
     var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
 
     var FADE_TIME = 150; // ms
@@ -410,7 +410,7 @@ function loadChatbox()
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
                 if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
                 if(!document.hidden) socket.emit('reset2origintitle', {});
-               
+
                 // do we want to change chatbox top color or make it shake to notify user of new message?
                 // $('#chat-top').css('background','yellowgreen');
                 // clearTimeout(grayChatBoxTimer);

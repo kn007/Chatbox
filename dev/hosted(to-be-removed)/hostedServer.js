@@ -3,7 +3,7 @@
 //================Hosted Version======================
 //====================================================
 //====================================================
- 
+
 var md5 = require('./md5.js');
 
 
@@ -237,7 +237,7 @@ io.on('connection', function (socket) {
         user.socketList.push(socket);
         socket.user = user;
         socket.room = user.room;
-        socket.join(user.room); // Important: sockets of a user should always join the same room 
+        socket.join(user.room); // Important: sockets of a user should always join the same room
         log('user room: ' + user.room);
         log('data.room: ' + data.room); // it would be odd if they are different but it's possible
 
@@ -599,7 +599,7 @@ io.on('connection', function (socket) {
                 success: true
             });
 
-            
+
         } else {
 
             if (adminUser && adminUser.id === socket.user.id) {

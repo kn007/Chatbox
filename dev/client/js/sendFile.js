@@ -36,7 +36,7 @@ window.chatbox = window.chatbox || {};
         $inputMessage.removeAttr('disabled');
     }
 
-    
+
     function doNothing(e){
         e.preventDefault();
         e.stopPropagation();
@@ -74,5 +74,5 @@ window.chatbox = window.chatbox || {};
 
 
 
-})();   
+})();
 
