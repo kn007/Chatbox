@@ -2,7 +2,7 @@ server {
   listen 443 ssl http2;
   server_name chatbox.kn007.net;
   include kn007_net_security.conf;
-  location ~ ^/admin\.html {
+  location ~ ^/(admin\.html|chat-log.txt) {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host;

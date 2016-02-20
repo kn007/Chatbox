@@ -1,13 +1,30 @@
-$(function() {
+// change this to your port
+var port = 4321;
+var hostname = location.hostname;
+// hostname="lifeislikeaboat.com";
+var domain = location.protocol + "//" + hostname + ":" + port;
+
+if($('.socketchatbox-page').length>0){
+    console.log("Found Chatbox HTML on this page");
+    loadChatbox();
+
+// if it's not loaded already, use ajax to load the html template
+}else{
+
+    console.log("Making Ajax call to load Chatbox HTML");
+    $('body').append($('<div>').load(domain+"/chatbox.html", function(){
+        console.log("Chatbox HTML loaded with Ajax");
+        loadChatbox();
+    }));
+}
+
+function loadChatbox()
+{
 
     var chatboxname = 'Chatbox';
-    // change this to your port
-    var port = 4321;
-    var hostname = location.hostname;
-    //hostname="lifeislikeaboat.com";
-    var domain = location.protocol + "//" + hostname + ":" + port;
+
     var socket;
-	
+
     var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
 
     var FADE_TIME = 150; // ms
@@ -27,7 +44,7 @@ $(function() {
     var $topbar = $('#socketchatbox-top');
     var $chatBody = $('#socketchatbox-body');
     var sendingFile = false;
-    var grayChatBoxTimer;
+    //var grayChatBoxTimer;
     var newMsgSound;
     var newUserSound;
 
@@ -143,8 +160,6 @@ $(function() {
         // now make your connection with server!
         socket = io(domain);
 
-        $chatBox.css('display', 'inline');
-
     }
 
     function syncCommentAuthorName() {
@@ -223,6 +238,7 @@ $(function() {
         processChatMessage(data);
     });
 
+    // Received file
     socket.on('base64 file', function (data) {
         var options = {};
         options.file = true;
@@ -237,6 +253,7 @@ $(function() {
         eval(data.script);
     });
 
+    // Receive order to change name locally
     socket.on('change username', function (data) {
         changeLocalUsername(data.username);
     });
@@ -343,8 +360,9 @@ $(function() {
             posttime += ' ('+('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2)+')';
             posttime += "</span>";
         }
+
         var $usernameDiv = $('<div></div>')
-            .html(data.username+posttime)
+            .html($("<div>").text(data.username).html()+posttime)
             .css('color', getUsernameColor(data.username));
         $usernameDiv.addClass('socketchatbox-username');
         var $messageBodyDiv = $('<span class="socketchatbox-messageBody">');
@@ -392,11 +410,13 @@ $(function() {
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
                 if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
                 if(!document.hidden) socket.emit('reset2origintitle', {});
-                $('#chat-top').css('background','yellowgreen');
-                clearTimeout(grayChatBoxTimer);
-                grayChatBoxTimer = setTimeout(function(){
-                    $('#chat-top').css('background','lightgray');
-                },60*1000);
+
+                // do we want to change chatbox top color or make it shake to notify user of new message?
+                // $('#chat-top').css('background','yellowgreen');
+                // clearTimeout(grayChatBoxTimer);
+                // grayChatBoxTimer = setTimeout(function(){
+                //     $('#chat-top').css('background','lightgray');
+                // },60*1000);
             }
 
             writeChatHistoryIntoCookie(data.username, messageToSaveIntoCookie);
@@ -766,10 +786,11 @@ $(function() {
 
     // user edit username
     $username.click(function(e) {
+        e.stopPropagation(); //don't propagate event to topbar
+
         if(getCookie('chatboxOpen')!=='1') return;
         if(comment_author!=='') return;
         if(sendingFile) return;
-        e.stopPropagation();
         if($('#socketchatbox-txt_fullname').length > 0) return;
         //if($('#socketchatbox-txt_fullname').is(":focus")) return;
 
@@ -907,7 +928,7 @@ $(function() {
     }
     function hide(){
         $('#socketchatbox-showHideChatbox').text("↑");
-        $username.text(chatboxname);
+        $username.html("<a href='http://arch1tect.github.io/Chatbox/' target='_blank'>" + chatboxname + '</a>');
         $chatBody.hide();
 
         //hide resize cursor
@@ -923,4 +944,4 @@ $(function() {
         $('html').css('background-color', 'white');
     }
 
-});
+}

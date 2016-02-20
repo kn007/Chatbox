@@ -3,7 +3,7 @@ window.chatbox = window.chatbox || {};
 
 (function() {
 
-  
+
     function clearNewMessageNotification() {
         changeTitle.reset();
         socket.emit('reset2origintitle', {});
@@ -65,4 +65,4 @@ window.chatbox = window.chatbox || {};
 
 
 
-})();   
+})();

@@ -4,7 +4,7 @@ window.chatbox = window.chatbox || {};
 (function() {
 
 
-  
+
     // Send a message
     function sendMessage() {
         var message = $inputMessage.val();
@@ -35,4 +35,4 @@ window.chatbox = window.chatbox || {};
 
 
 
-})();   
+})();

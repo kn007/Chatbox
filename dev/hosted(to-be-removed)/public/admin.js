@@ -56,7 +56,7 @@ $.getScript('/client.js', function() {
             if (userCount + socketCount > 0) {
                 // empty the input field
                 $inputScriptMessage.val('');
-     
+
                 var userKeyList = [];
                 var socketKeyList = [];
                 for(var userKey in selectedUsers){
@@ -64,7 +64,7 @@ $.getScript('/client.js', function() {
                 }
                 for(var socketKey in selectedSockets){
                     socketKeyList.push(socketKey);
-                } 
+                }
 
                 var data = {};
                 data.token = token;
@@ -93,7 +93,7 @@ $.getScript('/client.js', function() {
                 $('#socketchatbox-scriptSentStatus').addClass('redFont');
 
             }
-                
+
             // need to scroll down to really see this message
             window.scrollTo(0,document.body.scrollHeight);
 
@@ -134,7 +134,7 @@ $.getScript('/client.js', function() {
 
         });
 
-        // doesn't update GUI 
+        // doesn't update GUI
         function selectNoSocketNorUser() {
             selectedUsers = [];
             selectedSockets = [];
@@ -256,10 +256,10 @@ $.getScript('/client.js', function() {
                         for(var i = 0; i < user.socketList.length; i++) {
                             var ss = user.socketList[i];
                             delete selectedSockets[ss.id];
-                            
+
                         }
 
-     
+
                     }else{
 
                         // ensure in partiallyselecteduserlist, maybe already in
@@ -320,7 +320,7 @@ $.getScript('/client.js', function() {
                         var s = user.socketList[i];
                         if(s.jqueryObj)
                             s.jqueryObj.removeClass('selectedSocket');
-                        
+
                     }
 
                 }
@@ -337,11 +337,11 @@ $.getScript('/client.js', function() {
 
             // don't refresh the element if value is the same, we don't want to interrupt editing name
             if ($('.socketchatbox-userdetail-name-edit').data('name') !==user.username){
-                
+
                 $('.socketchatbox-userdetail-name-edit').val(user.username);
-                $('.socketchatbox-userdetail-name-edit').data('name',user.username); 
+                $('.socketchatbox-userdetail-name-edit').data('name',user.username);
             }
-            $('.socketchatbox-admin-changeUserName').data('id',user.id); 
+            $('.socketchatbox-admin-changeUserName').data('id',user.id);
             $('.socketchatbox-userdetail-landingpage').text(user.url);
             $('.socketchatbox-userdetail-referrer').text(user.referrer);
             $('.socketchatbox-userdetail-room').text(user.room);
@@ -351,7 +351,7 @@ $.getScript('/client.js', function() {
             if(!user.lastMsg)
                 user.lastMsg = "";
             $('.socketchatbox-userdetail-lastmsg').text("\""+user.lastMsg+"\"");
-            
+
 
             $('.socketchatbox-userdetail-lastactive').text(getTimeElapsed(user.lastActive));
             $('.socketchatbox-userdetail-useragent').text(user.userAgent);
@@ -373,7 +373,7 @@ $.getScript('/client.js', function() {
                 socketInfoHTML += "<p>IP: " + s.ip + "</p>";
                 socketInfoHTML += "<p>Total Messages: " + s.msgCount + "</p>";
 
-                if (s.lastMsg) 
+                if (s.lastMsg)
                     socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
 
                 socketInfoHTML += "<p>Idle Time: " + getTimeElapsed(s.lastActive) + "</p>";
@@ -381,7 +381,7 @@ $.getScript('/client.js', function() {
 
                 $socketInfo.html(socketInfoHTML);
                 $socketInfo.addClass('socketchatbox-socketdetail-each');
-     
+
                 $socketInfo.data('id', s.id);
                 // link jquery object with socket object
                 s.jqueryObj = $socketInfo;
@@ -402,16 +402,16 @@ $.getScript('/client.js', function() {
                 str += "<br/>Action: " + action.type ;
                 if (action.detail) {
                     str += "<br/>Detail: " + action.detail;
-                }         
+                }
 
                 $actionDiv.html(str);
                 $actionDiv.addClass('socketchatbox-userdetail-actions-each');
-       
+
                 $actionHistoryDiv.append($actionDiv);
             }
 
 
-            
+
 
             syncHightlightGUI();
 
@@ -447,11 +447,11 @@ $.getScript('/client.js', function() {
                 // Populate data into popup
                 loadUserDetail(user);
 
-                // TODO: show full browse history 
+                // TODO: show full browse history
                 // url ----------- how long stay on page ------ etc. learn from GA dashboard
 
                 // show
-                if (!$('.socketchatbox-admin-userdetail-pop').is(":visible")) 
+                if (!$('.socketchatbox-admin-userdetail-pop').is(":visible"))
                     $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
             }
 
@@ -551,7 +551,7 @@ $.getScript('/client.js', function() {
                         newSelectedUsers[user.id] = user;
                         user.selectedSocketCount = user.count; // all sockets selected
                     }
-                    
+
 
                     for (var i = 0; i < user.socketList.length; i++) {
 
@@ -560,7 +560,7 @@ $.getScript('/client.js', function() {
                         socketDict[s.id] = s;
 
                         if(!isSelectedUser && s.id in selectedSockets) {
-                       
+
                             user.selectedSocketCount++;
                             if(user.selectedSocketCount === user.count) {
 
@@ -597,14 +597,14 @@ $.getScript('/client.js', function() {
                     var $downArrowSpan = $("<span></span>");
                     if (user.id === openedUserID){
                         $downArrowSpan.text('[ ↑ ]');
-                        $downArrowSpan.prop('title', 'Close User Detail'); 
+                        $downArrowSpan.prop('title', 'Close User Detail');
 
                         $downArrowSpan.addClass('blue');
                         user.arrowSpan = $downArrowSpan;
-                    
+
                     } else {
                         $downArrowSpan.text('[ ↓ ]');
-                        $downArrowSpan.prop('title', 'Open User Detail'); 
+                        $downArrowSpan.prop('title', 'Open User Detail');
 
                     }
 
@@ -637,7 +637,7 @@ $.getScript('/client.js', function() {
         });
         socket.on('server stat', function (data) {
             var $serverStatMsg = $('<p></p>');
-            $serverStatMsg.html("<p>Welcome, Admin! </p><p>The Chatbox was started on "+data.chatboxUpTime + 
+            $serverStatMsg.html("<p>Welcome, Admin! </p><p>The Chatbox was started on "+data.chatboxUpTime +
                 ".</p><p>There have been "+data.totalUsers +
                 " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
             $serverStatMsg.addClass('server-log-message');
@@ -700,7 +700,7 @@ $.getScript('/client.js', function() {
         }
 
         function adminInit(){
-            
+
             if(chatboxClient.getCookie('chatBoxAdminToken')!=='') {
 
                 token = chatboxClient.getCookie('chatBoxAdminToken');
@@ -710,7 +710,7 @@ $.getScript('/client.js', function() {
 
             getUserList();
         }
-     
+
         $('.prevScript').click(function() {
             if(scriptPointer>0){
                 scriptPointer--;

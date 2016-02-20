@@ -47,7 +47,7 @@
         if (name === chatbox.username || name === "")  {
             $username.text(chatbox.username);
             return;
-        }  
+        }
 
         //if (!sendingFile) {
             askServerToChangeName(name);
@@ -239,4 +239,4 @@
 
 
 
-})();   
+})();
