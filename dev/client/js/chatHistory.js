@@ -1,18 +1,19 @@
 (function() {
     "use strict";
     window.chatbox = window.chatbox || {};
-    var util = chatbox.util;
-
+    var utils = chatbox.utils;
+    var msgHandler = chatbox.msgHandler;
     var chatHistory = {};
     chatbox.chatHistory = chatHistory;
 
     chatHistory.load = function() {
+        console.log("Load chat history");
 
         var chatHistory = [];
 
         try {
 
-            chatHistory = JSON.parse(util.getCookie('chathistory'));
+            chatHistory = JSON.parse(utils.getCookie('chathistory'));
 
         }catch(e) {
 
@@ -20,18 +21,18 @@
 
         if(chatHistory.length) {
 
-            log("----Chat History----");
+            msgHandler.addLog("----Chat History----");
 
-            options = {};
-            options.loadFromCookie = true;
+            var options = {};
+            options.history = true;
 
             for(var i=0; i<chatHistory.length; i++) {
-
+                
                 var data = chatHistory[i];
-                processChatMessage(data, options);
+                msgHandler.processChatMessage(data, options);
             }
 
-            log('-----End of History-----');
+            msgHandler.addLog('-----End of History-----');
         }
     }
 
@@ -42,7 +43,7 @@
 
         try{
 
-            chatHistory = JSON.parse(util.getCookie('chathistory'));
+            chatHistory = JSON.parse(utils.getCookie('chathistory'));
 
         }catch(e) {
 

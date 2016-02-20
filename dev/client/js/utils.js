@@ -4,12 +4,12 @@
 
     window.chatbox = window.chatbox || {};
 
-    var util = {};
-    chatbox.util = util;
+    var utils = {};
+    chatbox.utils = utils;
 
 
     // generate a unique guid for each browser, will pass in cookie
-    util.guid = function() {
+    utils.guid = function() {
 
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
@@ -33,18 +33,18 @@
         return "";
     }
 
-    util.getCookie = getCookie;
+    utils.getCookie = getCookie;
 
     function addCookie(cname, cvalue) {
 
-        exdays = 365;
+        var exdays = 365;
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
         document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=" + getCookieDomain() + "; path=/";
     }
 
-    util.addCookie = addCookie;
+    utils.addCookie = addCookie;
 
     function getCookieDomain() {
 
@@ -70,7 +70,7 @@
     function checkImageUrl (url) {
         return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     }
-
+    utils.checkImageUrl = checkImageUrl;
 
     // Prevents input from having injected markup
     function cleanInput (input) {

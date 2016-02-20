@@ -1,10 +1,8 @@
-
-
 (function() {
     "use strict";
     window.chatbox = window.chatbox || {};
     
-    var util = chatbox.util;
+    var utils = chatbox.utils;
     var ui = chatbox.ui; 
     var chatHistory = chatbox.chatHistory;
 
@@ -24,40 +22,38 @@
 
     var d = new Date();
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
+    chatbox.username = username;
     var comment_author = '';
     var totalUser = 0;
-
-
-    var $window = $(window);
 
 
     chatbox.init = function() {
 
         // Read old uuid from cookie if exist
-        if(util.getCookie('chatuuid')!=='') {
+        if(utils.getCookie('chatuuid')!=='') {
             
-            chatbox.uuid = util.getCookie('chatuuid');
+            chatbox.uuid = utils.getCookie('chatuuid');
 
         }else {
 
-            uuid = util.guid();
-            util.addCookie('chatuuid', uuid);
+            uuid = utils.guid();
+            utils.addCookie('chatuuid', uuid);
         }
 
         // Read old username from cookie if exist
-        if(util.getCookie('chatname')!=='') {
+        if(utils.getCookie('chatname')!=='') {
 
-            username = util.getCookie('chatname');
+            username = utils.getCookie('chatname');
 
         }else {
 
-            util.addCookie('chatname', username);
+            utils.addCookie('chatname', username);
         }
 
         chatHistory.load();
 
         // Show/hide chatbox base on cookie value
-        if(getCookie('chatboxOpen')==='1') {
+        if(utils.getCookie('chatboxOpen')==='1') {
 
             ui.show();
 
@@ -67,7 +63,8 @@
         }
 
         // now make your connection with server!
-        socket = io(domain);
+        chatbox.socket = io(domain);
+        chatbox.registerSocketEvents();
     }
 
 

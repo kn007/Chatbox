@@ -1,15 +1,15 @@
-window.chatbox = window.chatbox || {};
-"use strict";
-
 (function() {
 
+    "use strict";
+    window.chatbox = window.chatbox || {};
+
     var ui = {};
-    var util = chatbox.util || {};
+    var utils = chatbox.utils;
     chatbox.ui = ui;
+
 
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
-    var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
     var $topbar = $('#socketchatbox-top');
@@ -19,7 +19,7 @@ window.chatbox = window.chatbox || {};
 
     function show() {
         $showHideChatbox.text("↓");
-        $username.text(username);
+        $username.text(chatbox.username);
         $chatBody.show();
         //show resize cursor
         $chatboxResize.css('z-index', 99999);
@@ -30,7 +30,7 @@ window.chatbox = window.chatbox || {};
 
     function hide() {
         $showHideChatbox.text("↑");
-        $username.html("<a href='http://arch1tect.github.io/Chatbox/' target='_blank'>" + chatboxname + '</a>');
+        $username.html("<a href='http://arch1tect.github.io/Chatbox/' target='_blank'>" + chatbox.NAME + '</a>');
         $chatBody.hide();
         //hide resize cursor
         $chatboxResize.css('z-index', -999);
@@ -43,17 +43,20 @@ window.chatbox = window.chatbox || {};
     function changeNameByEdit() {
         var name = $('#socketchatbox-txt_fullname').val();
         name = $.trim(name);
-        if (name === username || name === "")  {
-            $username.text(username);
-        } else if (!sendingFile) {
+        if (name === chatbox.username || name === "")  {
+            $username.text(chatbox.username);
+            return;
+        }  
+
+        //if (!sendingFile) {
             askServerToChangeName(name);
-        }
+        //}
     }
 
     ui.changeNameByEdit = changeNameByEdit;
 
 
-    $window.keydown(function (event) {
+    $(window).keydown(function (event) {
 
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
@@ -64,7 +67,7 @@ window.chatbox = window.chatbox || {};
                 return;
             }
 
-            if (username && $inputMessage.is(":focus")) {
+            if (chatbox.username && $inputMessage.is(":focus")) {
                 sendMessage();
                 socket.emit('stop typing', {name:username});
                 typing = false;
@@ -91,10 +94,10 @@ window.chatbox = window.chatbox || {};
         if($chatBody.is(":visible")){
 
             hide();
-            addCookie('chatboxOpen',0);
+            utils.addCookie('chatboxOpen',0);
         }else {
             show();
-            addCookie('chatboxOpen',1);
+            utils.addCookie('chatboxOpen',1);
         }
     });
 
@@ -102,10 +105,11 @@ window.chatbox = window.chatbox || {};
     $username.click(function(e) {
         e.stopPropagation(); //don't propagate event to topbar
 
-        if(getCookie('chatboxOpen')!=='1') {
+        if(utils.getCookie('chatboxOpen')!=='1') {
             return;
         }
-        if(sendingFile) return;
+        //if(sendingFile) return; //add it back later
+
         if($('#socketchatbox-txt_fullname').length > 0) return;
         //if($('#socketchatbox-txt_fullname').is(":focus")) return;
 
@@ -127,8 +131,8 @@ window.chatbox = window.chatbox || {};
 
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
-        socket.emit('user edits name', {newName: newName});
-        if(getCookie('chatboxOpen')==='1')
+        chatbox.socket.emit('user edits name', {newName: newName});
+        if(utils.getCookie('chatboxOpen')==='1')
             $username.text('Changing your name...');
     }
 
