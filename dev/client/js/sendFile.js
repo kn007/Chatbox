@@ -1,7 +1,7 @@
-window.chatbox = window.chatbox || {};
-"use strict";
-
 (function() {
+
+    "use strict";
+
     var sendingFile = false;
 
     function readThenSendFile(data){

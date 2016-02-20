@@ -2,10 +2,7 @@
 
     "use strict";
 
-    window.chatbox = window.chatbox || {};
-
-    var utils = {};
-    chatbox.utils = utils;
+    var utils = chatbox.utils;
 
 
     // generate a unique guid for each browser, will pass in cookie

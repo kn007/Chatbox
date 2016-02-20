@@ -1,18 +1,17 @@
 (function() {
     "use strict";
-    window.chatbox = window.chatbox || {};
 
-    var msgHandler = {};
-    chatbox.msgHandler = msgHandler;
+    var chatHistory = chatbox.chatHistory;
+    var msgHandler = chatbox.msgHandler;
     var utils = chatbox.utils;
+
+
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
 
     var typing = false;
     var lastTypingTime;
-
-    var chatHistory = chatbox.chatHistory;
     var $messages = $('.socketchatbox-messages'); // Messages area
 
 
@@ -124,7 +123,7 @@
                 if(!document.hidden) socket.emit('reset2origintitle', {});
             }
 
-            chatHistory.writeChatHistoryIntoCookie(data.username, messageToSaveIntoCookie);
+            chatHistory.save(data.username, messageToSaveIntoCookie);
         }
 
 

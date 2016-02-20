@@ -1,10 +1,17 @@
 (function() {
     "use strict";
-    window.chatbox = window.chatbox || {};
+    window.chatbox = {};
+    chatbox.utils = {};
+    chatbox.ui = {};
+    chatbox.chatHistory = {};
+    chatbox.msgHandler = {};
+    chatbox.notification = {};
+    chatbox.socketEvent = {};
 
     var utils = chatbox.utils;
     var ui = chatbox.ui;
     var chatHistory = chatbox.chatHistory;
+    var socketEvent = chatbox.socketEvent;
 
     // change this to the port you want to use on server if you are hosting
     // TODO: move to config file
@@ -64,7 +71,7 @@
 
         // now make your connection with server!
         chatbox.socket = io(domain);
-        chatbox.registerSocketEvents();
+        socketEvent.register();
     }
 
 

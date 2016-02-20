@@ -1,12 +1,9 @@
 (function() {
 
     "use strict";
-    window.chatbox = window.chatbox || {};
-    //var msgHandler = chatbox.msgHandler;
 
-    var ui = {};
+    var ui = chatbox.ui;
     var utils = chatbox.utils;
-    chatbox.ui = ui;
 
 
     var $username = $('#socketchatbox-username');

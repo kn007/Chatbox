@@ -1,12 +1,12 @@
 (function() {
     "use strict";
-    window.chatbox = window.chatbox || {};
 
     var ui = chatbox.ui;
     var msgHandler = chatbox.msgHandler;
 
+    var socketEvent = chatbox.socketEvent;
 
-    chatbox.registerSocketEvents = function() {
+    socketEvent.register = function() {
         // Socket events
         var socket = chatbox.socket;
 
@@ -69,26 +69,26 @@
 
         // Receive order to change name locally
         socket.on('change username', function (data) {
-            changeLocalUsername(data.username);
+            ui.changeLocalUsername(data.username);
         });
 
         // Whenever the server emits 'user joined', log it in the chat body
         socket.on('user joined', function (data) {
-            log(data.username + ' joined');
-            addParticipantsMessage(data.numUsers);
+            msgHandler.addLog(data.username + ' joined');
+            //addParticipantsMessage(data.numUsers);
             beep();
         });
 
         // Whenever the server emits 'user left', log it in the chat body
         socket.on('user left', function (data) {
-            log(data.username + ' left');
-            addParticipantsMessage(data.numUsers);
+            msgHandler.addLog(data.username + ' left');
+            //addParticipantsMessage(data.numUsers);
             removeChatTyping(data);
         });
 
         // Whenever the server emits 'change name', log it in the chat body
         socket.on('log change name', function (data) {
-            log(data.oldname + ' changes name to ' + data.username);
+            msgHandler.addLog(data.oldname + ' changes name to ' + data.username);
         });
 
         // Whenever the server emits 'typing', show the typing message

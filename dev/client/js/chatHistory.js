@@ -1,10 +1,10 @@
 (function() {
     "use strict";
-    window.chatbox = window.chatbox || {};
+
+
     var utils = chatbox.utils;
     var msgHandler = chatbox.msgHandler;
-    var chatHistory = {};
-    chatbox.chatHistory = chatHistory;
+    var chatHistory = chatbox.chatHistory;
 
     chatHistory.load = function() {
         console.log("Load chat history");
@@ -60,7 +60,7 @@
             chatHistory.push(dataToSaveIntoCookie);
             // keep most recent 20 messages only
             chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0));
-            util.addCookie('chathistory',JSON.stringify(chatHistory));
+            utils.addCookie('chathistory',JSON.stringify(chatHistory));
         }
     }
 
