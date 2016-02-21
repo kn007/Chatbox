@@ -18,7 +18,8 @@
     var $messages; // Messages area
     var $cross;
     var $chatArea;
-
+    var $resize;
+    
     ui.init = function() {
 
         $username = $('#socketchatbox-username');
@@ -32,6 +33,7 @@
         $messages = $('.socketchatbox-messages');
         $cross = $('#socketchatbox-closeChatbox');
         $chatArea = $(".socketchatbox-chatArea");
+        $resize = $(".socketchatbox-resize");
 
         $topbar.click(function() {
 
@@ -89,6 +91,55 @@
         $('#socketchatbox-imagefile').bind('change', function(e) {
             var file = e.originalEvent.target.files[0];
             sendFile(file);
+        });
+
+
+            //resize chatbox
+
+        var prev_x = -1;
+        var prev_y = -1;
+        var dir = null;
+
+        $resize.mousedown(function(e){
+            prev_x = e.clientX;
+            prev_y = e.clientY;
+            dir = $(this).attr('id');
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        $(document).mousemove(function(e){
+
+            if (prev_x == -1) return;
+
+            var boxW = $chatArea.outerWidth();
+            var boxH = $chatArea.outerHeight();
+            var dx = e.clientX - prev_x;
+            var dy = e.clientY - prev_y;
+
+            //Check directions
+            if (dir.indexOf('n') > -1)  boxH -= dy;
+            
+            if (dir.indexOf('w') > -1)  boxW -= dx;
+            
+            if (dir.indexOf('e') > -1)  boxW += dx;
+
+
+            if(boxW<210)    boxW = 210;
+            if(boxH<30)     boxH = 30;
+
+            $chatArea.css({
+                "width":(boxW)+"px",
+                "height":(boxH)+"px",
+            });
+
+            prev_x = e.clientX;
+            prev_y = e.clientY;
+        });
+
+        $(document).mouseup(function(){
+            prev_x = -1;
+            prev_y = -1;
         });
 
     }
@@ -241,58 +292,6 @@
 
 
 
-
-    //resize chatbox
-
-    var prev_x = -1;
-    var prev_y = -1;
-    var dir = null;
-    $(".socketchatbox-resize").mousedown(function(e){
-        prev_x = e.clientX;
-        prev_y = e.clientY;
-        dir = $(this).attr('id');
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $(document).mousemove(function(e){
-
-        if (prev_x == -1)
-            return;
-
-        var boxW = $chatArea.outerWidth();
-        var boxH = $chatArea.outerHeight();
-        var dx = e.clientX - prev_x;
-        var dy = e.clientY - prev_y;
-
-        //Check directions
-        if (dir.indexOf('n') > -1) //north
-            boxH -= dy;
-        
-
-        if (dir.indexOf('w') > -1) //west
-            boxW -= dx;
-        
-        if (dir.indexOf('e') > -1) //east
-            boxW += dx;
-
-
-        if(boxW<210) boxW = 210;
-        if(boxH<30) boxH = 30;
-
-        $chatArea.css({
-            "width":(boxW)+"px",
-            "height":(boxH)+"px",
-        });
-
-        prev_x = e.clientX;
-        prev_y = e.clientY;
-    });
-
-    $(document).mouseup(function(){
-        prev_x = -1;
-        prev_y = -1;
-    });
 
 
 
