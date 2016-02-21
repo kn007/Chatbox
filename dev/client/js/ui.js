@@ -280,10 +280,6 @@
 
 
 
-
-
-
-
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         chatbox.socket.emit('user edits name', {newName: newName});
