@@ -43,6 +43,15 @@
 
     utils.addCookie = addCookie;
 
+
+    function doNothing(e){
+
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    utils.doNothing = doNothing;
+
     function getCookieDomain() {
 
         var host = location.hostname;

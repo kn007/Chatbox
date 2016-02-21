@@ -4,7 +4,7 @@
 
     var ui = chatbox.ui;
     var utils = chatbox.utils;
-
+    var fileHandler = chatbox.fileHandler;
 
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
@@ -175,9 +175,44 @@
             $username.text('Changing your name...');
     }
 
+    function receivedFileSentByMyself() {        
+        $inputMessage.val('');
+        $inputMessage.removeAttr('disabled');
+        fileHandler.receivedFileSentByMyself();
+    }
+
+    ui.receivedFileSentByMyself = receivedFileSentByMyself;
+
+    function sendFile(file) {
+
+        $inputMessage.val('Sending file...');
+        $inputMessage.prop('disabled', true);
+        fileHandler.readThenSendFile(file);
+
+    }
+
+    // Prepare file drop box.
+    $chatBox.on('dragenter', utils.doNothing);
+    $chatBox.on('dragover', utils.doNothing);
+    $chatBox.on('drop', function(e){
+        e.originalEvent.preventDefault();
+        var file = e.originalEvent.dataTransfer.files[0];
+        sendFile(file);
+
+    });
+
+    $('#socketchatbox-imagefile').bind('change', function(e) {
+        var file = e.originalEvent.target.files[0];
+        sendFile(file);
+    });
 
 
-    //resize
+
+
+
+
+
+    //resize chatbox
 
     var prev_x = -1;
     var prev_y = -1;

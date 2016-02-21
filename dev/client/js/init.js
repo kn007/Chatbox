@@ -4,6 +4,7 @@
     chatbox.utils = {};
     chatbox.ui = {};
     chatbox.chatHistory = {};
+    chatbox.fileHandler = {};
     chatbox.msgHandler = {};
     chatbox.notification = {};
     chatbox.socketEvent = {};
@@ -43,18 +44,18 @@
 
         }else {
 
-            uuid = utils.guid();
-            utils.addCookie('chatuuid', uuid);
+            chatbox.uuid = utils.guid();
+            utils.addCookie('chatuuid', chatbox.uuid);
         }
 
         // Read old username from cookie if exist
         if(utils.getCookie('chatname')!=='') {
 
-            username = utils.getCookie('chatname');
+            chatbox.username = utils.getCookie('chatname');
 
         }else {
 
-            utils.addCookie('chatname', username);
+            utils.addCookie('chatname', chatbox.username);
         }
 
         chatHistory.load();

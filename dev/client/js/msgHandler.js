@@ -4,7 +4,7 @@
     var chatHistory = chatbox.chatHistory;
     var msgHandler = chatbox.msgHandler;
     var utils = chatbox.utils;
-
+    var ui = chatbox.ui;
 
 
     var FADE_TIME = 150; // ms
@@ -91,12 +91,17 @@
                 mediaType = "video controls";
 
             if (data.file.substring(0,10)==='data:image' || data.file.substring(0,10)==='data:video') {
+                $messageBodyDiv.addClass("hasMedia");
                 $messageBodyDiv.html("<a target='_blank' href='" + data.file + "'><"+mediaType+" class='chatbox-image' src='"+data.file+"'></a>");
             }else{
                 $messageBodyDiv.html("<a target='_blank' download='" + data.fileName +"' href='"+data.file+"'>"+data.fileName+"</a>");
             }
 
-            messageToSaveIntoCookie = data.fileName+"(File)";
+            messageToSaveIntoCookie = data.fileName+" (File)";
+            if(data.username === chatbox.username){
+                ui.receivedFileSentByMyself();
+            }
+
 
         }else{
 
@@ -116,11 +121,11 @@
 
             // play new msg sound and change chatbox color to notify users
             if (data.username !== chatbox.username) {
-                newMsgBeep();
+                //newMsgBeep();
                 if(document.hidden && changeTitleMode === 1 && changeTitle.done === 0) changeTitle.change();
                 if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
                 if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
-                if(!document.hidden) socket.emit('reset2origintitle', {});
+                if(!document.hidden) chatbox.socket.emit('reset2origintitle', {});
             }
 
             chatHistory.save(data.username, messageToSaveIntoCookie);
