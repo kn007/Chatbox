@@ -5,7 +5,9 @@
     var utils = chatbox.utils;
     var msgHandler = chatbox.msgHandler;
     var historyHandler = chatbox.historyHandler;
+    var ui = chatbox.ui;
 
+    
     historyHandler.load = function() {
         console.log("Load chat history");
 
@@ -21,7 +23,7 @@
 
         if(chatHistory.length) {
 
-            msgHandler.addLog("----Chat History----");
+            ui.addLog("----Chat History----");
 
             var options = {};
             options.history = true;
@@ -32,7 +34,7 @@
                 msgHandler.processChatMessage(data, options);
             }
 
-            msgHandler.addLog('-----End of History-----');
+            ui.addLog('-----End of History-----');
         }
     }
 

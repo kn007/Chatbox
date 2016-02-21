@@ -12,26 +12,12 @@
 
     var typing = false;
     var lastTypingTime;
-    var $messages = $('.socketchatbox-messages'); // Messages area
+    // var $messages = $('.socketchatbox-messages'); // Messages area
 
 
-    // Add it to chat area
-    function addMessageElement($el) {
-
-        $messages.append($el);
-
-        //loading media takes time so we delay the scroll down
-        $messages[0].scrollTop = $messages[0].scrollHeight;
-    }
 
 
-    // Log a message
-    function addLog(log) {
-        var $el = $('<li>').addClass('socketchatbox-log').text(log);
-        addMessageElement($el);
-    }
 
-    msgHandler.addLog = addLog;
 
 
 
@@ -145,7 +131,7 @@
             $messageDiv.addClass('socketchatbox-message-others');
         }
 
-        addMessageElement($messageWrapper, options);
+        ui.addMessageElement($messageWrapper, options);
     }
 
     msgHandler.processChatMessage = processChatMessage;

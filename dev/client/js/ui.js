@@ -5,7 +5,7 @@
     var ui = chatbox.ui;
     var utils = chatbox.utils;
     var fileHandler = chatbox.fileHandler;
-    
+
 
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
@@ -15,6 +15,7 @@
     var $chatBody = $('#socketchatbox-body');
     var $showHideChatbox =  $('#socketchatbox-showHideChatbox');
     var $chatboxResize = $('.socketchatbox-resize');
+    var $messages = $('.socketchatbox-messages'); // Messages area
 
     function show() {
         $showHideChatbox.text("↓");
@@ -22,6 +23,7 @@
         $chatBody.show();
         //show resize cursor
         $chatboxResize.css('z-index', 99999);
+        $messages[0].scrollTop = $messages[0].scrollHeight;
 
     }
 
@@ -36,6 +38,26 @@
     }
 
     ui.hide = hide;
+
+
+    // Add it to chat area
+    function addMessageElement($el) {
+
+        $messages.append($el);
+
+        //loading media takes time so we delay the scroll down
+        $messages[0].scrollTop = $messages[0].scrollHeight;
+    }
+
+    ui.addMessageElement = addMessageElement;
+
+        // Log a message
+    function addLog(log) {
+        var $el = $('<li>').addClass('socketchatbox-log').text(log);
+        addMessageElement($el);
+    }
+
+    ui.addLog = addLog;
 
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
@@ -126,7 +148,9 @@
     });
 
 
-
+    $('#socketchatbox-closeChatbox').click(function() {
+        $chatBox.hide();
+    });
 
 
     $topbar.click(function() {
