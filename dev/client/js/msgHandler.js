@@ -12,26 +12,6 @@
 
     var typing = false;
     var lastTypingTime;
-    // var $messages = $('.socketchatbox-messages'); // Messages area
-
-
-
-
-
-
-
-
-    function addParticipantsMessage(numUsers) {
-        var message = '';
-        if (numUsers === 1) {
-            message += "You are the only user online";
-        }else if (totalUser === 0) {
-            message += "There are " + numUsers + " users online";
-        }
-        addLog(message);
-
-        totalUser = numUsers;
-    }
 
 
     // Process message before displaying
@@ -154,9 +134,6 @@
         data.msg = msg+'';//cast string
         chatbox.socket.emit('report', data);
     }
-
-
-
 
     // Adds the visual chat typing message
     function addChatTyping (data) {

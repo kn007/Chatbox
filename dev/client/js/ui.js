@@ -18,8 +18,7 @@
     var $messages; // Messages area
     var $cross;
     var $chatArea;
-    var $resize;
-    
+
     ui.init = function() {
 
         $username = $('#socketchatbox-username');
@@ -33,7 +32,6 @@
         $messages = $('.socketchatbox-messages');
         $cross = $('#socketchatbox-closeChatbox');
         $chatArea = $(".socketchatbox-chatArea");
-        $resize = $(".socketchatbox-resize");
 
         $topbar.click(function() {
 
@@ -94,13 +92,12 @@
         });
 
 
-            //resize chatbox
-
+        //resize chatbox
         var prev_x = -1;
         var prev_y = -1;
         var dir = null;
 
-        $resize.mousedown(function(e){
+        $chatboxResize.mousedown(function(e){
             prev_x = e.clientX;
             prev_y = e.clientY;
             dir = $(this).attr('id');
@@ -119,19 +116,13 @@
 
             //Check directions
             if (dir.indexOf('n') > -1)  boxH -= dy;
-            
             if (dir.indexOf('w') > -1)  boxW -= dx;
-            
             if (dir.indexOf('e') > -1)  boxW += dx;
 
+            if(boxW<240)    boxW = 240;
+            if(boxH<70)     boxH = 70;
 
-            if(boxW<210)    boxW = 210;
-            if(boxH<30)     boxH = 30;
-
-            $chatArea.css({
-                "width":(boxW)+"px",
-                "height":(boxH)+"px",
-            });
+            $chatArea.css({ "width":(boxW)+"px", "height":(boxH)+"px"});
 
             prev_x = e.clientX;
             prev_y = e.clientY;
@@ -142,7 +133,43 @@
             prev_y = -1;
         });
 
+        $(window).keydown(function (event) {
+
+            // When the client hits ENTER on their keyboard
+            if (event.which === 13) {
+
+                if ($('#socketchatbox-txt_fullname').is(":focus")) {
+                    changeNameByEdit();
+                    $inputMessage.focus();
+                    return;
+                }
+
+                if (chatbox.username && $inputMessage.is(":focus")) {
+                    sendMessage();
+                    chatbox.socket.emit('stop typing', {name: chatbox.username});
+                    //typing = false;
+                }
+            }
+
+            // When the client hits ESC on their keyboard
+            if (event.which === 27) {
+                if ($('#socketchatbox-txt_fullname').is(":focus")) {
+                    $username.text(username);
+                    $inputMessage.focus();
+                    return;
+                }
+            }
+
+        });
+
+
+
     }
+
+
+
+
+
 
     function show() {
         $showHideChatbox.text("↓");
@@ -186,6 +213,25 @@
 
     ui.addLog = addLog;
 
+
+    function addParticipantsMessage(numUsers) {
+        var message = '';
+        if (numUsers === 1) {
+
+            message += "You are the only user online";
+
+        }else {
+
+            message += "There are " + numUsers + " users online";
+        }
+
+        addLog(message);
+
+    }
+
+    ui.addParticipantsMessage = addParticipantsMessage;
+
+
     // When user change his username by editing though GUI, go through server to get permission
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
@@ -202,7 +248,8 @@
     }
     ui.changeNameByEdit = changeNameByEdit;
 
-        // Change local username value and update local cookie
+
+    // Change local username value and update local cookie
     function changeLocalUsername(name) {
         if(name) {
             chatbox.username = name;
@@ -230,35 +277,6 @@
  
 
 
-
-    $(window).keydown(function (event) {
-
-        // When the client hits ENTER on their keyboard
-        if (event.which === 13) {
-
-            if ($('#socketchatbox-txt_fullname').is(":focus")) {
-                changeNameByEdit();
-                $inputMessage.focus();
-                return;
-            }
-
-            if (chatbox.username && $inputMessage.is(":focus")) {
-                sendMessage();
-                chatbox.socket.emit('stop typing', {name: chatbox.username});
-                //typing = false;
-            }
-        }
-
-        // When the client hits ESC on their keyboard
-        if (event.which === 27) {
-            if ($('#socketchatbox-txt_fullname').is(":focus")) {
-                $username.text(username);
-                $inputMessage.focus();
-                return;
-            }
-        }
-
-    });
 
 
 
