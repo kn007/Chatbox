@@ -5,17 +5,93 @@
     var ui = chatbox.ui;
     var utils = chatbox.utils;
     var fileHandler = chatbox.fileHandler;
+    var msgHandler = chatbox.msgHandler;
+
+    var $username;
+    var $usernameInput;// Input for username
+    var $inputMessage; // Input message input box
+    var $chatBox;
+    var $topbar;
+    var $chatBody;
+    var $showHideChatbox;
+    var $chatboxResize;
+    var $messages; // Messages area
+    var $cross;
+    var $chatArea;
+
+    ui.init = function() {
+
+        $username = $('#socketchatbox-username');
+        $usernameInput = $('.socketchatbox-usernameInput'); 
+        $inputMessage = $('.socketchatbox-inputMessage'); 
+        $chatBox = $('.socketchatbox-page');
+        $topbar = $('#socketchatbox-top');
+        $chatBody = $('#socketchatbox-body');
+        $showHideChatbox =  $('#socketchatbox-showHideChatbox');
+        $chatboxResize = $('.socketchatbox-resize');
+        $messages = $('.socketchatbox-messages');
+        $cross = $('#socketchatbox-closeChatbox');
+        $chatArea = $(".socketchatbox-chatArea");
+
+        $topbar.click(function() {
+
+            if($chatBody.is(":visible")){
+
+                hide();
+                utils.addCookie('chatboxOpen',0);
+            }else {
+                show();
+                utils.addCookie('chatboxOpen',1);
+            }
+        });
+
+        // user edit username
+        $username.click(function(e) {
+            e.stopPropagation(); //don't propagate event to topbar
+
+            if(utils.getCookie('chatboxOpen')!=='1') {
+                return;
+            }
+            //if(sendingFile) return; //add it back later
+
+            if($('#socketchatbox-txt_fullname').length > 0) return;
+            //if($('#socketchatbox-txt_fullname').is(":focus")) return;
+
+            var name = $(this).text();
+            $(this).html('');
+            $('<input></input>')
+                .attr({
+                    'type': 'text',
+                    'name': 'fname',
+                    'id': 'socketchatbox-txt_fullname',
+                    'size': '10',
+                    'value': name
+                })
+                .appendTo('#socketchatbox-username');
+            $('#socketchatbox-txt_fullname').focus();
+        });
+
+        $cross.click(function() {
+            $chatBox.hide();
+        });
 
 
-    var $username = $('#socketchatbox-username');
-    var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
-    var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
-    var $chatBox = $('.socketchatbox-page');
-    var $topbar = $('#socketchatbox-top');
-    var $chatBody = $('#socketchatbox-body');
-    var $showHideChatbox =  $('#socketchatbox-showHideChatbox');
-    var $chatboxResize = $('.socketchatbox-resize');
-    var $messages = $('.socketchatbox-messages'); // Messages area
+        // Prepare file drop box.
+        $chatBox.on('dragenter', utils.doNothing);
+        $chatBox.on('dragover', utils.doNothing);
+        $chatBox.on('drop', function(e){
+            e.originalEvent.preventDefault();
+            var file = e.originalEvent.dataTransfer.files[0];
+            sendFile(file);
+
+        });
+
+        $('#socketchatbox-imagefile').bind('change', function(e) {
+            var file = e.originalEvent.target.files[0];
+            sendFile(file);
+        });
+
+    }
 
     function show() {
         $showHideChatbox.text("↓");
@@ -92,29 +168,15 @@
         var message = $inputMessage.val();
         // Prevent markup from being injected into the message
         message = utils.cleanInput(message);
+
         // if there is a non-empty message
         if (message) {
             // empty the input field
             $inputMessage.val('');
-            sendMessageToServer(message);
+            msgHandler.sendMessage(message);
         }
     }
  
-    function sendMessageToServer (msg) {
-        var data = {};
-        data.username = chatbox.username;
-        data.msg = msg+'';//cast string
-        chatbox.socket.emit('new message', data);
-    }
-
-    // Different from sendMessageToServer(), only admin can see the message
-    function reportToServer (msg) {
-        var data = {};
-        data.username = username;
-        data.msg = msg+'';//cast string
-        chatbox.socket.emit('report', data);
-    }
-
 
 
 
@@ -148,48 +210,7 @@
     });
 
 
-    $('#socketchatbox-closeChatbox').click(function() {
-        $chatBox.hide();
-    });
 
-
-    $topbar.click(function() {
-
-        if($chatBody.is(":visible")){
-
-            hide();
-            utils.addCookie('chatboxOpen',0);
-        }else {
-            show();
-            utils.addCookie('chatboxOpen',1);
-        }
-    });
-
-    // user edit username
-    $username.click(function(e) {
-        e.stopPropagation(); //don't propagate event to topbar
-
-        if(utils.getCookie('chatboxOpen')!=='1') {
-            return;
-        }
-        //if(sendingFile) return; //add it back later
-
-        if($('#socketchatbox-txt_fullname').length > 0) return;
-        //if($('#socketchatbox-txt_fullname').is(":focus")) return;
-
-        var name = $(this).text();
-        $(this).html('');
-        $('<input></input>')
-            .attr({
-                'type': 'text',
-                'name': 'fname',
-                'id': 'socketchatbox-txt_fullname',
-                'size': '10',
-                'value': name
-            })
-            .appendTo('#socketchatbox-username');
-        $('#socketchatbox-txt_fullname').focus();
-    });
 
 
 
@@ -216,22 +237,6 @@
 
     }
 
-    // Prepare file drop box.
-    $chatBox.on('dragenter', utils.doNothing);
-    $chatBox.on('dragover', utils.doNothing);
-    $chatBox.on('drop', function(e){
-        e.originalEvent.preventDefault();
-        var file = e.originalEvent.dataTransfer.files[0];
-        sendFile(file);
-
-    });
-
-    $('#socketchatbox-imagefile').bind('change', function(e) {
-        var file = e.originalEvent.target.files[0];
-        sendFile(file);
-    });
-
-
 
 
 
@@ -255,32 +260,27 @@
         if (prev_x == -1)
             return;
 
-        var boxW = $(".socketchatbox-chatArea").outerWidth();
-        var boxH = $(".socketchatbox-chatArea").outerHeight();
+        var boxW = $chatArea.outerWidth();
+        var boxH = $chatArea.outerHeight();
         var dx = e.clientX - prev_x;
         var dy = e.clientY - prev_y;
 
         //Check directions
         if (dir.indexOf('n') > -1) //north
-        {
             boxH -= dy;
-        }
+        
 
         if (dir.indexOf('w') > -1) //west
-        {
             boxW -= dx;
-        }
+        
         if (dir.indexOf('e') > -1) //east
-        {
             boxW += dx;
-        }
 
-        //console.log('boxW '+boxW);
-        //console.log('boxH '+boxH);
+
         if(boxW<210) boxW = 210;
         if(boxH<30) boxH = 30;
 
-        $(".socketchatbox-chatArea").css({
+        $chatArea.css({
             "width":(boxW)+"px",
             "height":(boxH)+"px",
         });

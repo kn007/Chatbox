@@ -19,7 +19,7 @@
     var port = 4321;
     var hostname = location.hostname;
     // hostname="lifeislikeaboat.com";
-    var domain = location.protocol + "//" + hostname + ":" + port;
+    chatbox.domain = location.protocol + "//" + hostname + ":" + port;
 
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
@@ -36,6 +36,9 @@
 
 
     chatbox.init = function() {
+
+        // load ui
+        ui.init();
 
         // Read old uuid from cookie if exist
         if(utils.getCookie('chatuuid')!=='') {
@@ -71,7 +74,7 @@
         }
 
         // now make your connection with server!
-        chatbox.socket = io(domain);
+        chatbox.socket = io(chatbox.domain);
         socketEvent.register();
     }
 

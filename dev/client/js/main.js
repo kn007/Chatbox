@@ -9,7 +9,7 @@
     }else{
 
         console.log("Making Ajax call to load Chatbox HTML");
-        $('body').append($('<div>').load(domain+"/chatbox.html", function() {
+        $('body').append($('<div>').load(chatbox.domain+"/chatbox.html", function() {
             console.log("Chatbox HTML loaded with Ajax, load Chatbox now.");
             chatbox.init();
         }));
