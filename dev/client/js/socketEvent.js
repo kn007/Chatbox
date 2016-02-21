@@ -3,6 +3,7 @@
 
     var ui = chatbox.ui;
     var msgHandler = chatbox.msgHandler;
+    var notification = chatbox.notification;
 
     var socketEvent = chatbox.socketEvent;
 
@@ -51,6 +52,12 @@
         // Whenever the server emits 'new message', update the chat body
         socket.on('new message', function (data) {
             msgHandler.processChatMessage(data);
+                        // play new msg sound and change chatbox color to notify users
+            if (data.username !== chatbox.username) {
+                //newMsgBeep();
+                notification.receivedNewMsg();
+            }
+
         });
 
         // Received file
@@ -90,6 +97,11 @@
             ui.addLog(data.oldname + ' changes name to ' + data.username);
         });
 
+        // For New Message Notification
+        socket.on('reset2origintitle', function (data) {
+            notification.changeTitle.reset();
+        });
+
         // Whenever the server emits 'typing', show the typing message
         socket.on('typing', function (data) {
             addChatTyping(data);
@@ -100,10 +112,6 @@
             removeChatTyping(data);
         });
 
-        // For New Message Notification
-        socket.on('reset2origintitle', function (data) {
-            //changeTitle.reset();
-        });
     }
 
 

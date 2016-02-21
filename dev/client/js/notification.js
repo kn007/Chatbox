@@ -3,14 +3,10 @@ window.chatbox = window.chatbox || {};
 
 (function() {
 
+    var ui = chatbox.ui;
+    var utils = chatbox.utils;
 
-    function clearNewMessageNotification() {
-        changeTitle.reset();
-        socket.emit('reset2origintitle', {});
-    }
-
-
-
+    var notification = chatbox.notification;
 
     // New Message Received Notification
     // 1      --  Change Page Title Once (when the webpage state is not visible)
@@ -52,16 +48,39 @@ window.chatbox = window.chatbox || {};
         }
     };
 
+    notification.changeTitle = changeTitle;
+
+    function receivedNewMsg() {
+
+        if(document.hidden && changeTitleMode === 1 && changeTitle.done === 0) changeTitle.change();
+        if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
+        if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
+        if(!document.hidden) 
+            chatbox.socket.emit('reset2origintitle', {});
+    }
+
+    notification.receivedNewMsg = receivedNewMsg;
+
+
+    function clearNewMessageNotification() {
+        changeTitle.reset();
+        chatbox.socket.emit('reset2origintitle', {});
+    }
 
 
     document.addEventListener('visibilitychange', function() {
-        if(!document.hidden) clearNewMessageNotification();
-        if(getCookie('chatboxOpen')==='1') {
-            show();
-        }else{
-            hide();
-        }
+        if(!document.hidden) 
+            clearNewMessageNotification();
+
+        // even if we want this feature, it should not be in this file
+        // if(utils.getCookie('chatboxOpen')==='1') {
+        //     ui.show();
+        // }else{
+        //     ui.hide();
+        // }
     });
+
+
 
 
 

@@ -84,16 +84,7 @@
 
         // receiving new message
         if (!options.history && !options.typing) {
-
-            // play new msg sound and change chatbox color to notify users
-            if (data.username !== chatbox.username) {
-                //newMsgBeep();
-                if(document.hidden && changeTitleMode === 1 && changeTitle.done === 0) changeTitle.change();
-                if(document.hidden && changeTitleMode === 2 && changeTitle.done === 0) changeTitle.flash();
-                if(document.hidden && changeTitleMode === 3 && changeTitle.done === 0) changeTitle.notify();
-                if(!document.hidden) chatbox.socket.emit('reset2origintitle', {});
-            }
-
+            
             historyHandler.save(data.username, messageToSaveIntoCookie);
         }
 
