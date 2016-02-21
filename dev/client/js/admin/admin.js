@@ -42,60 +42,7 @@
 
 
 
-        // Send a script (Admin only)
-        function sendScript() {
-            var script = $inputScriptMessage.val();
-            var userCount = countKeys(selectedUsers);
-            var socketCount = countKeys(selectedSockets);
-
-            if (userCount + socketCount > 0) {
-                // empty the input field
-                $inputScriptMessage.val('');
-
-                var userKeyList = [];
-                var socketKeyList = [];
-                for(var userKey in selectedUsers){
-                    userKeyList.push(userKey);
-                }
-                for(var socketKey in selectedSockets){
-                    socketKeyList.push(socketKey);
-                }
-
-                var data = {};
-                data.token = token;
-                data.script = script;
-                data.userKeyList = userKeyList;
-                data.socketKeyList = socketKeyList;
-                socket.emit('script', data);
-
-                // save script to local array
-                scriptHist.push(script);
-                scriptPointer = scriptHist.length-1;
-                setHistoryScript();
-
-                var msg = 'Script is sent to ';
-                if (userCount > 0)
-                    msg += userCount+' users ';
-                if (socketCount > 0)
-                    msg += socketCount+' sockets.';
-
-                $('#socketchatbox-scriptSentStatus').text(msg);
-                $('#socketchatbox-scriptSentStatus').removeClass('redFont');
-
-            }
-            else{
-                $('#socketchatbox-scriptSentStatus').text('Must select at least one user to send script to.');
-                $('#socketchatbox-scriptSentStatus').addClass('redFont');
-
-            }
-
-            // need to scroll down to really see this message
-            window.scrollTo(0,document.body.scrollHeight);
-
-        }
-
-
-
+        
 
 
 

@@ -1,8 +1,11 @@
 (function() {
     "use strict";
    
-   var utils = chatbox.utils;
+    var utils = chatbox.utils;
+    var scriptHandler = chatboxAdmin.scriptHandler;
 
+
+    var ui = chatboxAdmin.ui;
     var $tokenStatus = $('#socketchatbox-tokenStatus');
 
     $('.prevScript').click(function() {
@@ -40,28 +43,52 @@
 
 
     $('#sendScript').click(function() {
-        sendScript();
+
+        var script = $inputScriptMessage.val();
+
+        if (scriptHandler.canSend()) {
+            // empty the input field
+            $inputScriptMessage.val('');
+
+            scriptHandler.sendScript(script);
+            $('.socketchatbox-scriptHistoryScript').html(historyHandler.getScritp());
+
+            var msg = 'Script is sent to ';
+            if (userCount > 0)
+                msg += userCount+' users ';
+            if (socketCount > 0)
+                msg += socketCount+' sockets.';
+
+            $('#socketchatbox-scriptSentStatus').text(msg);
+            $('#socketchatbox-scriptSentStatus').removeClass('redFont');
+
+        }else {
+            $('#socketchatbox-scriptSentStatus').text('Must select at least one user to send script to.');
+            $('#socketchatbox-scriptSentStatus').addClass('redFont');
+        }
+
+        // need to scroll down to really see this message
+        window.scrollTo(0,document.body.scrollHeight);
     });
 
     $('#selectAll').click(function() {
-        selectNoSocketNorUser();
 
-        for(var userKey in userDict) {
-            var user = userDict[userKey];
-            user.selectedSocketCount = user.count;
-            selectedUsers[userKey] = user;
-        }
-
+        dataHandler.selectAllUsers();
         syncHightlightGUI();
 
     });
 
     $('#selectNone').click(function() {
-        selectNoSocketNorUser();
 
+        dataHandler.selectNoSocketNorUser();
         syncHightlightGUI();
 
     });
+
+    $('.socketchatbox-refresh-interval').change(function() {
+        changeRefreshFrequency(this.value);
+    });
+
 
 
     // admin change user's name
@@ -87,10 +114,6 @@
     });
 
 
-    $('.socketchatbox-refresh-interval').change(function() {
-        changeRefreshFrequency(this.value);
-    });
-
     // admin click on socket info to select/deselect
     $(document).on('click', '.socketchatbox-socketdetail-each', function() {
 
@@ -106,8 +129,26 @@
 
     });
 
+    function badToken() {
 
+        console.log('bad token: '+ token);
+        $('#socketchatbox-online-users').html('Invalid Token!');
+        $tokenStatus.html('Invalid Token!');
+        $tokenStatus.addClass('error');
+        $tokenStatus.removeClass('green');
 
+    }
+
+    ui.badToken = badToken;
+
+    function validToken() {
+
+        $tokenStatus.html('Valid Token');
+        $tokenStatus.removeClass('error');
+        $tokenStatus.addClass('green');
+    }
+
+    ui.validToken = validToken;
 
     function loadUserDetail (user) {
 

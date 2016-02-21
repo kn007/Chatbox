@@ -1,7 +1,8 @@
 (function() {
     "use strict";
-   
-   var utils = chatbox.utils;
+
+    // admin share utils functions with common user, but add more functions
+    var utils = chatbox.utils;
 
 
     function getTimeElapsed(startTime, fromTime) {

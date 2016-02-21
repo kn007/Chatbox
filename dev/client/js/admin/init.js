@@ -1,17 +1,28 @@
 (function() {
+
     "use strict";
     //load history scripts
     //put in token
     window.chatboxAdmin = {};
-    chatboxAdmin.userDict = {};
-    chatboxAdmin.socketDict = {};
 
 
-    var utils = chatbox.utils;
+    chatboxAdmin.scriptHandler = {};
+    chatboxAdmin.dataHandler = {};
+    chatboxAdmin.ui = {};
+    chatboxAdmin.socketEvent = {};
 
-    
+    var utils = chatbox.utils; //share admin utils and common user utills
+    var socketEvent = chatboxAdmin.socketEvent;
+
+
+    var refreshIntervalID = -1;
+    var refreshInterval = 5;
+
+    chatboxAdmin.token = '123';
+
     chatboxAdmin.init = function() {
 
+        console.log("Admin init");
 
         if(utils.getCookie('chatBoxAdminToken')!=='') {
 
@@ -19,6 +30,8 @@
             $('#socketchatbox-token').val(chatboxAdmin.token);
 
         }
+
+        socketEvent.register();
 
         getUserList();
 
@@ -29,7 +42,7 @@
     function getUserList() {
 
         chatbox.socket.emit('getUserList', {token: chatboxAdmin.token});
-        refreshIntervalID = setTimeout(function(){
+        refreshIntervalID = setTimeout(function() {
             getUserList();
 
         }, refreshInterval*1000);

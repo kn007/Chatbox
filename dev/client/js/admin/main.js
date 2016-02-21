@@ -4,12 +4,12 @@
     var utils = chatbox.utils;
             
 
-    if(typeof chatbox !== "undefined")
+    if(isReady())
 
         chatboxAdmin.init(); 
 
     else
-
+        
         waitToStart();
 
 
@@ -19,7 +19,7 @@
 
         setTimeout(function(){
 
-            if(typeof chatbox !== "undefined") {
+            if(isReady()) {
                 
                 chatboxAdmin.init(); 
 
@@ -31,6 +31,12 @@
         }, 1000);
 
         console.log("Waiting for client.js to load...");
+    }
+
+    function isReady() {
+
+        return typeof chatbox !== "undefined" && typeof chatbox.socket !== "undefined" ;
+    
     }
 
 
