@@ -5,6 +5,7 @@
     var ui = chatbox.ui;
     var utils = chatbox.utils;
     var fileHandler = chatbox.fileHandler;
+    
 
     var $username = $('#socketchatbox-username');
     var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username

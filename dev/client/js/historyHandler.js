@@ -4,9 +4,9 @@
 
     var utils = chatbox.utils;
     var msgHandler = chatbox.msgHandler;
-    var chatHistory = chatbox.chatHistory;
+    var historyHandler = chatbox.historyHandler;
 
-    chatHistory.load = function() {
+    historyHandler.load = function() {
         console.log("Load chat history");
 
         var chatHistory = [];
@@ -37,7 +37,7 @@
     }
 
 
-    chatHistory.save = function(username, msg) {
+    historyHandler.save = function(username, msg) {
 
         var chatHistory = [];
 

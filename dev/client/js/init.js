@@ -3,7 +3,7 @@
     window.chatbox = {};
     chatbox.utils = {};
     chatbox.ui = {};
-    chatbox.chatHistory = {};
+    chatbox.historyHandler = {};
     chatbox.fileHandler = {};
     chatbox.msgHandler = {};
     chatbox.notification = {};
@@ -11,7 +11,7 @@
 
     var utils = chatbox.utils;
     var ui = chatbox.ui;
-    var chatHistory = chatbox.chatHistory;
+    var historyHandler = chatbox.historyHandler;
     var socketEvent = chatbox.socketEvent;
 
     // change this to the port you want to use on server if you are hosting
@@ -58,7 +58,7 @@
             utils.addCookie('chatname', chatbox.username);
         }
 
-        chatHistory.load();
+        historyHandler.load();
 
         // Show/hide chatbox base on cookie value
         if(utils.getCookie('chatboxOpen')==='1') {

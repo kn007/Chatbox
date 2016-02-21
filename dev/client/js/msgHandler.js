@@ -1,7 +1,7 @@
 (function() {
     "use strict";
 
-    var chatHistory = chatbox.chatHistory;
+    var historyHandler = chatbox.historyHandler;
     var msgHandler = chatbox.msgHandler;
     var utils = chatbox.utils;
     var ui = chatbox.ui;
@@ -128,7 +128,7 @@
                 if(!document.hidden) chatbox.socket.emit('reset2origintitle', {});
             }
 
-            chatHistory.save(data.username, messageToSaveIntoCookie);
+            historyHandler.save(data.username, messageToSaveIntoCookie);
         }
 
 
