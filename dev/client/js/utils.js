@@ -71,14 +71,14 @@
         return '.' + host;
     }
 
-    function checkImageUrl (url) {
+    function checkImageUrl(url) {
         return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     }
     utils.checkImageUrl = checkImageUrl;
 
     // Prevents input from having injected markup
-    function cleanInput (input) {
-        return $('<div/>').text(input).text();
+    function cleanInput(input) {
+        return $('<div/>').html(input).text();
     }
     utils.cleanInput = cleanInput;
 

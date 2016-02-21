@@ -38,7 +38,7 @@
             posttime += "</span>";
         }
 
-        var $usernameDiv = $('<div></div>').html($("<div>").text(data.username).html()+posttime);
+        var $usernameDiv = $('<div></div>').html(utils.cleanInput(data.username)+posttime);
 
 
         $usernameDiv.addClass('socketchatbox-username');
@@ -73,7 +73,7 @@
 
             messageToSaveIntoCookie = data.message;
 
-            if (utils.checkImageUrl(data.message)) {
+            if (utils.checkImageUrl(data.message)) { // may cause secure issue?
                 //receiving image url
                 $messageBodyDiv.html("<a target='_blank' href='" + data.message + "'><img class='chatbox-image' src='" + data.message + "'></a>");
             }else {
@@ -84,7 +84,7 @@
 
         // receiving new message
         if (!options.history && !options.typing) {
-            
+
             historyHandler.save(data.username, messageToSaveIntoCookie);
         }
 

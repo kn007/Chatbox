@@ -31,8 +31,6 @@
     var d = new Date();
     var username = 'visitor#'+ d.getMinutes()+ d.getSeconds();
     chatbox.username = username;
-    var comment_author = '';
-    var totalUser = 0;
 
 
     chatbox.init = function() {

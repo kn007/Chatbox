@@ -236,6 +236,7 @@
     // since we may have rules about what names are forbidden in the future
     function changeNameByEdit() {
         var name = $('#socketchatbox-txt_fullname').val();
+        name = utils.cleanInput(name);
         name = $.trim(name);
         if (name === chatbox.username || name === "")  {
             $username.text(chatbox.username);

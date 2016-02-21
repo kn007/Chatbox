@@ -80,8 +80,4 @@ window.chatbox = window.chatbox || {};
         // }
     });
 
-
-
-
-
 })();
