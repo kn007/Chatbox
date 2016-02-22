@@ -60,6 +60,14 @@
         return utils.countKeys(selectedSockets);
     }
 
+    dataHandler.getSelectedUsers= function() {
+        return selectedUsers;
+    }
+
+    dataHandler.getSelectedSockets= function() {
+        return selectedSockets;
+    }
+
     // this removes the user and his sockets from all lists
     function clearUserSocketFromSelection(userID) {
         // remove user

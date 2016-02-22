@@ -21,10 +21,10 @@
 
             var userKeyList = [];
             var socketKeyList = [];
-            for(var userKey in dataHandler.selectedUsers){
+            for(var userKey in dataHandler.getSelectedUsers()){
                 userKeyList.push(userKey);
             }
-            for(var socketKey in dataHandler.selectedSockets){
+            for(var socketKey in dataHandler.getSelectedSockets()){
                 socketKeyList.push(socketKey);
             }
 
