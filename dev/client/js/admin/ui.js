@@ -3,7 +3,7 @@
    
     var utils = chatbox.utils;
     var scriptHandler = chatboxAdmin.scriptHandler;
-
+    var dataHandler = chatboxAdmin.dataHandler;
 
     var ui = chatboxAdmin.ui;
     var $tokenStatus = $('#socketchatbox-tokenStatus');
@@ -97,10 +97,10 @@
         var userID = $this.data('id');
         var newName = $('.socketchatbox-userdetail-name-edit').val();
         var data = {};
-        data.token = token;
+        data.token = chatboxAdmin.token;
         data.userID = userID;
         data.newName = newName;
-        socket.emit('admin change username', data);
+        chatbox.socket.emit('admin change username', data);
         restartGetUserList();
 
     });
@@ -131,7 +131,7 @@
 
     function badToken() {
 
-        console.log('bad token: '+ token);
+        console.log('bad token: '+ chatboxAdmin.token);
         $('#socketchatbox-online-users').html('Invalid Token!');
         $tokenStatus.html('Invalid Token!');
         $tokenStatus.addClass('error');
@@ -166,14 +166,14 @@
         $('.socketchatbox-userdetail-landingpage').text(user.url);
         $('.socketchatbox-userdetail-referrer').text(user.referrer);
         $('.socketchatbox-userdetail-ip').text(user.ip);
-        $('.socketchatbox-userdetail-jointime').text(getTimeElapsed(user.joinTime));
+        $('.socketchatbox-userdetail-jointime').text(utils.getTimeElapsed(user.joinTime));
         $('.socketchatbox-userdetail-totalmsg').text(user.msgCount);
         if(!user.lastMsg)
             user.lastMsg = "";
         $('.socketchatbox-userdetail-lastmsg').text("\""+user.lastMsg+"\"");
 
 
-        $('.socketchatbox-userdetail-lastactive').text(getTimeElapsed(user.lastActive));
+        $('.socketchatbox-userdetail-lastactive').text(utils.getTimeElapsed(user.lastActive));
         $('.socketchatbox-userdetail-useragent').text(user.userAgent);
 
 
@@ -195,8 +195,8 @@
             if (s.lastMsg)
                 socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
 
-            socketInfoHTML += "<p>Idle Time: " + getTimeElapsed(s.lastActive) + "</p>";
-            socketInfoHTML += "<p>Connection Time: " + getTimeElapsed(s.joinTime) + "</p>";
+            socketInfoHTML += "<p>Idle Time: " + utils.getTimeElapsed(s.lastActive) + "</p>";
+            socketInfoHTML += "<p>Connection Time: " + utils.getTimeElapsed(s.joinTime) + "</p>";
 
             $socketInfo.html(socketInfoHTML);
             $socketInfo.addClass('socketchatbox-socketdetail-each');
@@ -239,20 +239,20 @@
     $(document).on('click', '.username-info-viewmore', function() {
         var $this = $(this);
         var userID = $this.data('id');
-        var user = userDict[userID];
+        var user = dataHandler.getUserDict()[userID];
 
         // already opened, close now
-        if (openedUserID === userID) {
+        if (dataHandler.getOpenedUserID() === userID) {
 
             $('.socketchatbox-admin-userdetail-pop').hide();
             $this.text('[ ↓ ]');
             $this.removeClass('blue');
-            openedUserID = '';
+            dataHandler.setOpenedUserID('');
 
         }else{
 
-            if (openedUserID in userDict) {
-                var preOpenedUser = userDict[openedUserID];
+            if (dataHandler.getOpenedUserID() in dataHandler.getUserDict()) {
+                var preOpenedUser = dataHandler.getUserDict()[dataHandler.getOpenedUserID()];
                 preOpenedUser.arrowSpan.text('[ ↓ ]');
                 preOpenedUser.arrowSpan.removeClass('blue');
 
@@ -261,26 +261,77 @@
             $this.text('[ ↑ ]');
             $this.addClass('blue');
 
-            openedUserID = userID;
+            dataHandler.setOpenedUserID(userID);
             user.arrowSpan = $this;
             // Populate data into popup
             loadUserDetail(user);
 
-            // TODO: show full browse history
-            // url ----------- how long stay on page ------ etc. learn from GA dashboard
-
             // show
             if (!$('.socketchatbox-admin-userdetail-pop').is(":visible"))
-                $('.socketchatbox-admin-userdetail-pop').slideFadeToggle();
+                $('.socketchatbox-admin-userdetail-pop').show();
         }
 
     });
 
+    function renderOnlineUsers() {
+
+        for (var key in dataHandler.getUserDict()) {
+            var user = dataHandler.getUserDict()[key];
+
+
+            // display online user
+
+            var nameWithCount = user.username;
+
+            // show number of connections of this user if more than one
+            if(user.count > 1){
+                nameWithCount += "("+user.count+")";
+            }
+
+            var $usernameSpan = $("<span></span>");
+            $usernameSpan.text(nameWithCount);
+            $usernameSpan.prop('title', 'Join Time: '+ utils.getTimeElapsed(user.joinTime)); // better info to show?
+            $usernameSpan.addClass("username-info");
+            $usernameSpan.data('id', user.id);
+
+            // add [ ↓ ]  after the user's name
+            var $downArrowSpan = $("<span></span>");
+            if (user.id === dataHandler.getOpenedUserID()){
+                $downArrowSpan.text('[ ↑ ]');
+                $downArrowSpan.prop('title', 'Close User Detail');
+
+                $downArrowSpan.addClass('blue');
+                user.arrowSpan = $downArrowSpan;
+
+            } else {
+                $downArrowSpan.text('[ ↓ ]');
+                $downArrowSpan.prop('title', 'Open User Detail');
+
+            }
+
+            $downArrowSpan.addClass("username-info-viewmore");
+            $downArrowSpan.data('id', user.id);
+
+
+            // also link user with his jquery object
+            user.jqueryObj = $usernameSpan;
+
+            $('#socketchatbox-online-users').append($usernameSpan);
+            $('#socketchatbox-online-users').append($downArrowSpan);
+
+            // reload user detail if this is the user selected
+            //if(user.id === openedUserID) {
+            //    loadUserDetail(user);
+            //    newOpenedUserID = user.id;
+            //}
+        }
+    }
+    ui.renderOnlineUsers = renderOnlineUsers;
 
 
 
     function changeRefreshFrequency(newVal) {
-        refreshInterval = newVal;
+        chatboxAdmin.refreshInterval = newVal;
         $('.socketchatbox-refresh-interval-val').text(newVal);
 
         // immediately start one
@@ -288,23 +339,23 @@
     }
 
     function restartGetUserList(){
-        clearTimeout(refreshIntervalID);
-        getUserList();
+        clearTimeout(chatboxAdmin.refreshIntervalID);
+        chatboxAdmin.getUserList();
     }
 
 
 
     function updateToken(t) {
-        token = t;
-        utils.addCookie('chatBoxAdminToken', token);
+        chatboxAdmin.token = t;
+        utils.addCookie('chatBoxAdminToken', t);
         restartGetUserList();
     }
 
     // update GUI to sync with data, call this every time you change value of user.selectedSocketCount
     function syncHightlightGUI() {
         // sync user highlight
-        for(var key in userDict) {
-            var user = userDict[key];
+        for(var key in dataHandler.getUserDict()) {
+            var user = dataHandler.getUserDict()[key];
             // check to see what status username selection should be in
             if (user.selectedSocketCount === 0) {
                 // deselect
@@ -327,7 +378,7 @@
                 }
             }
 
-            if (user.id == openedUserID) {
+            if (user.id === dataHandler.getOpenedUserID()) {
                 for(var i = 0; i < user.socketList.length; i++) {
                     var s = user.socketList[i];
                     if(user.id in selectedUsers || s.id in selectedSockets){
@@ -351,6 +402,8 @@
 
         }
     }
+
+    ui.syncHightlightGUI = syncHightlightGUI;
 
 
 

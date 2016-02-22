@@ -65,64 +65,7 @@
                 //}
 
                 dataHandler.loadUserSocketFromServer(data.userdict);
-
-                for (var key in userDict) {
-
-                    var user = userDict[key];
-
- 
-                    // display online user
-
-                    var nameWithCount = user.username;
-
-                    // show number of connections of this user if more than one
-                    if(user.count > 1){
-                        nameWithCount += "("+user.count+")";
-                    }
-
-                    var $usernameSpan = $("<span></span>");
-                    $usernameSpan.text(nameWithCount);
-                    $usernameSpan.prop('title', 'Join Time: '+ getTimeElapsed(user.joinTime)); // better info to show?
-                    $usernameSpan.addClass("username-info");
-                    $usernameSpan.data('id', user.id);
-
-                    // add [ ↓ ]  after the user's name
-                    var $downArrowSpan = $("<span></span>");
-                    if (user.id === openedUserID){
-                        $downArrowSpan.text('[ ↑ ]');
-                        $downArrowSpan.prop('title', 'Close User Detail');
-
-                        $downArrowSpan.addClass('blue');
-                        user.arrowSpan = $downArrowSpan;
-
-                    } else {
-                        $downArrowSpan.text('[ ↓ ]');
-                        $downArrowSpan.prop('title', 'Open User Detail');
-
-                    }
-
-                    $downArrowSpan.addClass("username-info-viewmore");
-                    $downArrowSpan.data('id', user.id);
-
-
-                    // also link user with his jquery object
-                    user.jqueryObj = $usernameSpan;
-
-                    $('#socketchatbox-online-users').append($usernameSpan);
-                    $('#socketchatbox-online-users').append($downArrowSpan);
-
-                    // reload user detail if this is the user selected
-                    if(user.id === openedUserID) {
-                        loadUserDetail(user);
-                        newOpenedUserID = user.id;
-                    }
-                }
-
-                // data transfer done, update local stored data
-                openedUserID = newOpenedUserID;
-                selectedUsers = newSelectedUsers;
-                selectedSockets = newSelectedSockets;
-
+                ui.renderOnlineUsers();
                 // update view
                 ui.syncHightlightGUI();
             }

@@ -19,10 +19,22 @@
     // partiallyselectedUsers are users of selectedSocket
     var partiallyselectedUsers = {};
 
-    // if a user is in partiallyselectedUsers, he's not in selectedUsers
+    // Note: if a user is in partiallyselectedUsers, he's not in selectedUsers
     // if no socket of a user is selected, he's in neither partiallyselectedUsers nor selectedUsers
 
+    var openedUserID = 'default';
 
+    dataHandler.getUserDict = function() {
+        return userDict;
+    }
+
+    dataHandler.getOpenedUserID = function() {
+        return openedUserID;
+    }
+
+    dataHandler.setOpenedUserID = function(id) {
+        openedUserID = id;
+    }
 
     // this removes the user and his sockets from all lists
     function clearUserSocketFromSelection(userID) {
@@ -72,6 +84,8 @@
         }
 
     }
+
+    dataHandler.toggleUserSelection = toggleUserSelection;
 
     function toggleSocketSelection(socketID) {
 
@@ -125,6 +139,7 @@
             clearUserSocketFromSelection(user.id);
         }
     }
+    dataHandler.selectNoSocketNorUser = selectNoSocketNorUser;
 
     function selectAllUsers() {
 
@@ -133,7 +148,7 @@
             selectUser(user.id);
         }
     }
-
+    dataHandler.selectAllUsers = selectAllUsers;
 
     function addSelectedSockets(user) {
         for(var i=0; i<user.socketList.length; i++) {

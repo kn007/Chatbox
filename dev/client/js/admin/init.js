@@ -15,8 +15,8 @@
     var socketEvent = chatboxAdmin.socketEvent;
 
 
-    var refreshIntervalID = -1;
-    var refreshInterval = 5;
+    chatboxAdmin.refreshIntervalID = -1;
+    chatboxAdmin.refreshInterval = 5; //sec
 
     chatboxAdmin.token = '123';
 
@@ -42,11 +42,13 @@
     function getUserList() {
 
         chatbox.socket.emit('getUserList', {token: chatboxAdmin.token});
-        refreshIntervalID = setTimeout(function() {
+        chatboxAdmin.refreshIntervalID = setTimeout(function() {
             getUserList();
 
-        }, refreshInterval*1000);
+        }, chatboxAdmin.refreshInterval*1000);
     }
+
+    chatboxAdmin.getUserList = getUserList;
 
 
 })();

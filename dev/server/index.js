@@ -477,7 +477,6 @@ io.on('connection', function (socket) {
     // this callback is currently also used for authentication
     socket.on('getUserList', function (data) {
 
-        log('receive get user list ');
         if(data.token === token) {
 
             adminUser = socket.user;
