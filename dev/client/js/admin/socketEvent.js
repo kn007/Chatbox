@@ -65,9 +65,15 @@
                 //}
 
                 dataHandler.loadUserSocketFromServer(data.userdict);
-                ui.renderOnlineUsers();
+
+
                 // update view
-                ui.syncHightlightGUI();
+                ui.renderOnlineUsers();
+                ui.resetAllUsersHighlight();
+
+                ui.renderOpenedUserDetail();
+
+
             }
 
         });

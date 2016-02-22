@@ -7,6 +7,15 @@
 
     var ui = chatboxAdmin.ui;
     var $tokenStatus = $('#socketchatbox-tokenStatus');
+    var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
+
+
+    //=================================================================================//
+    //=================================================================================//
+    //===================================Script UI=====================================//
+    //=================================================================================//
+    //=================================================================================//
+
 
     $('.prevScript').click(function() {
 
@@ -51,13 +60,13 @@
             $inputScriptMessage.val('');
 
             scriptHandler.sendScript(script);
-            $('.socketchatbox-scriptHistoryScript').html(historyHandler.getScritp());
+            $('.socketchatbox-scriptHistoryScript').html(scriptHandler.getScript());
 
-            var msg = 'Script is sent to ';
-            if (userCount > 0)
-                msg += userCount+' users ';
-            if (socketCount > 0)
-                msg += socketCount+' sockets.';
+            var msg = 'Script is sent.';
+            // if (userCount > 0)
+            //     msg += userCount+' users ';
+            // if (socketCount > 0)
+            //     msg += socketCount+' sockets.';
 
             $('#socketchatbox-scriptSentStatus').text(msg);
             $('#socketchatbox-scriptSentStatus').removeClass('redFont');
@@ -71,18 +80,31 @@
         window.scrollTo(0,document.body.scrollHeight);
     });
 
+
+
+    //=================================================================================//
+    //=================================================================================//
+    //===============================End of Script UI==================================//
+    //=================================================================================//
+    //=================================================================================//
+
+
+
     $('#selectAll').click(function() {
 
         dataHandler.selectAllUsers();
-        syncHightlightGUI();
+        resetAllUsersHighlight();
+        if (dataHandler.getOpenedUserID() !== '')
+            resetSocketHighlight(dataHandler.getOpenedUserID());
 
     });
 
     $('#selectNone').click(function() {
 
         dataHandler.selectNoSocketNorUser();
-        syncHightlightGUI();
-
+        resetAllUsersHighlight();
+        if (dataHandler.getOpenedUserID() !== '')
+            resetSocketHighlight(dataHandler.getOpenedUserID());
     });
 
     $('.socketchatbox-refresh-interval').change(function() {
@@ -110,7 +132,12 @@
         var $this = $(this);
         var userID = $this.data('id');
         dataHandler.toggleUserSelection(userID);
-        syncHightlightGUI();
+        resetAllUsersHighlight();
+
+        // only need to resetSocketHighlight() if admin is clicking opened user 
+
+        if (dataHandler.getOpenedUserID() === userID)
+            resetOpenUserSocketHighlight(userID); 
     });
 
 
@@ -120,11 +147,14 @@
         var $this = $(this);
 
         var socketID = $this.data('id');
+        var s = dataHandler.getSocketDict()[socketID];
+
+        var user = s.user;
 
         dataHandler.toggleSocketSelection(socketID);
 
-        //console.log(user.selectedSocketCount);
-        syncHightlightGUI();
+        resetAllUsersHighlight();
+        resetOpenUserSocketHighlight(user.id);
 
 
     });
@@ -150,7 +180,7 @@
 
     ui.validToken = validToken;
 
-    function loadUserDetail (user) {
+    function loadUserDetail(user) {
 
         // user info
 
@@ -228,12 +258,6 @@
 
             $actionHistoryDiv.append($actionDiv);
         }
-
-
-
-
-        syncHightlightGUI();
-
     }
 
     $(document).on('click', '.username-info-viewmore', function() {
@@ -251,8 +275,9 @@
 
         }else{
 
-            if (dataHandler.getOpenedUserID() in dataHandler.getUserDict()) {
-                var preOpenedUser = dataHandler.getUserDict()[dataHandler.getOpenedUserID()];
+            var preOpenedUserID = dataHandler.getOpenedUserID();
+            if (preOpenedUserID in dataHandler.getUserDict()) {
+                var preOpenedUser = dataHandler.getUserDict()[preOpenedUserID];
                 preOpenedUser.arrowSpan.text('[ ↓ ]');
                 preOpenedUser.arrowSpan.removeClass('blue');
 
@@ -263,16 +288,19 @@
 
             dataHandler.setOpenedUserID(userID);
             user.arrowSpan = $this;
-            // Populate data into popup
+            // Populate data into user detail
             loadUserDetail(user);
 
             // show
             if (!$('.socketchatbox-admin-userdetail-pop').is(":visible"))
                 $('.socketchatbox-admin-userdetail-pop').show();
+
+            resetOpenUserSocketHighlight(userID);
         }
 
     });
 
+    // this function doesn't take care highlighting 
     function renderOnlineUsers() {
 
         for (var key in dataHandler.getUserDict()) {
@@ -326,6 +354,7 @@
             //}
         }
     }
+
     ui.renderOnlineUsers = renderOnlineUsers;
 
 
@@ -351,59 +380,76 @@
         restartGetUserList();
     }
 
-    // update GUI to sync with data, call this every time you change value of user.selectedSocketCount
-    function syncHightlightGUI() {
+    function resetAllUsersHighlight() {
         // sync user highlight
         for(var key in dataHandler.getUserDict()) {
             var user = dataHandler.getUserDict()[key];
             // check to see what status username selection should be in
-            if (user.selectedSocketCount === 0) {
-                // deselect
+
+            
+            if (dataHandler.userFullySelected(key)) {
+
+                user.jqueryObj.removeClass('partially-selected');
+                user.jqueryObj.addClass('selected');
+
+            }else if (dataHandler.userPartiallySelected(key)) {
+
+                user.jqueryObj.removeClass('selected');
+                user.jqueryObj.addClass('partially-selected');
+
+            }else {
+
                 user.jqueryObj.removeClass('selected');
                 user.jqueryObj.removeClass('partially-selected');
-
-
-            }else if (user.selectedSocketCount < user.count) {
-                // partial select
-                if(user.jqueryObj) {
-                    user.jqueryObj.removeClass('selected');
-                    user.jqueryObj.addClass('partially-selected');
-                }
-
-            }else {
-                // full select
-                if(user.jqueryObj) {
-                    user.jqueryObj.removeClass('partially-selected');
-                    user.jqueryObj.addClass('selected');
-                }
-            }
-
-            if (user.id === dataHandler.getOpenedUserID()) {
-                for(var i = 0; i < user.socketList.length; i++) {
-                    var s = user.socketList[i];
-                    if(user.id in selectedUsers || s.id in selectedSockets){
-
-                        s.jqueryObj.addClass('selectedSocket');
-
-                    }else{
-                        s.jqueryObj.removeClass('selectedSocket');
-                    }
-                }
-            }else {
-
-                for(var i = 0; i < user.socketList.length; i++) {
-                    var s = user.socketList[i];
-                    if(s.jqueryObj)
-                        s.jqueryObj.removeClass('selectedSocket');
-
-                }
-
             }
 
         }
+
     }
 
-    ui.syncHightlightGUI = syncHightlightGUI;
+    ui.resetAllUsersHighlight = resetAllUsersHighlight;
+
+    // only need to call this when the user is opened
+    function resetOpenUserSocketHighlight(userID) {
+        
+        // console.log("resetOpenUserSocketHighlight "+userID);
+
+        var user = dataHandler.getUserDict()[userID];
+
+        for (var i = 0; i < user.socketList.length; i++) {
+
+            var s = user.socketList[i];
+
+            if(dataHandler.userFullySelected(user.id) || dataHandler.socketSelected(s.id)) {
+
+                s.jqueryObj.addClass('selectedSocket');
+
+            }else {
+                s.jqueryObj.removeClass('selectedSocket');
+            }
+        }
+
+
+    }
+    // only if there's a user that's opened
+    function renderOpenedUserDetail() {
+            
+        var openedUserID = dataHandler.getOpenedUserID();
+        if (openedUserID in dataHandler.getUserDict()) {
+
+            loadUserDetail(dataHandler.getUserDict()[openedUserID]);
+            resetOpenUserSocketHighlight(openedUserID);
+
+        }else {
+            dataHandler.setOpenedUserID('');
+        }
+
+
+    }
+
+    ui.renderOpenedUserDetail = renderOpenedUserDetail;
+
+  
 
 
 

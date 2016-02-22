@@ -2,14 +2,15 @@
     "use strict";
    
     var utils = chatbox.utils;
-
+    var dataHandler = chatboxAdmin.dataHandler;
 
     var scriptHandler = chatboxAdmin.scriptHandler;
 
+
     scriptHandler.canSend = function() {
         
-        var userCount = utils.countKeys(selectedUsers);
-        var socketCount = utils.countKeys(selectedSockets);
+        var userCount = dataHandler.selectedUsersCount();
+        var socketCount = dataHandler.selectedSocketsCount();
 
         return (userCount + socketCount > 0);
     }
@@ -28,7 +29,7 @@
             }
 
             var data = {};
-            data.token = token;
+            data.token = chatboxAdmin.token;
             data.script = script;
             data.userKeyList = userKeyList;
             data.socketKeyList = socketKeyList;
@@ -39,7 +40,7 @@
 
     }
 
-
+    scriptHandler.sendScript = sendScript;
 
 
     //=================================================

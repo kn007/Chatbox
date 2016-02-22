@@ -28,12 +28,36 @@
         return userDict;
     }
 
+    dataHandler.getSocketDict = function() {
+        return socketDict;
+    }
+
     dataHandler.getOpenedUserID = function() {
         return openedUserID;
     }
 
     dataHandler.setOpenedUserID = function(id) {
         openedUserID = id;
+    }
+
+    dataHandler.userFullySelected = function(userID) {
+        return userID in selectedUsers;
+    }
+
+    dataHandler.userPartiallySelected = function(userID) {
+        return userID in partiallyselectedUsers;
+    }
+
+    dataHandler.socketSelected = function(socketID) {
+        return socketID in selectedSockets;
+    }
+
+    dataHandler.selectedUsersCount = function() {
+        return utils.countKeys(selectedUsers);
+    }
+
+    dataHandler.selectedSocketsCount = function() {
+        return utils.countKeys(selectedSockets);
     }
 
     // this removes the user and his sockets from all lists
@@ -103,30 +127,39 @@
             user.selectedSocketCount++;
 
         }
-
+        // console.log("user.selectedSocketCount " + user.selectedSocketCount);
         cleanUp(user);
 
     }
 
+    dataHandler.toggleSocketSelection = toggleSocketSelection;
+
+
     // decide where the socket/user go base on selectedUserCount
 
     function cleanUp(user) {
+        //console.log("user.selectedUserCount "+user.selectedUserCount);
+        //console.log("user.count "+user.count);
+        // console.log('cleanUp');
+        // console.log(user.selectedSocketCount);
+        if (user.selectedSocketCount === user.count) {
 
-        if (user.selectedUserCount === user.count) {
-
-            clearUserSocketFromSelection(userID);
-            selectUser(userID);
+            clearUserSocketFromSelection(user.id);
+            selectUser(user.id);
 
         }else if (user.selectedSocketCount > 0) {
 
             partiallyselectedUsers[user.id] = user;
             addSelectedSockets(user);
+            delete selectedUsers[user.id];
 
         }else {
 
-            clearUserSocketFromSelection(userID);
+            clearUserSocketFromSelection(user.id);
 
         }
+
+
     }
 
 
@@ -139,6 +172,7 @@
             clearUserSocketFromSelection(user.id);
         }
     }
+
     dataHandler.selectNoSocketNorUser = selectNoSocketNorUser;
 
     function selectAllUsers() {
@@ -148,6 +182,7 @@
             selectUser(user.id);
         }
     }
+
     dataHandler.selectAllUsers = selectAllUsers;
 
     function addSelectedSockets(user) {
@@ -155,6 +190,9 @@
             var s = user.socketList[i];
             if (s.selected)
                 selectedSockets[s.id] = s;
+            else
+                delete selectedSockets[s.id];
+
         }
     }
 

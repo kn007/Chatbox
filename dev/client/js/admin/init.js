@@ -16,7 +16,7 @@
 
 
     chatboxAdmin.refreshIntervalID = -1;
-    chatboxAdmin.refreshInterval = 5; //sec
+    chatboxAdmin.refreshInterval = 500; //sec
 
     chatboxAdmin.token = '123';
 
