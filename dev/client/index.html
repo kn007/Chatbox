@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Chatbox</title>
-        <link rel="stylesheet" href="/style/client.css">
+        <link rel="stylesheet" href="/chatbox/style/client.css">
     </head>
     <body>
 
@@ -38,20 +38,25 @@
 
     </body>
 
-    <script src="/lib/jquery-1.9.0.min.js"></script>
-    <script src="/lib/socket.io.js"></script>
+    <script src="/chatbox/lib/jquery-1.9.0.min.js"></script>
+    <script src="/chatbox/lib/socket.io.js"></script>
 
 
-    <script src="/js/init.js"></script>
+    <script src="/chatbox/init.js"></script>
 
-    <script src="/js/historyHandler.js"></script>
-    <script src="/js/msgHandler.js"></script>
-    <script src="/js/fileHandler.js"></script>
-    <script src="/js/notification.js"></script>
-    <script src="/js/socketEvent.js"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/ui.js"></script>
+    <script src="/chatbox/controllers/chatboxController.js"></script>
+    <script src="/chatbox/controllers/msgController.js"></script>
+    <script src="/chatbox/controllers/fileController.js"></script>
+    <script src="/chatbox/controllers/usernameController.js"></script>
 
-    <script src="/js/main.js"></script>
+    <script src="/chatbox/handlers/historyHandler.js"></script>
+    <script src="/chatbox/handlers/msgHandler.js"></script>
+    <script src="/chatbox/handlers/fileHandler.js"></script>
+    <script src="/chatbox/handlers/notificationHandler.js"></script>
+    <script src="/chatbox/handlers/socketHandler.js"></script>
+
+    <script src="/chatbox/utils/utils.js"></script>
+
+    <script src="/chatbox/main.js"></script>
 
 </html>

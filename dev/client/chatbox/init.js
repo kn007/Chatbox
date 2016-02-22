@@ -3,6 +3,7 @@
     window.chatbox = {};
     chatbox.utils = {};
     chatbox.ui = {};
+    chatbox.ui.init = []; //init is an array of functions
     chatbox.historyHandler = {};
     chatbox.fileHandler = {};
     chatbox.msgHandler = {};
@@ -35,8 +36,10 @@
 
     chatbox.init = function() {
 
-        // load ui
-        ui.init();
+        // load jquery objects and register events
+        for (var i = 0; i < ui.init.length; i++) {
+            ui.init[i]();
+        }
 
         // Read old uuid from cookie if exist
         if(utils.getCookie('chatuuid')!=='') {
