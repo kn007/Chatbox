@@ -15,10 +15,14 @@
     //=================================================================================//
     //=================================================================================//
 
+    ui.init.push(function() {
 
-    $('.socketchatbox-admin-lookupIP').click(function() {
-        window.open("https://geoiptool.com/en/?ip=");
+        $('.socketchatbox-admin-lookupIP').click(function() {
+            window.open("https://geoiptool.com/en/?ip=");
+        });
+
     });
+
 
     // open the user profile div
     $(document).on('click', '.username-info-viewmore', function() {
@@ -56,7 +60,7 @@
             if (!$('.socketchatbox-admin-userdetail-pop').is(":visible"))
                 $('.socketchatbox-admin-userdetail-pop').show();
 
-            resetOpenUserSocketHighlight(userID);
+            ui.resetOpenUserSocketHighlight(userID);
         }
 
     });
@@ -72,7 +76,7 @@
         data.userID = userID;
         data.newName = newName;
         chatbox.socket.emit('admin change username', data);
-        restartGetUserList();
+        chatboxAdmin.restartGetUserList();
 
     });
 
@@ -81,9 +85,9 @@
         // user info
         loadUserProfile(user);
         // socket info
-        loadSocketDetail(user);
+        ui.loadSocketDetail(user);
         // action history
-        loadUserActionHistory(user);
+        ui.loadUserActionHistory(user);
         
     }
 
@@ -118,7 +122,7 @@
         if (openedUserID in dataHandler.getUserDict()) {
 
             loadUserDetail(dataHandler.getUserDict()[openedUserID]);
-            resetOpenUserSocketHighlight(openedUserID);
+            ui.resetOpenUserSocketHighlight(openedUserID);
 
         }else {
             dataHandler.setOpenedUserID('');
@@ -126,30 +130,7 @@
 
     }
 
-    ui.renderOpenedUserDetail = renderOpenedUserDetail;
-
-
-    // only need to call this when the user is opened
-    function resetOpenUserSocketHighlight(userID) {
-        
-        // console.log("resetOpenUserSocketHighlight "+userID);
-
-        var user = dataHandler.getUserDict()[userID];
-
-        for (var i = 0; i < user.socketList.length; i++) {
-
-            var s = user.socketList[i];
-
-            if(dataHandler.userFullySelected(user.id) || dataHandler.socketSelected(s.id)) {
-
-                s.jqueryObj.addClass('selectedSocket');
-
-            }else {
-                s.jqueryObj.removeClass('selectedSocket');
-            }
-        }
-
-    }
+    ui.renderOpenedUserDetail = renderOpenedUserDetail; 
 
 
 })();

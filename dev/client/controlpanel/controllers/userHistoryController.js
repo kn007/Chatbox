@@ -15,10 +15,16 @@
     //=================================================================================//
     //=================================================================================//
 
+    ui.init.push(function() {
+
+        ui.$actionHistoryDiv = $('.socketchatbox-userdetail-actions');
+
+    });
+
+
     function loadUserActionHistory(user) {
 
-        var $actionHistoryDiv = $('.socketchatbox-userdetail-actions');
-        $actionHistoryDiv.html('');
+        ui.$actionHistoryDiv.html('');
 
         for (var i = 0; i < user.actionList.length; i++) {
             var action = user.actionList[i];
@@ -35,10 +41,11 @@
             $actionDiv.html(str);
             $actionDiv.addClass('socketchatbox-userdetail-actions-each');
 
-            $actionHistoryDiv.append($actionDiv);
+            ui.$actionHistoryDiv.append($actionDiv);
         }
     }
 
+    ui.loadUserActionHistory = loadUserActionHistory;
 
 
 })();

@@ -14,27 +14,30 @@
     //============================== Online Users Area ================================//
     //=================================================================================//
     //=================================================================================//
+    
 
-    $('#selectAll').click(function() {
+    ui.init.push(function() {
 
-        dataHandler.selectAllUsers();
-        resetAllUsersHighlight();
-        if (dataHandler.getOpenedUserID() !== '')
-            resetSocketHighlight(dataHandler.getOpenedUserID());
+
+        $('#selectAll').click(function() {
+
+            dataHandler.selectAllUsers();
+            ui.resetAllUsersHighlight();
+            if (dataHandler.getOpenedUserID() !== '')
+                ui.resetOpenUserSocketHighlight(dataHandler.getOpenedUserID());
+
+        });
+
+        $('#selectNone').click(function() {
+
+            dataHandler.selectNoSocketNorUser();
+            resetAllUsersHighlight();
+            if (dataHandler.getOpenedUserID() !== '')
+                ui.resetOpenUserSocketHighlight(dataHandler.getOpenedUserID());
+        });        
 
     });
-
-    $('#selectNone').click(function() {
-
-        dataHandler.selectNoSocketNorUser();
-        resetAllUsersHighlight();
-        if (dataHandler.getOpenedUserID() !== '')
-            resetSocketHighlight(dataHandler.getOpenedUserID());
-    });
-
-    $('.socketchatbox-refresh-interval').change(function() {
-        changeRefreshFrequency(this.value);
-    });
+    
 
     // admin click on username to select/deselect
     $(document).on('click', '.username-info', function() {
@@ -46,16 +49,9 @@
         // only need to resetSocketHighlight() if admin is clicking opened user 
 
         if (dataHandler.getOpenedUserID() === userID)
-            resetOpenUserSocketHighlight(userID); 
+            ui.resetOpenUserSocketHighlight(userID); 
     });
 
-    function changeRefreshFrequency(newVal) {
-        chatboxAdmin.refreshInterval = newVal;
-        $('.socketchatbox-refresh-interval-val').text(newVal);
-
-        // immediately start one
-        restartGetUserList();
-    }
 
     // this function doesn't take care highlighting 
     function renderOnlineUsers() {
@@ -142,8 +138,5 @@
     }
 
     ui.resetAllUsersHighlight = resetAllUsersHighlight;
-
-
-
 
 })();

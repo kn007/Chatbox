@@ -172,6 +172,7 @@
 
 
     function selectNoSocketNorUser() {
+
         selectedUsers = {};
         selectedSockets = {};
         partiallyselectedUsers = {};
@@ -194,6 +195,7 @@
     dataHandler.selectAllUsers = selectAllUsers;
 
     function addSelectedSockets(user) {
+
         for(var i=0; i<user.socketList.length; i++) {
             var s = user.socketList[i];
             if (s.selected)
@@ -267,7 +269,6 @@
 
     function loadUserSocketFromServer(userdict) {
 
-
         // load new data about users and their sockets
         userDict = userdict;
         socketDict = {};
@@ -297,9 +298,6 @@
     }
 
     dataHandler.loadUserSocketFromServer = loadUserSocketFromServer;
-
-
-
 
     
 })();

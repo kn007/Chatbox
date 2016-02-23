@@ -8,12 +8,13 @@
 
     chatboxAdmin.scriptHandler = {};
     chatboxAdmin.dataHandler = {};
-    chatboxAdmin.ui = {};
+    chatboxAdmin.ui = {};   
+    chatboxAdmin.ui.init = []; //init is an array of functions
     chatboxAdmin.socketEvent = {};
 
     var utils = chatbox.utils; //share admin utils and common user utills
     var socketEvent = chatboxAdmin.socketEvent;
-
+    var ui = chatboxAdmin.ui;
 
     chatboxAdmin.refreshIntervalID = -1;
     chatboxAdmin.refreshInterval = 5; //sec
@@ -24,6 +25,11 @@
 
         console.log("Admin init");
 
+        // load jquery objects and register events
+        for (var i = 0; i < ui.init.length; i++) {
+            ui.init[i]();
+        }
+
         if(utils.getCookie('chatBoxAdminToken')!=='') {
 
             chatboxAdmin.token = utils.getCookie('chatBoxAdminToken');
@@ -33,22 +39,9 @@
 
         socketEvent.register();
 
-        getUserList();
+        chatboxAdmin.getUserList();
 
     }
-
-
-    // if token not right, should stop this endless call
-    function getUserList() {
-
-        chatbox.socket.emit('getUserList', {token: chatboxAdmin.token});
-        chatboxAdmin.refreshIntervalID = setTimeout(function() {
-            getUserList();
-
-        }, chatboxAdmin.refreshInterval*1000);
-    }
-
-    chatboxAdmin.getUserList = getUserList;
 
 
 })();

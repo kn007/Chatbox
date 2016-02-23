@@ -14,15 +14,18 @@
     //================================= Token Area ====================================//
     //=================================================================================//
     //=================================================================================//
+    ui.init.push(function() {
 
-    var $tokenStatus = $('#socketchatbox-tokenStatus');
+        ui.$tokenStatus = $('#socketchatbox-tokenStatus');
 
-
-    $('#socketchatbox-updateToken').click(function() {
+        $('#socketchatbox-updateToken').click(function() {
+            
+            updateToken($('#socketchatbox-token').val());
         
-        updateToken($('#socketchatbox-token').val());
-    
+        });
+
     });
+
 
     function badToken() {
 
@@ -38,26 +41,20 @@
 
     function validToken() {
 
-        $tokenStatus.html('Valid Token');
-        $tokenStatus.removeClass('error');
-        $tokenStatus.addClass('green');
+        ui.$tokenStatus.html('Valid Token');
+        ui.$tokenStatus.removeClass('error');
+        ui.$tokenStatus.addClass('green');
     }
 
     ui.validToken = validToken;
 
-
-
     function updateToken(t) {
+
         chatboxAdmin.token = t;
         utils.addCookie('chatBoxAdminToken', t);
-        restartGetUserList();
+        chatboxAdmin.restartGetUserList();
     }
 
-
-    function restartGetUserList(){
-        clearTimeout(chatboxAdmin.refreshIntervalID);
-        chatboxAdmin.getUserList();
-    }
 
 
 })();

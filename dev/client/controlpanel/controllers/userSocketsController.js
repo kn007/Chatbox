@@ -28,8 +28,8 @@
 
         dataHandler.toggleSocketSelection(socketID);
 
-        resetAllUsersHighlight();
-        resetOpenUserSocketHighlight(user.id);
+        ui.resetAllUsersHighlight();
+        ui.resetOpenUserSocketHighlight(user.id);
 
 
     });
@@ -66,6 +66,30 @@
 
     }
 
+    ui.loadSocketDetail = loadSocketDetail;
 
+   // only need to call this when the user is opened
+    function resetOpenUserSocketHighlight(userID) {
+        
+        // console.log("resetOpenUserSocketHighlight "+userID);
+
+        var user = dataHandler.getUserDict()[userID];
+
+        for (var i = 0; i < user.socketList.length; i++) {
+
+            var s = user.socketList[i];
+
+            if(dataHandler.userFullySelected(user.id) || dataHandler.socketSelected(s.id)) {
+
+                s.jqueryObj.addClass('selectedSocket');
+
+            }else {
+                s.jqueryObj.removeClass('selectedSocket');
+            }
+        }
+
+    }
+
+    ui.resetOpenUserSocketHighlight = resetOpenUserSocketHighlight;
 
 })();
