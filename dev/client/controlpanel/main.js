@@ -1,7 +1,6 @@
 (function() {
     "use strict";
 
-    var utils = chatbox.utils;
             
 
     if(isReady())

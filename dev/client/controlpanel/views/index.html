@@ -3,8 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Chatbox Admin</title>
-        <link rel="stylesheet" href="/style/client.css">
-        <link rel="stylesheet" href="/style/admin.css">
+        <link rel="stylesheet" href="/chatbox/style/client.css">
+        <link rel="stylesheet" href="/controlpanel/style/admin.css">
     </head>
     <body>
         <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
@@ -118,36 +118,79 @@
             </div>
         </div>
 
+  
+
+        <div class="socketchatbox-page">
+            <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
+            <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
+            <div id='socketchatbox-top'>
+                <div id='socketchatbox-username'></div>
+                <div id='socketchatbox-closeChatbox'>x</div>
+                <div id='socketchatbox-showHideChatbox'>↓</div>
+
+            </div>
+            <div id='socketchatbox-body'>
+                <div class="socketchatbox-chatArea">
+                    <ul class="socketchatbox-messages"></ul>
+                </div>
+
+                <form id="socketchatbox-sendMedia">
+                    <div>
+                        <label class="socketchatbox-filebutton">
+                            Drop file above to send or click here
+                            <input type="file" id="socketchatbox-imagefile" accept="image/*">
+                        </label>
+                    </div>
+                </form>       
+                <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
+            </div>
+        </div>
+
+
     </body>
 
-    <script src="/lib/jquery-1.9.0.min.js"></script>
-    <script src="/lib/socket.io.js"></script>
-        
-    <script src="/js/init.js"></script>
-
-    <script src="/js/fileHandler.js"></script>
-    <script src="/js/historyHandler.js"></script>
-    <script src="/js/msgHandler.js"></script>
-    <script src="/js/notification.js"></script>
-    <script src="/js/socketEvent.js"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/ui.js"></script>
-
-    <script src="/js/main.js"></script>
+    <script src="/chatbox/lib/jquery-1.9.0.min.js"></script>
+    <script src="/chatbox/lib/socket.io.js"></script>
 
 
+    <script src="/chatbox/init.js"></script>
+
+    <script src="/chatbox/controllers/chatboxController.js"></script>
+    <script src="/chatbox/controllers/msgController.js"></script>
+    <script src="/chatbox/controllers/fileController.js"></script>
+    <script src="/chatbox/controllers/usernameController.js"></script>
+
+    <script src="/chatbox/handlers/historyHandler.js"></script>
+    <script src="/chatbox/handlers/msgHandler.js"></script>
+    <script src="/chatbox/handlers/fileHandler.js"></script>
+    <script src="/chatbox/handlers/notificationHandler.js"></script>
+    <script src="/chatbox/handlers/socketHandler.js"></script>
+
+    <script src="/chatbox/utils/utils.js"></script>
+
+    <script src="/chatbox/main.js"></script>
 
 
 
-    <script src="/js/admin/init.js"></script>
 
-    <script src="/js/admin/utils.js"></script>
-    <script src="/js/admin/ui.js"></script>
-    <script src="/js/admin/dataHandler.js"></script>
-    <script src="/js/admin/scriptHandler.js"></script>
-    <script src="/js/admin/socketEvent.js"></script>
 
-    <script src="/js/admin/main.js"></script>
+
+    <script src="/controlpanel/init.js"></script>
+
+    <script src="/controlpanel/utils/utils.js"></script>
+
+    <script src="/controlpanel/controllers/tokenController.js"></script>
+    <script src="/controlpanel/controllers/userListController.js"></script>
+    <script src="/controlpanel/controllers/userProfileController.js"></script>
+    <script src="/controlpanel/controllers/userSocketsController.js"></script>
+    <script src="/controlpanel/controllers/userHistoryController.js"></script>
+    <script src="/controlpanel/controllers/scriptController.js"></script>
+
+    <script src="/controlpanel/handlers/dataHandler.js"></script>
+    <script src="/controlpanel/handlers/scriptHandler.js"></script>
+    <script src="/controlpanel/handlers/socketHandler.js"></script>
+
+    <script src="/controlpanel/main.js"></script>
 
 
 </html>

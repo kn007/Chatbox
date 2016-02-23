@@ -40,7 +40,7 @@
 
                 if ($('#socketchatbox-txt_fullname').is(":focus")) {
                     changeNameByEdit();
-                    $inputMessage.focus();
+                    ui.$inputMessage.focus();
                     return;
                 }
 
