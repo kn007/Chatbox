@@ -15,7 +15,7 @@
 
     ui.init.push(function() {
 
-        ui.$inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
+        var $inputScriptMessage = $('.socketchatbox-admin-input textarea'); // admin script message input box
 
             $('.prevScript').click(function() {
 
