@@ -7,16 +7,18 @@
 
     var ui = chatboxAdmin.ui;
 
-
+    var $tokenStatus;
 
     //=================================================================================//
     //=================================================================================//
     //================================= Token Area ====================================//
     //=================================================================================//
     //=================================================================================//
+
+
     ui.init.push(function() {
 
-        ui.$tokenStatus = $('#socketchatbox-tokenStatus');
+        $tokenStatus = $('#socketchatbox-tokenStatus');
 
         $('#socketchatbox-updateToken').click(function() {
             
@@ -41,9 +43,9 @@
 
     function validToken() {
 
-        ui.$tokenStatus.html('Valid Token');
-        ui.$tokenStatus.removeClass('error');
-        ui.$tokenStatus.addClass('green');
+        $tokenStatus.html('Valid Token');
+        $tokenStatus.removeClass('error');
+        $tokenStatus.addClass('green');
     }
 
     ui.validToken = validToken;
