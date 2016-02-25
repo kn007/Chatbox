@@ -9,7 +9,7 @@ var fs = require('fs');
 var filePath = __dirname+"/../client/chat-log.txt";
 
 var utils = require('./utils/utils.js');
-
+var dataHandler = require('./handlers/dataHandler.js');
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
 
@@ -91,22 +91,21 @@ function recordActionTime(socket, msg) {
 
 io.on('connection', function (socket) {
 
-    totalSockets++;
+    dataHandler.socketConnected(socket);
+    // var defaultUser = {};
+    // defaultUser.username = "default name";
+    // defaultUser.notLoggedIn = true;
+    // socket.user = defaultUser; // assign a default user before we create the real user
+    // socket.joinTime = utils.getTime();
+    // socket.lastActive = socket.joinTime;
+    // socket.msgCount = 0;
 
-    var defaultUser = {};
-    defaultUser.username = "default name";
-    defaultUser.notLoggedIn = true;
-    socket.user = defaultUser; // assign a default user before we create the real user
-    socket.joinTime = utils.getTime();
-    socket.lastActive = socket.joinTime;
-    socket.msgCount = 0;
 
-
-    if (using_reverse_proxy != 1) {
-        socket.remoteAddress = socket.request.connection.remoteAddress;
-    }else{
-        socket.remoteAddress = socket.handshake.headers['x-real-ip'];
-    }
+    // if (using_reverse_proxy != 1) {
+    //     socket.remoteAddress = socket.request.connection.remoteAddress;
+    // }else{
+    //     socket.remoteAddress = socket.handshake.headers['x-real-ip'];
+    // }
 
     log('New socket connected!');
     log('socket.id: '+ socket.id);
@@ -128,42 +127,36 @@ io.on('connection', function (socket) {
     socket.on('login', function (data) {
 
         // url and referrer are from client-side script
-        socket.url = data.url;
-        socket.referrer = data.referrer;
+        // socket.url = data.url;
+        // socket.referrer = data.referrer;
 
 
-        var user; // the user for this socket
+        dataHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
+
+
+
+        
+        // check if the socket is from an online user or an existing user
 
         // the user already exists, this is just a new connection from him
-        if(data.uuid in userDict) {
+        if (dataHandler.userExists(data.uuid)) {
+            
             // existing user making new connection
-            user = userDict[data.uuid];
-
             log(user.username + ' logged in ('+(user.socketList.length+1) +').');
 
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
-                username: user.username,
-                count: user.socketList.length + 1
+
+                username: user.username
+                // ,count: user.socketList.length + 1
             });
 
-        }else{
-            totalUsers++;
-            // a new user is joining
-            user = {};
-            user.id = data.uuid;
-            user.username = setName(data.username);
-            user.ip = socket.remoteAddress;
-            user.url = socket.url;
-            user.referrer = socket.referrer;
-            user.joinTime = socket.joinTime;
-            user.userAgent = socket.request.headers['user-agent'];
-            user.socketList = [];
-            user.msgCount = 0;
-            user.actionList = [];
+        } else {
 
-            userDict[user.id] = user;
-            userCount++;
+            // a new user is joining
+
+            // totalUsers++;
+          
             log(user.username + ' logged in ('+(user.socketList.length+1) +').');
 
             // welcome the new user
@@ -179,32 +172,29 @@ io.on('connection', function (socket) {
 
         }
 
-        // map user <----> socket
-        user.socketList.push(socket);
-        socket.user = user;
-
-
         recordActionTime(socket);
         var action = {};
         action.type = 'Join';
         action.time = utils.getTime();
         action.url = socket.url;
         action.detail = socket.remoteAddress;
-        user.actionList.push(action);
+        // user.actionList.push(action);
 
     });
 
     // when the user disconnects..
     socket.on('disconnect', function () {
-        var user = socket.user;
-
+        
 
         // the user only exist after login
-        if(user.notLoggedIn){
+        if(!socket.joined){
             log('Socket disconnected before logging in.');
             log('socket.id: '+socket.id);
             return;
         }
+
+        var user = socket.user;
+
 
         log(user.username + ' closed a connection ('+(user.socketList.length-1)+').');
 

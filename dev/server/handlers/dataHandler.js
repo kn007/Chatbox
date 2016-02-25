@@ -7,27 +7,33 @@ var userDict = {};
 var userCount = 0;
 
 var socketDict = {};
-
+var socketCount = 0;
 
 
 var dataHandler = {};
 
 
-function socketConnected(socket) {
-
-	socketDict[socket.id] = socket;
-	socket.login = false;
+function userExist(uuid) {
+	return uuid in userDict;
 }
 
+dataHandler.userExist = userExist;
+
+dataHandler.getUser = function(uid) {return userDict[uid];}
+dataHandler.getSocket = function(sid) {return socketDict[sid];}
 
 
-function socketJoin(socket, url, referrer) {
+dataHandler.socketConnected = function(socket) {
 
-	
+	socketDict[socket.id] = socket;
+	socket.joined = false;
+}
+
+dataHandler.socketJoin = function(socket, url, referrer, uid, username) {
 
     if (using_reverse_proxy != 1) {
         socket.remoteAddress = socket.request.connection.remoteAddress;
-    }else{
+    } else {
         socket.remoteAddress = socket.handshake.headers['x-real-ip'];
     }
 
@@ -36,30 +42,36 @@ function socketJoin(socket, url, referrer) {
     socket.msgCount = 0;
 
     // url and referrer are from client-side script
-    socket.url = data.url;
-    socket.referrer = data.referrer;
+    socket.url = url;
+    socket.referrer = referrer;
 
 
-	socket.login = true;
+    if (uid in userDict) {
+
+    	mapSocketWithUser(socket, userDict[uid]);
+
+    } else {
+
+    	var newUser = newUserJoin(uid, username, socket);
+    	mapSocketWithUser(socket, newUser);
+    }
+
+	socket.joined = true;
 
 }
 
-function userJoin(uuid, username, firstSocket) {
+function mapSocketWithUser(socket, user) {
 
-	var user = createUser(uuid, username, firstSocket);
-        
-
-
-    userDict[user.id] = user;
-    firstSocket.user = user;
-
+	socket.user = user;
+	user.socketList.push(socket);
 }
+
 
 // create the user from the first socket
-function createUser(uuid, username, firstSocket) {
+function newUserJoin(uid, username, firstSocket) {
 
     var user = {};
-    user.id = uuid;
+    user.id = uid;
     user.username = utils.setUsername(username); // clean the name first
     user.ip = firstSocket.remoteAddress;
     user.url = firstSocket.url;
@@ -69,13 +81,12 @@ function createUser(uuid, username, firstSocket) {
     user.msgCount = 0;
     user.socketList = [];
     user.socketList.push(firstSocket.id);
-
     user.actionList = [];
 
+    userDict[uid] = user;
 
     return user;
 }
-
 
 
 module.exports = dataHandler;
