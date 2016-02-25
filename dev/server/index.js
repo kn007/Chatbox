@@ -8,6 +8,8 @@ var io = require('socket.io')(server);
 var fs = require('fs');
 var filePath = __dirname+"/../client/chat-log.txt";
 
+var utils = require('./utils/utils.js');
+
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
 
@@ -19,12 +21,7 @@ var token = "12345";
 var using_reverse_proxy = 0;
 
 
-var socketList = [];
-// users are grouped by browser base on cookie's uuid implementation,
-// therefore 1 connection is the smallest unique unit and 1 user is not.
-// 1 user may contain multiple connections when he opens multiple tabs in same browser.
-var userDict = {};
-var userCount = 0;
+
 
 var adminUser;
 
@@ -78,32 +75,11 @@ function log(str) {
     }
 }
 
-// set username, avoid no name
-function setName(name) {
-
-    if (typeof name != 'undefined' && name!=='')
-        return name;
-    return "no name";
-}
 
 
-function getCookie(cookie, cname) {
-    var name = cname + "=";
-    var ca = cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) === 0) return c.substring(name.length,c.length);
-    }
-    return "";
-}
-
-function getTime() {
-    return (new Date()).getTime().toString();
-}
 
 function recordActionTime(socket, msg) {
-    socket.lastActive = getTime();
+    socket.lastActive = utils.getTime();
     socket.user.lastActive = socket.lastActive;
     if(msg){
         socket.lastMsg = msg;
@@ -121,10 +97,9 @@ io.on('connection', function (socket) {
     defaultUser.username = "default name";
     defaultUser.notLoggedIn = true;
     socket.user = defaultUser; // assign a default user before we create the real user
-    socket.joinTime = getTime();
+    socket.joinTime = utils.getTime();
     socket.lastActive = socket.joinTime;
     socket.msgCount = 0;
-    socketList.push(socket);
 
 
     if (using_reverse_proxy != 1) {
@@ -212,7 +187,7 @@ io.on('connection', function (socket) {
         recordActionTime(socket);
         var action = {};
         action.type = 'Join';
-        action.time = getTime();
+        action.time = utils.getTime();
         action.url = socket.url;
         action.detail = socket.remoteAddress;
         user.actionList.push(action);
@@ -222,13 +197,6 @@ io.on('connection', function (socket) {
     // when the user disconnects..
     socket.on('disconnect', function () {
         var user = socket.user;
-
-
-        // remove from socket list
-        var socketIndex = socketList.indexOf(socket);
-        if (socketIndex != -1) {
-            socketList.splice(socketIndex, 1);
-        }
 
 
         // the user only exist after login
@@ -258,7 +226,7 @@ io.on('connection', function (socket) {
             }else{
                 var action = {};
                 action.type = 'Left';
-                action.time = getTime();
+                action.time = utils.getTime();
                 action.url = socket.url;
                 action.detail = socket.remoteAddress;
                 user.actionList.push(action);
@@ -296,7 +264,7 @@ io.on('connection', function (socket) {
 
         var action = {};
         action.type = 'change name';
-        action.time = getTime();
+        action.time = utils.getTime();
         action.url = socket.url;
         action.detail = 'Changed name from' + oldName + ' to ' + newName;
         socket.user.actionList.push(action);
@@ -335,7 +303,7 @@ io.on('connection', function (socket) {
 
         var action = {};
         action.type = 'message';
-        action.time = getTime();
+        action.time = utils.getTime();
         action.url = socket.url;
         action.detail = data.msg;
         socket.user.actionList.push(action);
@@ -360,7 +328,7 @@ io.on('connection', function (socket) {
 
         var action = {};
         action.type = 'send file';
-        action.time = getTime();
+        action.time = utils.getTime();
         action.url = socket.url;
         action.detail = data.fileName;
         socket.user.actionList.push(action);
