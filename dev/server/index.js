@@ -9,7 +9,12 @@ var fs = require('fs');
 var filePath = __dirname+"/../client/chat-log.txt";
 
 var utils = require('./utils/utils.js');
-var dataHandler = require('./handlers/dataHandler.js');
+var socketHandler = require('./handlers/socketHandler.js');
+var msgHandler = require('./handlers/msgHandler.js');
+var fileHandler = require('./handlers/fileHandler.js');
+var usernameHandler = require('./handlers/usernameHandler.js');
+
+
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
 
@@ -91,21 +96,7 @@ function recordActionTime(socket, msg) {
 
 io.on('connection', function (socket) {
 
-    dataHandler.socketConnected(socket);
-    // var defaultUser = {};
-    // defaultUser.username = "default name";
-    // defaultUser.notLoggedIn = true;
-    // socket.user = defaultUser; // assign a default user before we create the real user
-    // socket.joinTime = utils.getTime();
-    // socket.lastActive = socket.joinTime;
-    // socket.msgCount = 0;
-
-
-    // if (using_reverse_proxy != 1) {
-    //     socket.remoteAddress = socket.request.connection.remoteAddress;
-    // }else{
-    //     socket.remoteAddress = socket.handshake.headers['x-real-ip'];
-    // }
+    socketHandler.socketConnected(socket);
 
     log('New socket connected!');
     log('socket.id: '+ socket.id);
@@ -116,7 +107,7 @@ io.on('connection', function (socket) {
     // tell him how many people online now
     // TODO: may not need to say welcome when it's his second third connection
     socket.emit('login', {
-        numUsers: userCount + 1
+        numUsers: socketHandler.getUserCount()
     });
 
 
@@ -126,38 +117,23 @@ io.on('connection', function (socket) {
     // then we'll map the user and the socket
     socket.on('login', function (data) {
 
-        // url and referrer are from client-side script
-        // socket.url = data.url;
-        // socket.referrer = data.referrer;
+        socketHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
 
+        log(socket.user.username + ' logged in ('+(socket.user.socketList.length) +').');
 
-        dataHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
-
-
-
-        
         // check if the socket is from an online user or an existing user
 
         // the user already exists, this is just a new connection from him
-        if (dataHandler.userExists(data.uuid)) {
-            
-            // existing user making new connection
-            log(user.username + ' logged in ('+(user.socketList.length+1) +').');
+        if (socketHandler.userExists(data.uuid)) {
 
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
 
-                username: user.username
+                username: socket.user.username
                 // ,count: user.socketList.length + 1
             });
 
         } else {
-
-            // a new user is joining
-
-            // totalUsers++;
-          
-            log(user.username + ' logged in ('+(user.socketList.length+1) +').');
 
             // welcome the new user
             socket.emit('welcome new user', {
@@ -166,40 +142,38 @@ io.on('connection', function (socket) {
 
             // echo to others that a new user just joined
             socket.broadcast.emit('user joined', {
-                username: user.username,
+                username: socket.user.username,
                 numUsers: userCount
             });
 
         }
 
-        recordActionTime(socket);
-        var action = {};
-        action.type = 'Join';
-        action.time = utils.getTime();
-        action.url = socket.url;
-        action.detail = socket.remoteAddress;
-        // user.actionList.push(action);
+        // recordActionTime(socket);
 
     });
 
     // when the user disconnects..
     socket.on('disconnect', function () {
         
+        socketHandler.socketDisconnected(socket);
+
 
         // the user only exist after login
-        if(!socket.joined){
+        if (!socket.joined){
+
             log('Socket disconnected before logging in.');
             log('socket.id: '+socket.id);
+
             return;
+            
         }
 
-        var user = socket.user;
-
-
-        log(user.username + ' closed a connection ('+(user.socketList.length-1)+').');
+        log(socket.user.username + ' closed a connection ('+(socket.user.socketList.length)+').');
 
         // also need to remove socket from user's socketlist
         // when a user has 0 socket connection, remove the user
+
+        /*
         var socketIndexInUser = user.socketList.indexOf(socket);
         if (socketIndexInUser != -1) {
             user.socketList.splice(socketIndexInUser, 1);
@@ -221,29 +195,18 @@ io.on('connection', function (socket) {
                 action.detail = socket.remoteAddress;
                 user.actionList.push(action);
             }
-        }
+        }*/
 
     });
 
-    // this is when one user want to change his name
+    // this is when one user wants to change his name
     // enforce that all his socket connections change name too
     socket.on('user edits name', function (data) {
         recordActionTime(socket);
 
         var oldName = socket.user.username;
-        var newName =  data.newName;
-        socket.user.username = newName;
 
-        if (newName === oldName) return;
-
-        // sync name change
-        var socketsToChangeName = socket.user.socketList;
-        for (var i = 0; i< socketsToChangeName.length; i++) {
-
-            socketsToChangeName[i].emit('change username', { username: newName });
-
-        }
-
+        usernameHandler.userEditName(socket, data.newName);
 
         // echo globally that this client has changed name, including user himself
         io.sockets.emit('log change name', {
@@ -251,13 +214,6 @@ io.on('connection', function (socket) {
             oldname: oldName
         });
 
-
-        var action = {};
-        action.type = 'change name';
-        action.time = utils.getTime();
-        action.url = socket.url;
-        action.detail = 'Changed name from' + oldName + ' to ' + newName;
-        socket.user.actionList.push(action);
 
     });
 
@@ -267,36 +223,16 @@ io.on('connection', function (socket) {
 
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
-        totalMsg++;
+
         recordActionTime(socket, data.msg);
 
-        socket.msgCount++;
-        socket.user.msgCount++;
+        msgHandler.receiveMsg(socket, data.msg);
 
-        // socket.broadcast.emit('new message', {//send to everybody but sender
         io.sockets.emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
 
-
-        // log the message in chat history file
-        var chatMsg = socket.user.username+": "+data.msg+'\n';
-        console.log(chatMsg);
-
-        fs.appendFile(filePath, new Date() + "\t"+ chatMsg, function(err) {
-            if(err) {
-                return log(err);
-            }
-            console.log("The message is saved to log file!");
-        });
-
-        var action = {};
-        action.type = 'message';
-        action.time = utils.getTime();
-        action.url = socket.url;
-        action.detail = data.msg;
-        socket.user.actionList.push(action);
 
     });
 
@@ -305,7 +241,8 @@ io.on('connection', function (socket) {
 
         log('received base64 file from' + data.username);
 
-        // socket.broadcast.emit('base64 image', //exclude sender
+        fileHandler.receiveFile(socket, data.file, data.fileName);
+
         io.sockets.emit('base64 file',
 
             {
@@ -316,15 +253,9 @@ io.on('connection', function (socket) {
 
         );
 
-        var action = {};
-        action.type = 'send file';
-        action.time = utils.getTime();
-        action.url = socket.url;
-        action.detail = data.fileName;
-        socket.user.actionList.push(action);
     });
 
-
+/*
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
         return;
@@ -344,7 +275,9 @@ io.on('connection', function (socket) {
             username: socket.user.username
         });
     });
+*/
 
+/*
     // for New Message Received Notification callback
     socket.on('reset2origintitle', function (data) {
         var socketsToResetTitle = socket.user.socketList;
@@ -352,7 +285,7 @@ io.on('connection', function (socket) {
             socketsToResetTitle[i].emit('reset2origintitle', {});
         }
     });
-
+*/
 
 
     //==========================================================================
@@ -367,28 +300,13 @@ io.on('connection', function (socket) {
 
         if(data.token === token) {
 
-            var user = userDict[data.userID];
-            var newName =  data.newName;
-            var oldName = user.username;
-            user.username = newName;
-
-            if (newName === oldName) return;
-
-            // sync name change
-            var socketsToChangeName = user.socketList;
-            for (var i = 0; i< socketsToChangeName.length; i++) {
-
-                socketsToChangeName[i].emit('change username', { username: newName });
-
-            }
-
+            usernameHandler.adminEditName(data.userID, data.newName);
 
             // echo globally that this client has changed name, including user himself
             io.sockets.emit('log change name', {
                 username: user.username,
                 oldname: oldName
             });
-
 
         }
 
@@ -434,7 +352,7 @@ io.on('connection', function (socket) {
     // send real time data statistic to admin
     // this callback is currently also used for authentication
     socket.on('getUserList', function (data) {
-
+        return;
         if(data.token === token) {
 
             adminUser = socket.user;

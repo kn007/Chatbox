@@ -4,7 +4,7 @@ var utils = {
 
         return (new Date()).getTime().toString();
 
-    }
+    },
 
     // set username, avoid empty name
     setUsername: function(name) {
