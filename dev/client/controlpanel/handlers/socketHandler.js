@@ -4,7 +4,7 @@
    var utils = chatbox.utils;
    var ui = chatboxAdmin.ui;
    var dataHandler = chatboxAdmin.dataHandler;
-
+   var verified = false;
    var socketEvent = chatboxAdmin.socketEvent;
 
     socketEvent.register = function() {
@@ -59,10 +59,11 @@
                 ui.validToken();
 
 
-                //if (!verified){
-                //    verified = true;
-                    //getServerStat();
-                //}
+                if (!verified){
+                    verified = true;
+                    console.log('go');
+                    socket.emit('getServerStat', {token: chatboxAdmin.token});
+                }
 
                 dataHandler.loadUserSocketFromServer(data.userdict);
 

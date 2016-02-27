@@ -1,7 +1,9 @@
 var utils = require('../utils/utils.js');
 var socketHandler = require('./socketHandler.js');
+var msgHandler = require('./msgHandler.js');
 
 var token = '12345';
+var chatboxUpTime = (new Date()).toString();
 
 var adminUser = {};
 
@@ -56,6 +58,21 @@ adminHandler.sendScript = function (io, inToken, userIDList, socketIDList, scrip
     }
 }
 
+function getServerStat(socket, inToken) {
+    
+    if(inToken === token) {
+
+        socket.emit('server stat', {
+            chatboxUpTime: chatboxUpTime,
+            totalUsers: socketHandler.getTotalUserCount(),
+            totalSockets: socketHandler.totalSocketConnectionCount(),
+            totalMsg: msgHandler.getTotalMsgCount()
+        });
+    }
+}
+
+adminHandler.getServerStat = getServerStat;
+
 adminHandler.getUserData = function (socket, inToken) {
 
 	if (!socket.joined)
@@ -63,7 +80,9 @@ adminHandler.getUserData = function (socket, inToken) {
 
     if(inToken === token) {
 
-        adminUser = socket.user;
+        if (adminUser.id !== socket.user.id) {
+            adminUser = socket.user;
+        }
 
         // send serilizable user and socket object
         var simpleUserDict = {};

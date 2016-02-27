@@ -211,14 +211,14 @@
         // handle selected users
         for (var userID in selectedUsers) {
             // if user still online
-            if (userID in userDict) {
+            if (userID in userDict) 
 
                 selectUser(userID);
 
-            }else {
+            else
 
                 delete selectedUsers[userID];
-            }
+            
         }
 
         // handle partially selected users
@@ -255,7 +255,7 @@
 
 
 
-        // remove sockets that no longer alive
+        // remove sockets that are no longer alive
 
         for (var socketID in selectedSockets) {
             if (!(socketID in socketDict)) {

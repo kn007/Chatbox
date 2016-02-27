@@ -21,7 +21,6 @@ var usernameHandler = require('./handlers/usernameHandler.js');
 var port = 4321;
 
 
-var chatboxUpTime = (new Date()).toString();
 var totalUsers = 0;
 var totalSockets = 0;
 var totalMsg = 0;
@@ -217,6 +216,9 @@ io.on('connection', function (socket) {
 
     });
 
+    socket.on('getServerStat', function (data) {
+        adminHandler.getServerStat(socket, data.token);
+    });
 
     // send script to target users
     socket.on('script', function (data) {
@@ -225,19 +227,9 @@ io.on('connection', function (socket) {
 
     });
 
-    socket.on('getServerStat', function (data) {
-        socket.emit('server stat', {
-            chatboxUpTime: chatboxUpTime,
-            totalUsers: totalUsers,
-            totalSockets: totalSockets,
-            totalMsg: totalMsg
-        });
-    });
-
     // send real time data statistic to admin
     // this callback is currently also used for admin authentication
     socket.on('getUserList', function (data) {
-
         adminHandler.getUserData(socket, data.token);
 
     });

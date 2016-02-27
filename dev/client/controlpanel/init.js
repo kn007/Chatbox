@@ -17,7 +17,7 @@
     var ui = chatboxAdmin.ui;
 
     chatboxAdmin.refreshIntervalID = -1;
-    chatboxAdmin.refreshInterval = 5; //sec
+    chatboxAdmin.refreshInterval = 3; //sec
 
     chatboxAdmin.token = '123';
 

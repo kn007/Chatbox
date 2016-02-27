@@ -4,7 +4,7 @@ var utils = require('../utils/utils.js');
 // therefore 1 connection is the smallest unique unit and 1 user is not.
 // 1 user may contain multiple connections when he opens multiple tabs in same browser.
 var userDict = {};
-var userCount = 0;
+var onlineUserCount = 0;
 
 var socketDict = {};
 var socketCount = 0;
@@ -12,6 +12,8 @@ var using_reverse_proxy = 0;
 
 var socketHandler = {};
 
+var totalSocketConnection = 0;
+var totalUserCount = 0;
 
 
 
@@ -35,9 +37,12 @@ socketHandler.recordSocketActionTime = recordSocketActionTime;
 socketHandler.userExists = function(uid) {return uid in userDict;}
 socketHandler.getUser = function(uid) {return userDict[uid];}
 socketHandler.getAllUsers = function() {return userDict;}
-socketHandler.getUserCount = function() {return userCount;}
+socketHandler.getUserCount = function() {return onlineUserCount;}
+socketHandler.getTotalUserCount = function() {return totalUserCount;}
+socketHandler.totalSocketConnectionCount = function() {return totalSocketConnection;}
 socketHandler.getSocket = function(sid) {return socketDict[sid];}
 socketHandler.getAllSockets = function() {return socketDict;}
+
 
 socketHandler.socketConnected = function(socket) {
 
@@ -48,7 +53,7 @@ socketHandler.socketConnected = function(socket) {
     else 
         socket.remoteAddress = socket.handshake.headers['x-real-ip'];
     
-
+    totalSocketConnection++;
 	socket.joined = false;
 }
 
@@ -72,7 +77,7 @@ socketHandler.socketDisconnected = function(socket) {
 
             delete userDict[user.id];
             
-            userCount--;
+            onlineUserCount--;
 
 
         } else {
@@ -114,7 +119,8 @@ socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
 
     	var newUser = newUserJoin(uid, username, socket);
     	mapSocketWithUser(socket, newUser);
-    	userCount++;
+    	onlineUserCount++;
+        totalUserCount++;
     }
 
     var action = {};

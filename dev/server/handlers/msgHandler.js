@@ -8,6 +8,7 @@ var totalMsg = 0;
 
 var msgHandler = {};
 
+msgHandler.getTotalMsgCount = function() { return totalMsg; }
 
 msgHandler.receiveMsg = function(socket, msg) {
 
