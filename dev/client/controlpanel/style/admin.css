@@ -229,6 +229,22 @@ button {
 
 }
 
+.socketchatbox-livesockets-header {
+  cursor: pointer;
+}
+
+.socketchatbox-livesockets-header:hover{
+  background: yellow;
+}
+
+.socketchatbox-actionhistory-header {
+  cursor: pointer;
+}
+
+.socketchatbox-actionhistory-header:hover{
+  background: yellow;
+}
+
 .blue {
   background: #EDEDED;
 }

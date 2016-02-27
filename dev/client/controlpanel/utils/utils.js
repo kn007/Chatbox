@@ -4,6 +4,9 @@
     // admin share utils functions with common user, but add more functions
     var utils = chatbox.utils;
 
+    utils.createNewWindowLink = function (link) {
+        return "<a target = '_blank' href = '" + link + "''>" + link + "</a>";
+    }
 
     function getTimeElapsed(startTime, fromTime) {
 
@@ -35,7 +38,7 @@
     utils.getTimeElapsed = getTimeElapsed;
 
 
-    utils.countKeys = function(myObj) {
+    utils.countKeys = function (myObj) {
         var count = 0;
 
         for (var k in myObj) {

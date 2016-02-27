@@ -15,6 +15,29 @@
     //=================================================================================//
     //=================================================================================//
 
+    ui.showAliveSocket = false;
+
+    ui.init.push(function() {
+
+        $('.socketchatbox-livesockets-header').click(function() {
+
+            if (ui.showAliveSocket) {
+                ui.showAliveSocket = false;
+                $('.socketchatbox-livesockets-header').text('[ ↓ ]');
+            } else {
+                ui.showAliveSocket = true;
+                $('.socketchatbox-livesockets-header').text('[ ↑ ]');
+
+            }
+
+            toggleSocketDetailVisibility();
+
+        });
+        toggleSocketDetailVisibility();
+
+    });
+
+
 
     // admin click on socket info to select/deselect
     $(document).on('click', '.socketchatbox-socketdetail-each', function() {
@@ -34,18 +57,27 @@
 
     });
 
+
+    function toggleSocketDetailVisibility() {
+
+        if (ui.showAliveSocket) 
+            $('.socketchatbox-userdetail-sockets').show();
+        else
+            $('.socketchatbox-userdetail-sockets').hide();
+    }
+
     function loadSocketDetail(user) {
 
         $('.socketchatbox-userdetail-sockets').html('');
-
+        $('.socketchatbox-livesockets-count').text(user.socketList.length);
         for (var i = 0; i< user.socketList.length; i++) {
             var s = user.socketList[i];
             var $socketInfo = $("<div></div");
             var socketInfoHTML = "<center>[" + i + "]</center></p>";
             socketInfoHTML += "<p>ID: " + s.id + "</p>";
-            socketInfoHTML += "<p>URL: " + s.url + "</p>";
+            socketInfoHTML += "<p>URL: " + utils.createNewWindowLink(s.url) + "</p>";
             if (s.referrer)
-                socketInfoHTML += "<p>Referrer: " + s.referrer + "</p>";
+                socketInfoHTML += "<p>Referrer: " + utils.createNewWindowLink(s.referrer) + "</p>";
             socketInfoHTML += "<p>IP: " + s.ip + "</p>";
             socketInfoHTML += "<p>Total Messages: " + s.msgCount + "</p>";
 

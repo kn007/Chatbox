@@ -68,6 +68,7 @@
 
     // admin change user's name
     $(document).on('click', '.socketchatbox-admin-changeUserName', function() {
+        
         var $this = $(this);
         var userID = $this.data('id');
         var newName = $('.socketchatbox-userdetail-name-edit').val();
@@ -102,16 +103,38 @@
             $('.socketchatbox-userdetail-name-edit').data('name',user.username);
         }
         $('.socketchatbox-admin-changeUserName').data('id',user.id);
-        $('.socketchatbox-userdetail-landingpage').text(user.url);
-        $('.socketchatbox-userdetail-referrer').text(user.referrer);
-        $('.socketchatbox-userdetail-ip').text(user.ip);
+
+        if ($('.socketchatbox-userdetail-landingpage').html() !== utils.createNewWindowLink(user.url))
+            $('.socketchatbox-userdetail-landingpage').html(utils.createNewWindowLink(user.url));
+
+        if (user.referrer)
+            $('.socketchatbox-userdetail-referrer').html(utils.createNewWindowLink(user.referrer));
+        else {
+            $('.socketchatbox-userdetail-referrer').text('N/A');
+
+        }
+        if ($('.socketchatbox-userdetail-ip').text() !== user.ip )
+            $('.socketchatbox-userdetail-ip').text(user.ip);
+
         $('.socketchatbox-userdetail-jointime').text(utils.getTimeElapsed(user.joinTime));
-        $('.socketchatbox-userdetail-totalmsg').text(user.msgCount);
+
+        if ($('.socketchatbox-userdetail-totalmsg').text() !== user.msgCount)
+            $('.socketchatbox-userdetail-totalmsg').text(user.msgCount);
+
         if(!user.lastMsg)
-            user.lastMsg = "";
-        $('.socketchatbox-userdetail-lastmsg').text("\""+user.lastMsg+"\"");
-        $('.socketchatbox-userdetail-lastactive').text(utils.getTimeElapsed(user.lastActive));
-        $('.socketchatbox-userdetail-useragent').text(user.userAgent);
+            user.lastMsg = 'N/A';
+        else
+            user.lastMsg = "'"+user.lastMsg+"'";
+
+        if ($('.socketchatbox-userdetail-lastmsg').text() !== user.lastMsg)
+            $('.socketchatbox-userdetail-lastmsg').text(user.lastMsg);
+
+
+        if ($('.socketchatbox-userdetail-lastactive').text() !== utils.getTimeElapsed(user.lastActive))
+            $('.socketchatbox-userdetail-lastactive').text(utils.getTimeElapsed(user.lastActive));
+
+        if ($('.socketchatbox-userdetail-useragent').text() !== user.userAgent)
+            $('.socketchatbox-userdetail-useragent').text(user.userAgent);
 
     }
 

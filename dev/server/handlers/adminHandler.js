@@ -22,7 +22,8 @@ adminHandler.sendLog = function (str) {
 
         for(var i = 0; i < adminUser.socketIDList.length; i++) {
             var sid = adminUser.socketIDList[i];
-            socketHandler.getSocket(sid).emit('server log', {log: str});
+            if (socketHandler.getSocket(sid).joined)
+                socketHandler.getSocket(sid).emit('server log', {log: str});
         }
     }
 }
