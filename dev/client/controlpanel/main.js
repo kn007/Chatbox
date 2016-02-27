@@ -29,12 +29,13 @@
 
         }, 1000);
 
-        console.log("Waiting for client.js to load...");
+        console.log("Waiting for Chatbox socket to login");
     }
 
     function isReady() {
+        // wait until the socket joined - receive the welcome message from the server (user created on server side)
 
-        return typeof chatbox !== "undefined" && typeof chatbox.socket !== "undefined" ;
+        return typeof chatbox !== "undefined" && typeof chatbox.socket !== "undefined" && chatbox.socket.joined;
     
     }
 

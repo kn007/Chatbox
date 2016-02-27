@@ -27,16 +27,17 @@
 
         // This is a new user
         socket.on('welcome new user', function (data) {
+            socket.joined = true;
 
             // Display the welcome message
             var message = "Welcome, "+ chatbox.username;
             ui.addLog(message);
             ui.addParticipantsMessage(data.numUsers);
-
         });
 
         // This is just a new connection of an existing online user
         socket.on('welcome new connection', function (data) {
+            socket.joined = true;
 
             // sync username
             ui.changeLocalUsername(data.username);
@@ -46,7 +47,6 @@
             ui.addLog(message);
 
             socket.emit('reset2origintitle', {});
-
         });
 
         // Whenever the server emits 'new message', update the chat body
