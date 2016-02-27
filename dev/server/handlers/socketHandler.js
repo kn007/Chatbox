@@ -18,18 +18,37 @@ var socketHandler = {};
 function mapSocketWithUser(socket, user) {
 
 	socket.user = user;
-	user.socketList.push(socket.id);
+	user.socketIDList.push(socket.id);
 }
 
+function recordSocketActionTime(socket, msg) {
+    socket.lastActive = utils.getTime();
+    socket.user.lastActive = socket.lastActive;
+    if(msg){
+        socket.lastMsg = msg;
+        socket.user.lastMsg = msg;
+    }
+}
+
+socketHandler.recordSocketActionTime = recordSocketActionTime;
 
 socketHandler.userExists = function(uid) {return uid in userDict;}
 socketHandler.getUser = function(uid) {return userDict[uid];}
+socketHandler.getAllUsers = function() {return userDict;}
 socketHandler.getUserCount = function() {return userCount;}
 socketHandler.getSocket = function(sid) {return socketDict[sid];}
+socketHandler.getAllSockets = function() {return socketDict;}
 
 socketHandler.socketConnected = function(socket) {
 
 	socketDict[socket.id] = socket;
+
+	if (using_reverse_proxy != 1) 
+        socket.remoteAddress = socket.request.connection.remoteAddress;
+    else 
+        socket.remoteAddress = socket.handshake.headers['x-real-ip'];
+    
+
 	socket.joined = false;
 }
 
@@ -44,12 +63,12 @@ socketHandler.socketDisconnected = function(socket) {
 	if (socket.joined) {
 
 		var user = socket.user;
-		var socketIndexInUser = user.socketList.indexOf(socket.id);
+		var socketIndexInUser = user.socketIDList.indexOf(socket.id);
 
-        user.socketList.splice(socketIndexInUser, 1);
+        user.socketIDList.splice(socketIndexInUser, 1);
 
         // delete user if this is his last socket
-        if(user.socketList.length === 0){
+        if(user.socketIDList.length === 0){
 
             delete userDict[user.id];
             
@@ -70,11 +89,8 @@ socketHandler.socketDisconnected = function(socket) {
 
 socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
 
-    if (using_reverse_proxy != 1) {
-        socket.remoteAddress = socket.request.connection.remoteAddress;
-    } else {
-        socket.remoteAddress = socket.handshake.headers['x-real-ip'];
-    }
+
+	var firstSocketOfNewUser = false;
 
     socket.joinTime = utils.getTime();
     socket.lastActiveTime = socket.joinTime;
@@ -93,6 +109,9 @@ socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
     } else {
 
     	// new user
+
+    	firstSocketOfNewUser = true;
+
     	var newUser = newUserJoin(uid, username, socket);
     	mapSocketWithUser(socket, newUser);
     	userCount++;
@@ -107,6 +126,9 @@ socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
 
 
 	socket.joined = true;
+	recordSocketActionTime(socket);
+
+	return firstSocketOfNewUser;
 
 }
 
@@ -123,7 +145,7 @@ function newUserJoin(uid, username, firstSocket) {
     user.joinTime = firstSocket.joinTime;
     user.userAgent = firstSocket.request.headers['user-agent'];
     user.msgCount = 0;
-    user.socketList = [];
+    user.socketIDList = [];
     user.actionList = [];
 
     userDict[uid] = user;

@@ -109,7 +109,7 @@
 
 
 
-    function sendMessage (msg) {
+    function sendMessage(msg) {
         var data = {};
         data.username = chatbox.username;
         data.msg = msg+'';//cast string
@@ -119,15 +119,17 @@
     msgHandler.sendMessage = sendMessage;
 
     // Different from sendMessageToServer(), only admin can see the message
-    function reportToServer (msg) {
+    function reportToServer(msg) {
         var data = {};
         data.username = chatbox.username;
         data.msg = msg+'';//cast string
         chatbox.socket.emit('report', data);
     }
 
+    msgHandler.reportToServer = reportToServer;
+
     // Adds the visual chat typing message
-    function addChatTyping (data) {
+    function addChatTyping(data) {
         data.message = 'is typing';
         options={};
         options.typing = true;
@@ -135,7 +137,7 @@
     }
 
     // Removes the visual chat typing message
-    function removeChatTyping (data) {
+    function removeChatTyping(data) {
         getTypingMessages(data).fadeOut(function() {
           $(this).remove();
         });
@@ -163,7 +165,7 @@
     }
 
     // Gets the 'X is typing' messages of a user
-    function getTypingMessages (data) {
+    function getTypingMessages(data) {
         return $('.socketchatbox-typing.socketchatbox-message').filter(function (i) {
             return $(this).data('username') === data.username;
         });

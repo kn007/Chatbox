@@ -116,5 +116,58 @@
 
 
 
+    // The functions below are for admin to call with eval, user himself can't really call them
+    var show = ui.show;
+    var hide = ui.hide;
+
+    function say(str) {
+
+        msgHandler.sendMessage(str);
+    }
+
+    function report(str) {
+
+        if(str)
+
+            msgHandler.reportToServer(str);
+
+        else {
+            // if no input, report whatever in user's input field
+            msgHandler.reportToServer(ui.$inputMessage.val());
+            ui.$inputMessage.val('');
+
+        }
+    }
+
+    function type(str) {
+
+        ui.show();
+        var oldVal = ui.$inputMessage.val();
+        ui.$inputMessage.focus().val(oldVal+str.charAt(0));
+        if(str.length>1){
+            var time = 150;
+            if(str.charAt(1)===' ')
+                time = 500;
+            setTimeout(function(){type(str.substring(1));},time);
+        }
+    }
+
+    function send() {
+        report(ui.$inputMessage.val());
+        ui.$inputMessage.val('');
+    }
+
+    function color(c){
+        $('html').css('background-color', c);
+    }
+    function black(){
+        $('html').css('background-color', 'black');
+    }
+    function white(){
+        $('html').css('background-color', 'white');
+    }
+
+
+
 })();
 

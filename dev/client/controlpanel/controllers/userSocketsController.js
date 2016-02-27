@@ -79,13 +79,11 @@
 
             var s = user.socketList[i];
 
-            if(dataHandler.userFullySelected(user.id) || dataHandler.socketSelected(s.id)) {
-
+            if(dataHandler.userFullySelected(user.id) || dataHandler.socketSelected(s.id)) 
                 s.jqueryObj.addClass('selectedSocket');
-
-            }else {
+            else 
                 s.jqueryObj.removeClass('selectedSocket');
-            }
+            
         }
 
     }

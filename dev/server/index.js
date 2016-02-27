@@ -1,4 +1,3 @@
-// Setup basic express server
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -10,25 +9,17 @@ var filePath = __dirname+"/../client/chat-log.txt";
 
 var utils = require('./utils/utils.js');
 var socketHandler = require('./handlers/socketHandler.js');
+var adminHandler = require('./handlers/adminHandler.js');
 var msgHandler = require('./handlers/msgHandler.js');
 var fileHandler = require('./handlers/fileHandler.js');
 var usernameHandler = require('./handlers/usernameHandler.js');
-
 
 //set timeout, default is 1 min
 //io.set("heartbeat timeout", 3*60*1000);
 
 //set which port this app runs on
 var port = 4321;
-//set admin password
-var token = "12345";
-//set 1 if you using reverse proxy
-var using_reverse_proxy = 0;
 
-
-
-
-var adminUser;
 
 var chatboxUpTime = (new Date()).toString();
 var totalUsers = 0;
@@ -38,8 +29,6 @@ server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
 
-
-
 // Routing
 
 // allow ajax request from different domain, you can comment it out if you don't want it
@@ -47,61 +36,35 @@ app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
-
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
     // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
-
     // Pass to next layer of middleware
     next();
 });
 
-// server the client folder
+// serve the client folder 
 app.use(express.static(__dirname + '/../client'));
 
 
 
 // Chatbox
 
-// log to console, if admin is online, send to admin as well
-function log(str) {
-    console.log(str);
-    if (adminUser && adminUser.id in userDict) {
-        for(var i = 0; i < adminUser.socketList.length; i++) {
-            var s = adminUser.socketList[i];
-            s.emit('server log', {log: str});
-        }
-    }
-}
-
-
-
-
-function recordActionTime(socket, msg) {
-    socket.lastActive = utils.getTime();
-    socket.user.lastActive = socket.lastActive;
-    if(msg){
-        socket.lastMsg = msg;
-        socket.user.lastMsg = msg;
-    }
-}
-
 
 
 io.on('connection', function (socket) {
 
+
+    adminHandler.log('New socket connected!');
+    adminHandler.log('socket.id: '+ socket.id);
     socketHandler.socketConnected(socket);
 
-    log('New socket connected!');
-    log('socket.id: '+ socket.id);
-    log("socket.ip: " + socket.remoteAddress);
-
+    adminHandler.log("socket.ip: " + socket.remoteAddress);
+    
 
     // once the new user is connected, we ask him to tell us his name
     // tell him how many people online now
@@ -117,114 +80,68 @@ io.on('connection', function (socket) {
     // then we'll map the user and the socket
     socket.on('login', function (data) {
 
-        socketHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
 
-        log(socket.user.username + ' logged in ('+(socket.user.socketList.length) +').');
+        var newUser = false;
 
-        // check if the socket is from an online user or an existing user
+        newUser = socketHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
+
+        var user = socket.user;
+        adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
 
         // the user already exists, this is just a new connection from him
-        if (socketHandler.userExists(data.uuid)) {
-
-            // force sync all user's client side usernames
-            socket.emit('welcome new connection', {
-
-                username: socket.user.username
-                // ,count: user.socketList.length + 1
-            });
-
-        } else {
+        if (!newUser) {
 
             // welcome the new user
             socket.emit('welcome new user', {
-                numUsers: userCount
+                numUsers: socketHandler.getUserCount()
             });
 
             // echo to others that a new user just joined
             socket.broadcast.emit('user joined', {
-                username: socket.user.username,
-                numUsers: userCount
+                username: user.username,
+                numUsers: socketHandler.getUserCount()
+            });
+
+        } else {
+
+            // force sync all user's client side usernames
+            socket.emit('welcome new connection', {
+                username: socket.user.username
             });
 
         }
 
-        // recordActionTime(socket);
-
     });
 
-    // when the user disconnects..
+    // when the socket disconnects
     socket.on('disconnect', function () {
         
         socketHandler.socketDisconnected(socket);
 
-
         // the user only exist after login
-        if (!socket.joined){
-
-            log('Socket disconnected before logging in.');
-            log('socket.id: '+socket.id);
-
-            return;
-            
-        }
-
-        log(socket.user.username + ' closed a connection ('+(socket.user.socketList.length)+').');
-
-        // also need to remove socket from user's socketlist
-        // when a user has 0 socket connection, remove the user
-
-        /*
-        var socketIndexInUser = user.socketList.indexOf(socket);
-        if (socketIndexInUser != -1) {
-            user.socketList.splice(socketIndexInUser, 1);
-            if(user.socketList.length === 0){
-                log("It's his last connection, he's gone.");
-                delete userDict[user.id];
-                userCount--;
-                // echo globally that this user has left
-                socket.broadcast.emit('user left', {
-                    username: socket.user.username,
-                    numUsers: userCount
-                });
-
-            }else{
-                var action = {};
-                action.type = 'Left';
-                action.time = utils.getTime();
-                action.url = socket.url;
-                action.detail = socket.remoteAddress;
-                user.actionList.push(action);
-            }
-        }*/
+        if (!socket.joined)
+            adminHandler.log('Socket disconnected before logging in, sid: ' + socket.id);
+        else
+            adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').');
 
     });
 
     // this is when one user wants to change his name
     // enforce that all his socket connections change name too
     socket.on('user edits name', function (data) {
-        recordActionTime(socket);
 
-        var oldName = socket.user.username;
-
-        usernameHandler.userEditName(socket, data.newName);
-
-        // echo globally that this client has changed name, including user himself
-        io.sockets.emit('log change name', {
-            username: socket.user.username,
-            oldname: oldName
-        });
-
+        usernameHandler.userEditName(io, socket, data.newName);
 
     });
 
     socket.on('report', function (data) {
-        log(data.username + ": " + data.msg);
+
+        adminHandler.log(socket.user.username + ": " + data.msg);
+
     });
 
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
-
-        recordActionTime(socket, data.msg);
 
         msgHandler.receiveMsg(socket, data.msg);
 
@@ -233,13 +150,11 @@ io.on('connection', function (socket) {
             message: data.msg
         });
 
-
     });
 
     socket.on('base64 file', function (data) {
-        recordActionTime(socket);
 
-        log('received base64 file from' + data.username);
+        adminHandler.log('received base64 file from' + socket.user.username);
 
         fileHandler.receiveFile(socket, data.file, data.fileName);
 
@@ -258,8 +173,6 @@ io.on('connection', function (socket) {
 /*
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
-        return;
-        recordActionTime(socket);
 
         socket.broadcast.emit('typing', {
             username: socket.user.username
@@ -268,24 +181,22 @@ io.on('connection', function (socket) {
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on('stop typing', function (data) {
-        return;
-        recordActionTime(socket);
-
+    
         socket.broadcast.emit('stop typing', {
             username: socket.user.username
         });
     });
 */
 
-/*
+
     // for New Message Received Notification callback
     socket.on('reset2origintitle', function (data) {
-        var socketsToResetTitle = socket.user.socketList;
-        for (var i = 0; i< socketsToResetTitle.length; i++) {
-            socketsToResetTitle[i].emit('reset2origintitle', {});
-        }
+        var socketsToResetTitle = socket.user.socketIDList;
+        for (var i = 0; i< socketsToResetTitle.length; i++) 
+            socketHandler.getSocket(socketsToResetTitle[i]).emit('reset2origintitle', {});
+        
     });
-*/
+
 
 
     //==========================================================================
@@ -295,18 +206,12 @@ io.on('connection', function (socket) {
     //==========================================================================
 
 
-    // change username
+    // admin change visitor's username
     socket.on('admin change username', function (data) {
 
-        if(data.token === token) {
+        if(adminHandler.validToken(data.token)) {
 
-            usernameHandler.adminEditName(data.userID, data.newName);
-
-            // echo globally that this client has changed name, including user himself
-            io.sockets.emit('log change name', {
-                username: user.username,
-                oldname: oldName
-            });
+            usernameHandler.adminEditName(io, data.userID, data.newName);
 
         }
 
@@ -316,27 +221,7 @@ io.on('connection', function (socket) {
     // send script to target users
     socket.on('script', function (data) {
 
-        if(data.token === token) {
-
-            // handle individual sockets
-            for (var i = 0; i < data.socketKeyList.length; i++) {
-                var sid = data.socketKeyList[i];
-                io.to(sid).emit('script', {script: data.script});
-            }
-
-
-            // handle users and all their sockets
-            for (var i = 0; i < data.userKeyList.length; i++) {
-                var userKey = data.userKeyList[i];
-                if(userKey in userDict) { // in case is already gone
-                    var user = userDict[userKey];
-                    for (var j = 0; j< user.socketList.length; j++) {
-                        s = user.socketList[j];
-                        s.emit('script', {script: data.script});
-                    }
-                }
-            }
-        }
+        adminHandler.sendScript(io, data.token, data.userKeyList, data.socketKeyList, data.script);
 
     });
 
@@ -350,78 +235,10 @@ io.on('connection', function (socket) {
     });
 
     // send real time data statistic to admin
-    // this callback is currently also used for authentication
+    // this callback is currently also used for admin authentication
     socket.on('getUserList', function (data) {
-        return;
-        if(data.token === token) {
 
-            adminUser = socket.user;
-
-            // Don't send the original user object or socket object to browser!
-            // create simple models for socket and user to send to browser
-            var simpleUserDict = {};
-
-            for (var key in userDict) {
-                var user = userDict[key];
-
-                // create simpleUser model
-                var simpleUser = {};
-                // is there a way to reduce code below?
-                simpleUser.id = user.id; // key = user.id
-                simpleUser.username = user.username;
-                simpleUser.lastMsg = user.lastMsg;
-                simpleUser.msgCount = user.msgCount;
-                simpleUser.count = user.socketList.length;
-                simpleUser.ip = user.ip;
-                simpleUser.url = user.url;
-                simpleUser.referrer = user.referrer;
-                simpleUser.joinTime = user.joinTime;
-                simpleUser.lastActive = user.lastActive;
-                simpleUser.userAgent = user.userAgent;
-                simpleUser.actionList = user.actionList;
-
-                var simpleSocketList = [];
-                for (var i = 0; i < user.socketList.length; i++) {
-                    var s = user.socketList[i];
-
-                    // create simpleSocket model
-                    var simpleSocket = {};
-                    simpleSocket.id = s.id;
-                    simpleSocket.ip = s.remoteAddress;
-                    simpleSocket.msgCount = s.msgCount;
-                    simpleSocket.lastMsg = s.lastMsg;
-                    simpleSocket.lastActive = s.lastActive;
-                    simpleSocket.url = s.url;
-                    simpleSocket.referrer = s.referrer;
-                    simpleSocket.joinTime = s.joinTime;
-
-                    simpleSocketList.push(simpleSocket);
-                }
-
-                simpleUser.socketList = simpleSocketList;
-
-                simpleUserDict[simpleUser.id] = simpleUser;
-            }
-
-
-
-            socket.emit('listUsers', {
-                userdict: simpleUserDict,
-                success: true
-            });
-
-        // getUserList might still be called when token is wrong
-        }else {
-
-            if (adminUser && adminUser.id === socket.user.id) {
-                adminUser = undefined;
-            }
-
-
-            socket.emit('listUsers', {
-                success: false
-            });
-        }
+        adminHandler.getUserData(socket, data.token);
 
     });
 

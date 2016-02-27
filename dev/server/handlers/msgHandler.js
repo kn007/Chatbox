@@ -1,6 +1,8 @@
 var utils = require('../utils/utils.js');
+var socketHandler = require('./socketHandler.js');
+
 var fs = require('fs');
-var filePath = __dirname+"/../../client/chat-log.txt";
+var logFilePath = __dirname+"/../../client/chat-log.txt";
 
 var totalMsg = 0;
 
@@ -8,6 +10,8 @@ var msgHandler = {};
 
 
 msgHandler.receiveMsg = function(socket, msg) {
+
+	socketHandler.recordSocketActionTime(socket, msg);
 
 	totalMsg++;
 	socket.msgCount++;
@@ -26,11 +30,11 @@ msgHandler.receiveMsg = function(socket, msg) {
     var chatMsg = socket.user.username+": "+msg+'\n';
     console.log(chatMsg);
 
-    fs.appendFile(filePath, new Date() + "\t"+ chatMsg, function(err) {
+    fs.appendFile(logFilePath, new Date() + "\t"+ chatMsg, function(err) {
 
-        if(err) {
+        if(err) 
             console.log(err);
-        }else
+        else
         	console.log("The message is saved to log file!");
 
     });

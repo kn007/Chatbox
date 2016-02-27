@@ -281,7 +281,7 @@
             var user = userDict[key];
 
             user.selectedSocketCount = 0; // for socket/user selection purpose
-
+            user.count = user.socketIDList.length;
             for (var i = 0; i < user.socketList.length; i++) {
 
                 var s = user.socketList[i];

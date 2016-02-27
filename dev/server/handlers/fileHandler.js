@@ -1,4 +1,5 @@
 var utils = require('../utils/utils.js');
+var socketHandler = require('./socketHandler.js');
 
 var fileHandler = {};
 
@@ -19,6 +20,8 @@ fileHandler.receiveFile = function(socket, file, fileName) {
     action.detail = fileName;
     socket.user.actionList.push(action);
 
+
+    socketHandler.recordSocketActionTime(socket);
 
 }
 
