@@ -153,7 +153,7 @@ io.on('connection', function (socket) {
 
     socket.on('base64 file', function (data) {
 
-        adminHandler.log('received base64 file from' + socket.user.username);
+        adminHandler.log('received base64 file from ' + socket.user.username);
 
         fileHandler.receiveFile(socket, data.file, data.fileName);
 
