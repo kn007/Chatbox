@@ -35,7 +35,7 @@
 
             $('.socketchatbox-admin-userdetail-pop').hide();
             $this.text('[ ↓ ]');
-            $this.removeClass('blue');
+            $this.removeClass('green');
             dataHandler.setOpenedUserID('');
 
         }else{
@@ -44,12 +44,12 @@
             if (preOpenedUserID in dataHandler.getUserDict()) {
                 var preOpenedUser = dataHandler.getUserDict()[preOpenedUserID];
                 preOpenedUser.arrowSpan.text('[ ↓ ]');
-                preOpenedUser.arrowSpan.removeClass('blue');
+                preOpenedUser.arrowSpan.removeClass('green');
 
             }
 
             $this.text('[ ↑ ]');
-            $this.addClass('blue');
+            $this.addClass('green');
 
             dataHandler.setOpenedUserID(userID);
             user.arrowSpan = $this;
