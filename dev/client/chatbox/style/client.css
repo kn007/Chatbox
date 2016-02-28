@@ -52,7 +52,7 @@ ul {
   background: lightgrey;
   border: 1px solid lightgray;
   color:gray;
-  margin-top: 30px;
+  margin-top: 15px;
   padding: 5px
 }
 
@@ -215,13 +215,8 @@ line-height: 1em;
   color: gray;
   text-align: center;
   font-size: smaller;
-  /* padding: 10px; */
-  /* padding-bottom: 30px; */
-  height: 30px;
-  /* margin-bottom: 40px; */
+  height: 15px;
 }
-
-.socketchatbox-typing {}
 
 .socketchatbox-username {
   font-weight: 700; 
