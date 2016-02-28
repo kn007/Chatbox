@@ -85,6 +85,7 @@ io.on('connection', function (socket) {
         newUser = socketHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
 
         var user = socket.user;
+
         adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
 
         // the user already exists, this is just a new connection from him
@@ -169,33 +170,29 @@ io.on('connection', function (socket) {
 
     });
 
-/*
+
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
 
-        socket.broadcast.emit('typing', {
-            username: socket.user.username
-        });
+        socket.broadcast.emit('typing', { username: socket.user.username });
+
     });
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on('stop typing', function (data) {
     
-        socket.broadcast.emit('stop typing', {
-            username: socket.user.username
-        });
-    });
-*/
+        socket.broadcast.emit('stop typing', { username: socket.user.username });
 
+    });
 
     // for New Message Received Notification callback
     socket.on('reset2origintitle', function (data) {
+        if (!socket.joined) return;
         var socketsToResetTitle = socket.user.socketIDList;
         for (var i = 0; i< socketsToResetTitle.length; i++) 
             socketHandler.getSocket(socketsToResetTitle[i]).emit('reset2origintitle', {});
         
     });
-
 
 
     //==========================================================================
@@ -230,6 +227,7 @@ io.on('connection', function (socket) {
     // send real time data statistic to admin
     // this callback is currently also used for admin authentication
     socket.on('getUserList', function (data) {
+
         adminHandler.getUserData(socket, data.token);
 
     });

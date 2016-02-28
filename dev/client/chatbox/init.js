@@ -7,6 +7,7 @@
     chatbox.historyHandler = {};
     chatbox.fileHandler = {};
     chatbox.msgHandler = {};
+    chatbox.typingHandler = {};
     chatbox.notification = {};
     chatbox.socketEvent = {};
 

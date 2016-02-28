@@ -3,6 +3,7 @@
 
     var ui = chatbox.ui;
     var msgHandler = chatbox.msgHandler;
+    var typingHandler = chatbox.typingHandler;
     var notification = chatbox.notification;
 
     var socketEvent = chatbox.socketEvent;
@@ -104,12 +105,13 @@
 
         // Whenever the server emits 'typing', show the typing message
         socket.on('typing', function (data) {
-            addChatTyping(data);
+
+            typingHandler.addTypingUser(data.username);
         });
 
         // Whenever the server emits 'stop typing', kill the typing message
         socket.on('stop typing', function (data) {
-            removeChatTyping(data);
+            typingHandler.removeTypingUser(data.username);
         });
 
     }

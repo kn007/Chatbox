@@ -4,6 +4,7 @@
 
     var ui = chatbox.ui;
     var msgHandler = chatbox.msgHandler;
+    var typingHandler = chatbox.typingHandler;
     var utils = chatbox.utils;
 
 
@@ -19,9 +20,22 @@
                     chatbox.socket.emit('stop typing', {name: chatbox.username});
                     //typing = false;
                 }
+
+            } else {
+
+                if (ui.$inputMessage.is(":focus")) {
+
+                    chatbox.socket.emit('typing', {});
+
+                }
+
             }
 
         });
+
+        // typing controller
+        setInterval(function(){ typingHandler.updateTypingInfo(); }, 5*1000);
+
 
     });
 
