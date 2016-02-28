@@ -81,7 +81,7 @@
                 $downArrowSpan.text('[ ↑ ]');
                 $downArrowSpan.prop('title', 'Close User Detail');
 
-                $downArrowSpan.addClass('green');
+                $downArrowSpan.addClass('yellow');
                 user.arrowSpan = $downArrowSpan;
 
             } else {

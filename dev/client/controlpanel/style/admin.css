@@ -250,6 +250,10 @@ button {
   background: blue;
 }
 
+.yellow {
+  background: yellow;
+}
+
 .error {
   background: red !important;
 }

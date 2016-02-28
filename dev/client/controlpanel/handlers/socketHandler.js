@@ -61,7 +61,6 @@
 
                 if (!verified){
                     verified = true;
-                    console.log('go');
                     socket.emit('getServerStat', {token: chatboxAdmin.token});
                 }
 

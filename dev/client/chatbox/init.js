@@ -22,6 +22,7 @@
     var hostname = location.hostname;
     // hostname="lifeislikeaboat.com";
     chatbox.domain = location.protocol + "//" + hostname + ":" + port;
+    console.log('chatbox.domain: ' + chatbox.domain);
 
     // This uuid is unique for each browser but not unique for each connection
     // because one browser can have multiple tabs each with connections to the chatbox server.
