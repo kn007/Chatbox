@@ -221,7 +221,9 @@ div#socketchatbox-online {}
   padding-right: 5px; 
   border: 1px solid lightgray;
 }
-
+.breakable {
+  word-break: break-word;
+}
 button {
   border: 1px solid lightgray;
   margin-left: 10px;
@@ -260,7 +262,7 @@ button {
 }
 
 .yellow {
-  background: yellow;
+  background: yellow !important;
 }
 
 .error {

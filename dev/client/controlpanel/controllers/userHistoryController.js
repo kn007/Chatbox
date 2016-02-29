@@ -63,11 +63,11 @@
             var d = new Date(Number(action.time));
             var str = '';
                 str += ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
-                str += "<span class = 'socketchatbox-actionhistory-url'>" + utils.createNewWindowLink(action.url) + "</span>";
+                str += "<span class = 'socketchatbox-actionhistory-url breakable'>" + utils.createNewWindowLink(action.url) + "</span>";
             str += "<br/>";
             str += "Action: " + action.type ;
             if (action.detail) {
-                str += "<br/>Detail: " + action.detail;
+                str += "<br/><span class='breakable'>Detail: " + action.detail + "<span>";
             }
 
             $actionDiv.html(str);

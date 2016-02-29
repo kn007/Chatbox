@@ -75,15 +75,15 @@
             var $socketInfo = $("<div></div>");
             var socketInfoHTML = "<center>[" + i + "]</center><br/>";
             socketInfoHTML += "<table class='table table-bordered'><tbody>";
-            socketInfoHTML += "<tr><td>ID</td><td>" + s.id + "</td></tr>";
-            socketInfoHTML += "<tr><td>URL</td><td>" + utils.createNewWindowLink(s.url) + "</td></tr>";
+            socketInfoHTML += "<tr><td>ID</td><td class='breakable'>" + s.id + "</td></tr>";
+            socketInfoHTML += "<tr><td>URL</td><td class='breakable'>" + utils.createNewWindowLink(s.url) + "</td></tr>";
             if (s.referrer)
-                socketInfoHTML += "<tr><td>Referrer</td><td>" + utils.createNewWindowLink(s.referrer) + "</td></tr>";
+                socketInfoHTML += "<tr><td>Referrer</td><td class='breakable'>" + utils.createNewWindowLink(s.referrer) + "</td></tr>";
             socketInfoHTML += "<tr><td>IP</td><td>" + s.ip + "</td></tr>";
             socketInfoHTML += "<tr><td>Total Messages</td><td>" + s.msgCount + "</td></tr>";
 
             if (s.lastMsg)
-                socketInfoHTML += "<tr><td>Last Message</td><td>\"" + s.lastMsg + "\"</td></tr>";
+                socketInfoHTML += "<tr><td>Last Message</td><td class='breakable'>\"" + s.lastMsg + "\"</td></tr>";
 
             socketInfoHTML += "<tr><td>Idle Time</td><td>" + utils.getTimeElapsed(s.lastActive) + "</td></tr>";
             socketInfoHTML += "<tr><td>Connection Time</td><td>" + utils.getTimeElapsed(s.joinTime) + "</td></tr>";
