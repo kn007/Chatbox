@@ -25,10 +25,10 @@
 
             if (ui.showHistory) {
                 ui.showHistory = false;
-                $('.socketchatbox-actionhistory-header').text(' ↓ ');
+                $('.socketchatbox-actionhistory-arrow').text(' ↓ ');
             } else {
                 ui.showHistory = true;
-                $('.socketchatbox-actionhistory-header').text(' ↑ ');
+                $('.socketchatbox-actionhistory-arrow').text(' ↑ ');
 
             }
 

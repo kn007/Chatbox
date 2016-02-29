@@ -52,8 +52,10 @@
                     <br/><br/>
                     Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec<input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="1"  />
                     <br/><br/>
-                    <button id="selectAll">Select All</button>
-                    <button id="selectNone">Select None</button>
+                    <div class="btn-group btn-group-sm">
+                        <button id="selectAll"  type="button" class="btn btn-default">Select All</button>
+                        <button id="selectNone"  type="button" class="btn btn-default">Select None</button>
+                    </div>
                     <br/><br/>
                     <div id="socketchatbox-online-users">
                         Waiting...
@@ -78,11 +80,11 @@
                         <p>User-Agent:  <span class="socketchatbox-userdetail-useragent"></span></p>
                         </div>
                         <div class="socketchatbox-socketdetail">
-                            <center>Live Connection <span class="socketchatbox-livesockets-count badge"></span> <button class="socketchatbox-livesockets-header viewmore"> ↓ </button></center>
+                            <center><button class="socketchatbox-livesockets-header btn btn-default">Live Connection <span class="socketchatbox-livesockets-count badge"></span><span class="socketchatbox-livesockets-arrow">  ↓ </span></button></center>
                             <div class="socketchatbox-userdetail-sockets"></div>
                         </div>
 
-                        <center>Action History <span class="socketchatbox-actionhistory-count badge"></span> <button class="socketchatbox-actionhistory-header viewmore"> ↓ </button></center>
+                        <center><button class="socketchatbox-actionhistory-header btn btn-default"> Action History <span class="socketchatbox-actionhistory-count badge"></span><span class="socketchatbox-actionhistory-arrow"> ↓ </span></button></center>
                         <br/>
                         <div class="socketchatbox-userdetail-actions"></div>
 

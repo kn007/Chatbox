@@ -73,6 +73,8 @@
             $usernameSpan.html(nameWithCount);
             $usernameSpan.prop('title', 'Join Time: '+ utils.getTimeElapsed(user.joinTime)); // better info to show?
             $usernameSpan.addClass("username-info");
+            $usernameSpan.addClass("btn");
+            $usernameSpan.addClass("btn-default");
 
 
             $usernameSpan.data('id', user.id);
@@ -93,15 +95,26 @@
             }
 
             $downArrowSpan.addClass("username-info-viewmore");
-            $downArrowSpan.addClass('viewmore');
+            $downArrowSpan.addClass('btn');
+            $downArrowSpan.addClass("btn-default");
+
             $downArrowSpan.data('id', user.id);
 
 
             // also link user with his jquery object
             user.jqueryObj = $usernameSpan;
 
-            $('#socketchatbox-online-users').append($usernameSpan);
-            $('#socketchatbox-online-users').append($downArrowSpan);
+            // group username with down arrow
+            var $usernameDiv = $('<div></div>');
+            $usernameDiv.addClass('btn-group');
+            $usernameDiv.addClass('socketchatbox-onlineuserlist-user');
+            $usernameDiv.append($usernameSpan);
+            $usernameDiv.append($downArrowSpan);
+
+
+
+            $('#socketchatbox-online-users').append($usernameDiv);
+            // $('#socketchatbox-online-users').append($downArrowSpan);
 
             // reload user detail if this is the user selected
             //if(user.id === openedUserID) {

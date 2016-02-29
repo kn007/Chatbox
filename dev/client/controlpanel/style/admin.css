@@ -35,7 +35,7 @@ a:visited {
   /* background: rgba(255, 255, 255, 0.5); */
 }
 
-.viewmore {
+/*.viewmore {
   margin-right: 10px;
   background: white;
 }
@@ -43,10 +43,10 @@ a:visited {
   background: yellow;
 }
 
-
-
+*/
+/*
 .username-info-viewmore {
-}
+}*/
 
 #socketchatbox-checkAdmin {
   background: white;
@@ -57,6 +57,10 @@ a:visited {
   border: 1px solid lightgray;
   padding: 20px;
   background: white;
+}
+
+.socketchatbox-onlineuserlist-user {
+  margin:5px;
 }
 
 div#socketchatbox-online {}
@@ -100,7 +104,6 @@ div#socketchatbox-online {}
   overflow-y: scroll;
 }
 .username-info {
-  margin: 5px;
   cursor: pointer;
   border-radius: 5px;
   background: white;
@@ -108,14 +111,14 @@ div#socketchatbox-online {}
 }
 
 .selected {
-  background: yellow;
+  background: yellow !important;
   /* border: 1px solid lightgray; */
   /* padding: 5px; */
 }
 
 .partially-selected {
   border: 1px solid lightgray;
-  background: linear-gradient(90deg, yellow 50%, white 50%);
+  background: linear-gradient(90deg, yellow 50%, white 50%) !important;
 }
 
 
