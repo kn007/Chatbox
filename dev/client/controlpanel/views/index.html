@@ -5,6 +5,7 @@
         <title>Chatbox Admin</title>
         <link rel="stylesheet" href="/chatbox/style/client.css">
         <link rel="stylesheet" href="/controlpanel/style/admin.css">
+        <link rel="stylesheet" href="/controlpanel/style/bootstrap.min.css">
     </head>
     <body>
         <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
@@ -48,10 +49,11 @@
 
                 <div id="socketchatbox-online">
                     <b> Users Online</b>
+                    <br/><br/>
+                    Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec<input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="1"  />
+                    <br/><br/>
                     <button id="selectAll">Select All</button>
                     <button id="selectNone">Select None</button>
-                    <br/><br/>
-                    <small>Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec</small><input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="1"  />
                     <br/><br/>
                     <div id="socketchatbox-online-users">
                         Waiting...
@@ -76,14 +78,11 @@
                         <p>User-Agent:  <span class="socketchatbox-userdetail-useragent"></span></p>
                         </div>
                         <div class="socketchatbox-socketdetail">
-                            <center>Live Connection (<span class="socketchatbox-livesockets-count"></span>) <span class="socketchatbox-livesockets-header"> [ ↓ ]</span></center>
-
-
+                            <center>Live Connection <span class="socketchatbox-livesockets-count badge"></span> <span class="socketchatbox-livesockets-header"> [ ↓ ]</span></center>
                             <div class="socketchatbox-userdetail-sockets"></div>
                         </div>
 
-
-                        <center>Action History (<span class="socketchatbox-actionhistory-count"></span>) <span class="socketchatbox-actionhistory-header"> [ ↓ ]</span></center>
+                        <center>Action History <span class="socketchatbox-actionhistory-count badge"></span> <span class="socketchatbox-actionhistory-header"> [ ↓ ]</span></center>
                         <br/>
                         <div class="socketchatbox-userdetail-actions"></div>
 
@@ -97,25 +96,16 @@
                 <div class="socketchatbox-admin-input">
                     <div class="socketchatbox-scriptHistory">
                         <b>Client-Side Scripting</b>
-                        <button class="prevScript">prev</button>
-                        <button class="nextScript">next</button>
-                        <button class="cloneScript">clone</button>
-                        
-
-
-                        <div class="socketchatbox-scriptHistoryScript">
-                             
-                        </div>
-
-                        
+                        <button class="prevScript"> < </button>
+                        <button class="nextScript"> > </button>
+                        <button class="cloneScript">clone</button>    
+                        <div class="socketchatbox-scriptHistoryScript"></div>
                     </div>
                     <textarea placeholder="Type script here..." rows="4" cols="50"></textarea>
                     <button id='sendScript'>Send Script!</button>
                     <div id="socketchatbox-scriptSentStatus"></div>
 
                 </div>
-            
-
             </div>
         </div>
 
@@ -138,13 +128,12 @@
 
                 </div>
 
-
                 <form id="socketchatbox-sendMedia">
                     <div>
-                        <label class="socketchatbox-filebutton">
+                        <span class="socketchatbox-filebutton">
                             Drop file above to send or click here
                             <input type="file" id="socketchatbox-imagefile" accept="image/*">
-                        </label>
+                        </span>
                     </div>
                 </form>       
                 <input class="socketchatbox-inputMessage" placeholder="Type here..."/>

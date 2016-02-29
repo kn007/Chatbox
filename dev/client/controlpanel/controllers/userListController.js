@@ -66,11 +66,11 @@
 
             // show number of connections of this user if more than one
             if(user.count > 1){
-                nameWithCount += "("+user.count+")";
+                nameWithCount += " <span class='badge'>"+user.count+"<span>";
             }
 
             var $usernameSpan = $("<span></span>");
-            $usernameSpan.text(nameWithCount);
+            $usernameSpan.html(nameWithCount);
             $usernameSpan.prop('title', 'Join Time: '+ utils.getTimeElapsed(user.joinTime)); // better info to show?
             $usernameSpan.addClass("username-info");
             $usernameSpan.data('id', user.id);

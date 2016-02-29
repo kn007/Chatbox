@@ -44,9 +44,9 @@
     function toggleActionHistoryVisibility() {
 
         if (ui.showHistory) 
-            ui.$actionHistoryDiv.show();
+            ui.$actionHistoryDiv.slideDown();
         else
-            ui.$actionHistoryDiv.hide();
+            ui.$actionHistoryDiv.slideUp();
     }
 
     function loadUserActionHistory(user) {

@@ -10,14 +10,7 @@ html {
 a:visited {
   color:black;
 }
-.socketchatbox-admin-title h1 {
-
-color: #3D3D3D;
-
-margin: 50px;
-
-font-size: 55px;
-}
+.socketchatbox-admin-title h1 {color: #3D3D3D;/* margin: 50px; */font-size: 35px;padding: 50px;background: whitesmoke;}
 .socketchatbox-admin-instruction li{
   margin:10px
 }
@@ -226,8 +219,9 @@ button {
 }
 
 .socketchatbox-refresh-interval {
+    width: 50%!important;
     margin-left:30px;
-
+    display: inline!important;
 }
 
 .socketchatbox-livesockets-header {

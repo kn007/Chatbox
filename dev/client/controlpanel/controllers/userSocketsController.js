@@ -61,9 +61,9 @@
     function toggleSocketDetailVisibility() {
 
         if (ui.showAliveSocket) 
-            $('.socketchatbox-userdetail-sockets').show();
+            $('.socketchatbox-userdetail-sockets').slideDown();
         else
-            $('.socketchatbox-userdetail-sockets').hide();
+            $('.socketchatbox-userdetail-sockets').slideUp();
     }
 
     function loadSocketDetail(user) {

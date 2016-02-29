@@ -33,7 +33,7 @@
         // already opened, close now
         if (dataHandler.getOpenedUserID() === userID) {
 
-            $('.socketchatbox-admin-userdetail-pop').hide();
+            $('.socketchatbox-admin-userdetail-pop').slideUp();
             $this.text('[ ↓ ]');
             $this.removeClass('yellow');
             dataHandler.setOpenedUserID('');
@@ -58,7 +58,7 @@
 
             // show
             if (!$('.socketchatbox-admin-userdetail-pop').is(":visible"))
-                $('.socketchatbox-admin-userdetail-pop').show();
+                $('.socketchatbox-admin-userdetail-pop').slideDown();
 
             ui.resetOpenUserSocketHighlight(userID);
         }
