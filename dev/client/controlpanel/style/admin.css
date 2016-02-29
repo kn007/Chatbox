@@ -19,7 +19,7 @@ a:visited {
 }
 
 .table-wrapper {
-  overflow: scroll;
+  /*overflow: scroll;*/
 }
 
 #sendScript {
@@ -70,7 +70,7 @@ div#socketchatbox-online {}
 .socketchatbox-scriptHistory {
   border: 1px solid lightgray;
   padding: 20px;
-  background: #EDEDED;
+  background: #F5F5F5;
 }
 .socketchatbox-admin-leftside {
   width: 36%;
@@ -133,7 +133,7 @@ div#socketchatbox-online {}
 
 .socketchatbox-userdetail {
   border: 1px solid lightgray;
-  background: #F9F9F9;
+  background: #FFFFFF;
   margin: 10px;
   display:none;
   font-size: small;
@@ -159,7 +159,7 @@ div#socketchatbox-online {}
 }
 
 .socketchatbox-userdetail-actions-each:nth-child(odd) {
-  background: #ededed;
+  background: #FFFFFF;
 }
 
 .socketchatbox-userdetail-actions-each:nth-child(even) {
@@ -192,7 +192,7 @@ div#socketchatbox-online {}
 }
 
 .socketchatbox-socketdetail-each:nth-child(odd) {
-  background: #ededed;
+  background: #FFFFFF;
 }
 
 .socketchatbox-socketdetail-each:nth-child(even) {
