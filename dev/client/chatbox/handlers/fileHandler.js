@@ -4,21 +4,14 @@
 
     var fileHandler = chatbox.fileHandler;
 
-    var sendingFile = false;
-
-    fileHandler.sending = function() {
-        return sendingFile;
-    }
+    fileHandler.sendingFile = false;
 
     function readThenSendFile(data){
 
-        if(sendingFile){
+        if(fileHandler.sendingFile){
             alert('Still sending last file!');
             return;
         }
-
-        if(fileTooBig(data))
-            return;
 
 
         var reader = new FileReader();
@@ -30,16 +23,13 @@
             chatbox.socket.emit('base64 file', msg);
             fileHandler.sendingFile = true;
         };
+        
         reader.readAsDataURL(data);
     }
 
     fileHandler.readThenSendFile = readThenSendFile;
 
-
-    fileHandler.receivedFileSentByMyself = function() {
-        sendingFile = false;
-    }
-
+ 
 
     function fileTooBig(data){
 
@@ -54,6 +44,8 @@
         return false;
 
     }
+
+    fileHandler.fileTooBig = fileTooBig;
 
 })();
 

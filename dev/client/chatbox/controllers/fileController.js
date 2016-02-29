@@ -24,6 +24,7 @@
         $('#socketchatbox-imagefile').bind('change', function(e) {
             var file = e.originalEvent.target.files[0];
             sendFile(file);
+            $('#socketchatbox-imagefile').val('');
         });
 
     });
@@ -33,11 +34,17 @@
 
         ui.$inputMessage.val('');
         ui.$inputMessage.removeAttr('disabled');
+        fileHandler.sendingFile = false;
     }
 
     ui.receivedFileSentByMyself = receivedFileSentByMyself;
 
     function sendFile(file) {
+
+
+
+        if(!file || fileHandler.fileTooBig(file))
+            return;
 
         ui.$inputMessage.val('Sending file...');
         ui.$inputMessage.prop('disabled', true);
