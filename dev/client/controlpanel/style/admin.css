@@ -215,7 +215,7 @@ div#socketchatbox-online {}
 }
 
 .socketchatbox-admin-input textarea{
-  height: 150px;  
+  height: 100px;  
   width: 100%;
   outline: none;
   padding-right: 5px; 
