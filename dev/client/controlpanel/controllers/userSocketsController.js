@@ -72,23 +72,28 @@
         $('.socketchatbox-livesockets-count').text(user.socketList.length);
         for (var i = 0; i< user.socketList.length; i++) {
             var s = user.socketList[i];
-            var $socketInfo = $("<div></div");
-            var socketInfoHTML = "<center>[" + i + "]</center></p>";
-            socketInfoHTML += "<p>ID: " + s.id + "</p>";
-            socketInfoHTML += "<p>URL: " + utils.createNewWindowLink(s.url) + "</p>";
+            var $socketInfo = $("<div></div>");
+            var socketInfoHTML = "<center>[" + i + "]</center><br/>";
+            socketInfoHTML += "<table class='table table-bordered'><tbody>";
+            socketInfoHTML += "<tr><td>ID</td><td>" + s.id + "</td></tr>";
+            socketInfoHTML += "<tr><td>URL</td><td>" + utils.createNewWindowLink(s.url) + "</td></tr>";
             if (s.referrer)
-                socketInfoHTML += "<p>Referrer: " + utils.createNewWindowLink(s.referrer) + "</p>";
-            socketInfoHTML += "<p>IP: " + s.ip + "</p>";
-            socketInfoHTML += "<p>Total Messages: " + s.msgCount + "</p>";
+                socketInfoHTML += "<tr><td>Referrer</td><td>" + utils.createNewWindowLink(s.referrer) + "</td></tr>";
+            socketInfoHTML += "<tr><td>IP</td><td>" + s.ip + "</td></tr>";
+            socketInfoHTML += "<tr><td>Total Messages</td><td>" + s.msgCount + "</td></tr>";
 
             if (s.lastMsg)
-                socketInfoHTML += "<p>Last Message: \"" + s.lastMsg + "\"</p>";
+                socketInfoHTML += "<tr><td>Last Message</td><td>\"" + s.lastMsg + "\"</td></tr>";
 
-            socketInfoHTML += "<p>Idle Time: " + utils.getTimeElapsed(s.lastActive) + "</p>";
-            socketInfoHTML += "<p>Connection Time: " + utils.getTimeElapsed(s.joinTime) + "</p>";
+            socketInfoHTML += "<tr><td>Idle Time</td><td>" + utils.getTimeElapsed(s.lastActive) + "</td></tr>";
+            socketInfoHTML += "<tr><td>Connection Time</td><td>" + utils.getTimeElapsed(s.joinTime) + "</td></tr>";
+
+
+            socketInfoHTML += "</tbody></table>";
 
             $socketInfo.html(socketInfoHTML);
             $socketInfo.addClass('socketchatbox-socketdetail-each');
+            $socketInfo.addClass('table-wrapper');
 
             $socketInfo.data('id', s.id);
             // link jquery object with socket object

@@ -62,32 +62,39 @@
                     </div>
                     <div class="socketchatbox-userdetail socketchatbox-admin-userdetail-pop">
                         <center><span class="socketchatbox-userdetail-name"></span></center>
-                        <div class="socketchatbox-admin-userprofile">
-                        <p>Name: <input class="socketchatbox-userdetail-name-edit" type="text" />
-                            <button class="socketchatbox-admin-changeUserName">update</button>
-                        </p>
-                        <p>Last Message: <span class="socketchatbox-userdetail-lastmsg"></span></p>
-                        <p>Total Messages: <span class="socketchatbox-userdetail-totalmsg"></span></p>
-                        <p>Landing Page: <span class="socketchatbox-userdetail-landingpage"></span></p>
-                        <p>Referrer: <span class="socketchatbox-userdetail-referrer"></span></p>
-                        <p>Idle Time: <span class="socketchatbox-userdetail-lastactive"></span></p>
-                        <p>Join Time: <span class="socketchatbox-userdetail-jointime"></span>
-                        </p>
-                        <p>IP: <span class="socketchatbox-userdetail-ip"></span>
-                            <button class="socketchatbox-admin-blockIP">block</button>
-                            <button class="socketchatbox-admin-lookupIP">look up</button>
-                        </p>
-                        <p>User-Agent:  <span class="socketchatbox-userdetail-useragent"></span></p>
+                        <div class="socketchatbox-admin-userprofile table-wrapper">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr><td>Name</td> <td><input class="socketchatbox-userdetail-name-edit" type="text" />
+                                        <button class="socketchatbox-admin-changeUserName">update</button></td>
+                                    </tr>
+                                    <tr><td>Last Message:</td> <td class="socketchatbox-userdetail-lastmsg"></td></tr>
+                                    <tr><td>Total Messages:</td> <td class="socketchatbox-userdetail-totalmsg"></td></tr>
+                                    <tr><td>Landing Page:</td> <td class="socketchatbox-userdetail-landingpage"></td></tr>
+                                    <tr><td>Referrer:</td> <td class="socketchatbox-userdetail-referrer"></td></tr>
+                                    <tr><td>Idle Time:</td> <td class="socketchatbox-userdetail-lastactive"></td></tr>
+                                    <tr><td>Join Time:</td> <td class="socketchatbox-userdetail-jointime"></td>
+                                    </tr>
+                                    <tr><td>IP:</td><td><span class="socketchatbox-userdetail-ip"></span>
+                                        <button class="socketchatbox-admin-blockIP">block</button>
+                                        <button class="socketchatbox-admin-lookupIP">look up</button></td>
+                                    </tr>
+                                    <tr><td>User-Agent: </td> <td class="socketchatbox-userdetail-useragent"></td></tr>
+                                </tbody>    
+                            </table>
                         </div>
                         <div class="socketchatbox-socketdetail">
                             <center><button class="socketchatbox-livesockets-header btn btn-default">Live Connection <span class="socketchatbox-livesockets-count badge"></span><span class="socketchatbox-livesockets-arrow">  ↓ </span></button></center>
+                            
                             <div class="socketchatbox-userdetail-sockets"></div>
+                             
                         </div>
 
                         <center><button class="socketchatbox-actionhistory-header btn btn-default"> Action History <span class="socketchatbox-actionhistory-count badge"></span><span class="socketchatbox-actionhistory-arrow"> ↓ </span></button></center>
                         <br/>
+                        
                         <div class="socketchatbox-userdetail-actions"></div>
-
+                         
 
                     </div>
                     
