@@ -31,19 +31,23 @@ a:visited {
   width: 50%;
   position: absolute;
   /* max-width: 618px; */
-  word-wrap: break-word;
+  /*word-wrap: break-word;*/
   /* background: rgba(255, 255, 255, 0.5); */
 }
 
-
-.username-info-viewmore {
+.viewmore {
   margin-right: 10px;
-  border-radius: 100px;
   background: white;
 }
-.username-info-viewmore:hover{
+.viewmore :hover{
   background: yellow;
 }
+
+
+
+.username-info-viewmore {
+}
+
 #socketchatbox-checkAdmin {
   background: white;
   border: 1px solid lightgray;
@@ -99,7 +103,7 @@ div#socketchatbox-online {}
   margin: 5px;
   cursor: pointer;
   border-radius: 5px;
-  background: #F5F5F5;
+  background: white;
   /* border: 1px solid white; */
 }
 
@@ -224,7 +228,7 @@ button {
 }
 
 .socketchatbox-refresh-interval {
-    width: 50%!important;
+    width: 35%!important;
     margin-left:30px;
     display: inline!important;
 }

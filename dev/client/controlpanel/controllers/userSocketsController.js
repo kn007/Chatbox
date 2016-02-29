@@ -23,10 +23,10 @@
 
             if (ui.showAliveSocket) {
                 ui.showAliveSocket = false;
-                $('.socketchatbox-livesockets-header').text('[ ↓ ]');
+                $('.socketchatbox-livesockets-header').text(' ↓ ');
             } else {
                 ui.showAliveSocket = true;
-                $('.socketchatbox-livesockets-header').text('[ ↑ ]');
+                $('.socketchatbox-livesockets-header').text(' ↑ ');
 
             }
 

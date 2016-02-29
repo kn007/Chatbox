@@ -77,7 +77,7 @@
 
             $usernameSpan.data('id', user.id);
 
-            // add [ ↓ ]  after the user's name
+            // add  ↓   after the user's name
             var $downArrowSpan = $("<button></button>");
             if (user.id === dataHandler.getOpenedUserID()){
                 $downArrowSpan.text(' ↑ ');
@@ -93,6 +93,7 @@
             }
 
             $downArrowSpan.addClass("username-info-viewmore");
+            $downArrowSpan.addClass('viewmore');
             $downArrowSpan.data('id', user.id);
 
 
