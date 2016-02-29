@@ -69,23 +69,25 @@
                 nameWithCount += " <span class='badge'>"+user.count+"<span>";
             }
 
-            var $usernameSpan = $("<span></span>");
+            var $usernameSpan = $("<button></button>");
             $usernameSpan.html(nameWithCount);
             $usernameSpan.prop('title', 'Join Time: '+ utils.getTimeElapsed(user.joinTime)); // better info to show?
             $usernameSpan.addClass("username-info");
+
+
             $usernameSpan.data('id', user.id);
 
             // add [ ↓ ]  after the user's name
-            var $downArrowSpan = $("<span></span>");
+            var $downArrowSpan = $("<button></button>");
             if (user.id === dataHandler.getOpenedUserID()){
-                $downArrowSpan.text('[ ↑ ]');
+                $downArrowSpan.text(' ↑ ');
                 $downArrowSpan.prop('title', 'Close User Detail');
 
                 $downArrowSpan.addClass('yellow');
                 user.arrowSpan = $downArrowSpan;
 
             } else {
-                $downArrowSpan.text('[ ↓ ]');
+                $downArrowSpan.text(' ↓ ');
                 $downArrowSpan.prop('title', 'Open User Detail');
 
             }

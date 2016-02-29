@@ -38,7 +38,8 @@ a:visited {
 
 .username-info-viewmore {
   margin-right: 10px;
-  cursor: pointer;
+  border-radius: 100px;
+  background: white;
 }
 .username-info-viewmore:hover{
   background: yellow;
@@ -95,13 +96,17 @@ div#socketchatbox-online {}
   overflow-y: scroll;
 }
 .username-info {
-  margin-right: 5px;
+  margin: 5px;
   cursor: pointer;
+  border-radius: 5px;
+  background: #F5F5F5;
   /* border: 1px solid white; */
 }
 
 .selected {
   background: yellow;
+  /* border: 1px solid lightgray; */
+  /* padding: 5px; */
 }
 
 .partially-selected {
@@ -211,7 +216,7 @@ button {
   border: 1px solid lightgray;
   margin-left: 10px;
   cursor: pointer;
-  background: beige;
+  background: #f5f5f5;
 }
 
 .socketchatbox-admin-changeUserName {
