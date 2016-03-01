@@ -16,6 +16,8 @@
     //=================================================================================//
 
     ui.showHistory = false;
+    var uid = '-1';
+    var historyCount = 0;
 
     ui.init.push(function() {
 
@@ -54,10 +56,33 @@
 
     function loadUserActionHistory(user) {
 
-        ui.$actionHistoryDiv.html('');
-        $('.socketchatbox-actionhistory-count').text(user.actionList.length);
-        for (var i = 0; i < user.actionList.length; i++) {
-            var action = user.actionList[i];
+        var historyIndex = 0;
+
+        if (user.id !== uid)
+
+            ui.$actionHistoryDiv.html('');
+
+        else {
+
+            
+            // if it's the same user's action history and the total history number is the same, no need to update DOM
+            if (user.actionList.length === historyCount)
+                return;
+            
+            else {
+
+                historyIndex = historyCount;
+            }
+        }
+
+        uid = user.id;
+        historyCount = user.actionList.length;
+
+
+        $('.socketchatbox-actionhistory-count').text(historyCount);
+
+        for (; historyIndex < historyCount; historyIndex++) {
+            var action = user.actionList[historyIndex];
             var $actionDiv = $('<div></div>');
             //new Date(Number(action.time)) // full time format
             var d = new Date(Number(action.time));
@@ -65,15 +90,23 @@
             var actionBasicHTML = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
             actionBasicHTML += "<span class = 'socketchatbox-actionhistory-actiontype breakable'>" + action.type + "</span>";
             $actionBasicDiv.html(actionBasicHTML);
+            $actionBasicDiv.addClass('socketchatbox-userdetail-actions-each');
+
             $actionDiv.append($actionBasicDiv);
 
 
-            var htmlStr = "<span>url: " + utils.createNewWindowLink(action.url) + "</span><br />";
-            htmlStr += action.detail;
+            // var htmlStr = "<span>url: " + utils.createNewWindowLink(action.url) + "</span><br />";
+            // htmlStr += action.detail;
 
-            $actionDiv.prop('title', htmlStr);
-            $actionDiv.prop('data-toggle', 'tooltip');
+            $actionDiv.popover({
 
+                placement : 'left',
+                html : true,
+                title : utils.createNewWindowLink(action.url),
+                content : action.detail      
+            });
+
+            // title="Header" data-toggle="popover" data-placement="left" data-content="Content"
 
 
             // var $actionDetailDiv = $('<div></div>');
@@ -88,15 +121,10 @@
             // $actionBasicDiv.click(function(){$actionDetailDiv.show();});
 
 
-            $actionDiv.addClass('socketchatbox-userdetail-actions-each');
 
             ui.$actionHistoryDiv.append($actionDiv);
 
         }
-$('body').tooltip({
-    selector: '[rel=tooltip]'
-});
-        $('[data-toggle="tooltip"]').tooltip(); 
 
         
     }
