@@ -61,20 +61,43 @@
             var $actionDiv = $('<div></div>');
             //new Date(Number(action.time)) // full time format
             var d = new Date(Number(action.time));
-            var str = '';
-                str += ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
-                str += "<span class = 'socketchatbox-actionhistory-url breakable'>" + utils.createNewWindowLink(action.url) + "</span>";
-            str += "<br/>";
-            str += "Action: " + action.type ;
-            if (action.detail) {
-                str += "<br/><span class='breakable'>Detail: " + action.detail + "<span>";
-            }
+            var $actionBasicDiv = $('<div></div>');
+            var actionBasicHTML = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+            actionBasicHTML += "<span class = 'socketchatbox-actionhistory-actiontype breakable'>" + action.type + "</span>";
+            $actionBasicDiv.html(actionBasicHTML);
+            $actionDiv.append($actionBasicDiv);
 
-            $actionDiv.html(str);
+
+            var htmlStr = "<span>url: " + utils.createNewWindowLink(action.url) + "</span><br />";
+            htmlStr += action.detail;
+
+            $actionDiv.prop('title', htmlStr);
+            $actionDiv.prop('data-toggle', 'tooltip');
+
+
+
+            // var $actionDetailDiv = $('<div></div>');
+            // $actionDetailDiv.addClass('socketchatbox-actionhistory-actiondetail');
+            // $actionDetailDiv.addClass('breakable');
+
+            // var str = "";
+            // str += "<span>url: " + utils.createNewWindowLink(action.url) + "</span><br />";
+            // str += action.detail;
+            // $actionDetailDiv.html(str);
+            // $actionDiv.append($actionDetailDiv);
+            // $actionBasicDiv.click(function(){$actionDetailDiv.show();});
+
+
             $actionDiv.addClass('socketchatbox-userdetail-actions-each');
 
             ui.$actionHistoryDiv.append($actionDiv);
+
         }
+$('body').tooltip({
+    selector: '[rel=tooltip]'
+});
+        $('[data-toggle="tooltip"]').tooltip(); 
+
         
     }
 
