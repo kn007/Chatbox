@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <title>Chatbox</title>
         <link rel="stylesheet" href="/chatbox/style/client.css">
+        <link rel="stylesheet" href="/chatbox/style/bootstrap.min.css">
+
     </head>
     <body>
 
@@ -36,10 +38,23 @@
         </div>
 
 
+        <!-- image pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-imagepopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-body">
+                <center><img src="" id="socketchatbox-imagepopup-src"  ></center>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
     </body>
 
-    <script src="/chatbox/lib/jquery-1.9.0.min.js"></script>
+    <script src="/chatbox/lib/jquery-2.2.1.min.js"></script>
     <script src="/chatbox/lib/socket.io.js"></script>
+    <script src="/chatbox/lib/bootstrap.min.js"></script>
 
 
     <script src="/chatbox/init.js"></script>

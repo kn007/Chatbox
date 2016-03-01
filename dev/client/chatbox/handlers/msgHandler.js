@@ -22,14 +22,6 @@
         if (typeof data.username === 'undefined' || data.username==='')
            data.username = "empty name";
 
-        // Don't fade the message in if there is an 'X was typing'
-        //var $typingMessages = getTypingMessages(data);
-
-        // if ($typingMessages.length !== 0) {
-        //     options.fade = false;
-        //     $typingMessages.remove();
-        // }
-
         var d = new Date();
         var posttime = '';
         if (!options.loadFromCookie) {

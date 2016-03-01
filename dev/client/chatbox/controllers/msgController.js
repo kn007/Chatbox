@@ -39,6 +39,14 @@
 
     });
 
+    $(document).on('click', '.chatbox-image', function(e) {
+
+        e.preventDefault();
+        $('#socketchatbox-imagepopup-src').attr('src', $(this).attr('src')); 
+        $('#socketchatbox-imagepopup-modal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    });
+
+
     // Send a message
     function sendMessage() {
         var message = ui.$inputMessage.val();
