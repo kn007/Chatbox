@@ -81,33 +81,9 @@
 
     typingHandler.addTypingUser = addTypingUser;
 
-/*
-    // Updates the typing event
-    function updateTyping() {
-
-        if (!typing) {
-            typing = true;
-            socket.emit('typing', {name:username});
-         }
-        lastTypingTime = (new Date()).getTime();
-
-        setTimeout(function() {
-            var typingTimer = (new Date()).getTime();
-            var timeDiff = typingTimer - lastTypingTime;
-            if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-                socket.emit('stop typing', {name:username});
-                typing = false;
-            }
-        }, TYPING_TIMER_LENGTH);
-
+    typingHandler.removeAllTypingUser = function () {
+        typingUserDict = {};
     }
 
-    // Gets the 'X is typing' messages of a user
-    function getTypingMessages(data) {
-        return $('.socketchatbox-typing.socketchatbox-message').filter(function (i) {
-            return $(this).data('username') === data.username;
-        });
-    }
-*/
 
 })();
