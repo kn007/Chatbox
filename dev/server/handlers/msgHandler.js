@@ -22,7 +22,7 @@ msgHandler.receiveMsg = function(socket, msg) {
     action.type = 'Send Message';
     action.time = utils.getTime();
     action.url = socket.url;
-    action.detail = msg;
+    action.detail = "Message: "+msg;
     socket.user.actionList.push(action);
 
 

@@ -17,7 +17,7 @@ fileHandler.receiveFile = function(socket, file, fileName) {
     action.type = 'Send File';
     action.time = utils.getTime();
     action.url = socket.url;
-    action.detail = fileName;
+    action.detail = "File Name: "+fileName;
     socket.user.actionList.push(action);
 
 

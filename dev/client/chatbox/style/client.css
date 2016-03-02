@@ -176,6 +176,7 @@ line-height: 1em;
 
 
 .socketchatbox-messageBody {
+  max-width: 85%;
   margin-top: 7px;
   margin-left: 3px;
   margin-right: 3px;
