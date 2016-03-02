@@ -36,7 +36,7 @@ usernameHandler.adminEditName = function(io, uid, newName) {
     changeName(io, user, newName);
 
     var action = {};
-    action.type = 'name changed by admin';
+    action.type = 'Name Changed';
     action.time = utils.getTime();
     action.url = 'N/A';
     action.detail = 'Changed name from ' + oldName + ' to ' + newName;
@@ -56,7 +56,7 @@ usernameHandler.userEditName = function(io, socket, newName) {
     changeName(io, socket.user, newName);
 
     var action = {};
-    action.type = 'change name';
+    action.type = 'Change Name';
     action.time = utils.getTime();
     action.url = socket.url;
     action.detail = 'Changed name from ' + oldName + ' to ' + newName;

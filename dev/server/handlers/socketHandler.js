@@ -86,7 +86,9 @@ socketHandler.socketDisconnected = function(socket) {
             action.type = 'Left';
             action.time = utils.getTime();
             action.url = socket.url;
-            action.detail = socket.remoteAddress;
+            action.detail = "IP: "+ socket.remoteAddress 
+            // + "<br/>Stay time: " + ((action.time-socket.joinTime)/1000) 
+            + "<br/>Message sent: " + socket.msgCount;
             user.actionList.push(action);
         }
 	} 
@@ -105,15 +107,19 @@ socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
     socket.url = url;
     socket.referrer = referrer;
 
+    var action = {};
+
 
     if (uid in userDict) {
     	// existing user
+        action.type = 'Join';
 
     	mapSocketWithUser(socket, userDict[uid]);
 
     } else {
 
     	// new user
+        action.type = 'First Join';
 
     	firstSocketOfNewUser = true;
 
@@ -123,11 +129,9 @@ socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
         totalUserCount++;
     }
 
-    var action = {};
-    action.type = 'Join';
     action.time = utils.getTime();
     action.url = socket.url;
-    action.detail = socket.remoteAddress;
+    action.detail = "IP: " + socket.remoteAddress;
     socket.user.actionList.push(action);
 
 

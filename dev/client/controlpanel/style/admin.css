@@ -132,41 +132,6 @@ div#socketchatbox-online {}
   background: yellow !important;
 }
 
-.socketchatbox-userdetail {
-  border: 1px solid lightgray;
-  background: #FFFFFF;
-  margin: 10px;
-  display:none;
-  font-size: small;
-  z-index: 9999;
-  padding: 15px;
-}
-.socketchatbox-admin-userprofile {
-  margin: 20px;
-}
-
-.socketchatbox-admin-userprofile p{
-  margin: 7px;
-}
-
-.socketchatbox-userdetail-actions {
-  margin: 20px;
-  margin-top:0px;
-}
-.socketchatbox-userdetail-actions-each {
-  border: 1px solid lightgray;
-  padding: 10px;
-
-}
-
-.socketchatbox-userdetail-actions-each:nth-child(odd) {
-  background: #FFFFFF;
-}
-
-.socketchatbox-userdetail-actions-each:nth-child(even) {
-  background: #fafafa;
-}
-
 .socketchatbox-userdetail-name {
   font-size: large;
   font-weight: bold;
@@ -186,55 +151,36 @@ div#socketchatbox-online {}
   padding: 15px;
   cursor: pointer;
   border: 1px solid lightgray;
+  border-top: 0px solid lightgray;
+
 }
 
 .socketchatbox-socketdetail-each p{
   margin:5px
 }
 
-.socketchatbox-socketdetail-each:nth-child(odd) {
+.socketchatbox-socketdetail-each:nth-child(1) {
+  border-top: 1px solid lightgray;
+}
+
+
+.socketchatbox-userdetail {
+  border: 1px solid lightgray;
   background: #FFFFFF;
-}
-
-.socketchatbox-socketdetail-each:nth-child(even) {
-  background: #fafafa;
-}
-
-.socketchatbox-actionhistory-actiontype {
-  float: right;
-}
-
-.socketchatbox-actionhistory-actiondetail {
-  display: none;
-}
-
-
-
-#socketchatbox-scriptSentStatus {
   margin: 10px;
+  display:none;
+  font-size: small;
+  z-index: 9999;
+  padding: 15px;
+}
+.socketchatbox-admin-userprofile {
+  margin: 20px;
 }
 
-.socketchatbox-admin-input {
-
-  font-size: 100%;
+.socketchatbox-admin-userprofile p{
+  margin: 7px;
 }
 
-.socketchatbox-admin-input textarea{
-  height: 100px;  
-  width: 100%;
-  outline: none;
-  padding-right: 5px; 
-  border: 1px solid lightgray;
-}
-.breakable {
-  word-break: break-word;
-}
-button {
-  border: 1px solid lightgray;
-  /*margin-left: 10px;*/
-  cursor: pointer;
-  background: #f5f5f5;
-}
 
 .socketchatbox-admin-changeUserName {
   /*margin:0px;*/
@@ -254,6 +200,9 @@ button {
   background: yellow;
 }
 
+
+
+
 .socketchatbox-actionhistory-header {
   cursor: pointer;
 }
@@ -261,6 +210,78 @@ button {
 .socketchatbox-actionhistory-header:hover{
   background: yellow;
 }
+.socketchatbox-actionhistory-actiontype {
+  float: right;
+}
+ 
+
+.socketchatbox-userdetail-actions {
+  margin: 20px;
+  margin-top:0px;
+}
+
+.socketchatbox-actionhistory-basic {
+  padding: 10px;
+  cursor: pointer;
+}
+.socketchatbox-actionhistory-actiondetail {
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-top: 1px dashed lightgray;
+
+}
+
+.socketchatbox-userdetail-actions-each {
+  border: 1px solid lightgray;
+  border-top: 0px solid lightgray;
+
+}
+.socketchatbox-userdetail-actions-each:nth-child(1) {
+    border-top: 1px solid lightgray;
+
+}
+.socketchatbox-userdetail-actions-each:nth-child(odd) {
+  background: #FFFFFF;
+}
+
+.socketchatbox-userdetail-actions-each:nth-child(even) {
+  background: #F5F5F5;
+}
+
+
+#socketchatbox-scriptSentStatus {
+  margin: 10px;
+}
+
+.socketchatbox-admin-input {
+
+  font-size: 100%;
+}
+
+.socketchatbox-admin-input textarea{
+  height: 100px;  
+  width: 100%;
+  outline: none;
+  padding-right: 5px; 
+  border: 1px solid lightgray;
+}
+.breakable {
+  word-break: break-word !important;
+}
+.popover-content {
+    word-wrap: break-word;
+}
+.popover-title {
+    word-wrap: break-word;
+}
+button {
+  border: 1px solid lightgray;
+  /*margin-left: 10px;*/
+  cursor: pointer;
+  background: #f5f5f5;
+}
+
 
 .blue {
   background: blue;

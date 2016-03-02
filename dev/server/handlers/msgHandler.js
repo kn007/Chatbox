@@ -19,7 +19,7 @@ msgHandler.receiveMsg = function(socket, msg) {
     socket.user.msgCount++;
 
     var action = {};
-    action.type = 'message';
+    action.type = 'Send Message';
     action.time = utils.getTime();
     action.url = socket.url;
     action.detail = msg;
