@@ -57,8 +57,13 @@ socketHandler.socketConnected = function(socket) {
 	socket.joined = false;
 }
 
+// if it's user's last connection, return true
+// otherwise return false
+// if there's no user, also return false
+
 socketHandler.socketDisconnected = function(socket) {
 
+    var lastConnectionOfUser = false;
 	// delete socket from socketDict
 	delete socketDict[socket.id];
 
@@ -78,7 +83,7 @@ socketHandler.socketDisconnected = function(socket) {
             delete userDict[user.id];
             
             onlineUserCount--;
-
+            lastConnectionOfUser = true;
 
         } else {
 
@@ -91,7 +96,9 @@ socketHandler.socketDisconnected = function(socket) {
             + "<br/>Message sent: " + socket.msgCount;
             user.actionList.push(action);
         }
-	} 
+	}
+
+    return lastConnectionOfUser; 
 }
 
 socketHandler.socketJoin = function(socket, url, referrer, uid, username) {

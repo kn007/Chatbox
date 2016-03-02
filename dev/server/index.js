@@ -92,8 +92,7 @@ io.on('connection', function (socket) {
 
         adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
 
-        // the user already exists, this is just a new connection from him
-        if (!newUser) {
+        if (newUser) {
 
             // welcome the new user
             socket.emit('welcome new user', {
@@ -108,6 +107,7 @@ io.on('connection', function (socket) {
 
         } else {
 
+            // the user already exists, this is just a new connection from him
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
                 username: socket.user.username
@@ -120,13 +120,21 @@ io.on('connection', function (socket) {
     // when the socket disconnects
     socket.on('disconnect', function () {
         
-        socketHandler.socketDisconnected(socket);
+        var lastConnectionOfUser = socketHandler.socketDisconnected(socket);
 
         // the user only exist after login
         if (!socket.joined)
             adminHandler.log('Socket disconnected before logging in, sid: ' + socket.id);
         else
             adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').');
+
+        if (lastConnectionOfUser) {
+            
+            socket.broadcast.emit('user left', {
+                username: socket.user.username,
+                numUsers: socketHandler.getUserCount()
+            });
+        }
 
     });
 

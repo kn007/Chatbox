@@ -88,8 +88,8 @@
         // Whenever the server emits 'user left', log it in the chat body
         socket.on('user left', function (data) {
             ui.addLog(data.username + ' left');
-            if(data.numUsers === 1)
-                ui.addParticipantsMessage(data.numUsers);
+            // if(data.numUsers === 1)
+            ui.addParticipantsMessage(data.numUsers);
             //removeChatTyping(data);
         });
 
