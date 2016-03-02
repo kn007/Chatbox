@@ -43,7 +43,7 @@
 
         e.preventDefault();
         $('#socketchatbox-imagepopup-src').attr('src', $(this).attr('src')); 
-        $('#socketchatbox-imagepopup-modal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+        $('#socketchatbox-imagepopup-modal').modal('show'); 
     });
 
 
