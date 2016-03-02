@@ -26,6 +26,21 @@
         
         });
 
+        $(window).keydown(function (event) {
+
+            // When the client hits ENTER on their keyboard
+            if (event.which === 13) {
+
+                if ($('#socketchatbox-token').is(":focus")) {
+                    updateToken($('#socketchatbox-token').val());
+                    return;
+                }
+            }
+
+        });
+
+
+
     });
 
 

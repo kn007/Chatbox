@@ -14,21 +14,19 @@
     //=============================== Socket Detail Area ==============================//
     //=================================================================================//
     //=================================================================================//
-
+    var uid = '-1';
     ui.showAliveSocket = false;
 
     ui.init.push(function() {
 
         $('.socketchatbox-livesockets-header').click(function() {
 
-            if (ui.showAliveSocket) {
+            if (ui.showAliveSocket)
+             
                 ui.showAliveSocket = false;
-                $('.socketchatbox-livesockets-arrow').text(' ↓ ');
-            } else {
+            else 
                 ui.showAliveSocket = true;
-                $('.socketchatbox-livesockets-arrow').text(' ↑ ');
-
-            }
+            
 
             toggleSocketDetailVisibility();
 
@@ -61,12 +59,25 @@
     function toggleSocketDetailVisibility() {
 
         if (ui.showAliveSocket) 
-            $('.socketchatbox-userdetail-sockets').slideDown();
+            $('.socketchatbox-userdetail-sockets').slideDown(function(){
+                $('.socketchatbox-livesockets-arrow').text(' ↑ ');
+            });
         else
-            $('.socketchatbox-userdetail-sockets').slideUp();
+            $('.socketchatbox-userdetail-sockets').slideUp(function(){
+                $('.socketchatbox-livesockets-arrow').text(' ↓ ');
+
+            });
     }
 
     function loadSocketDetail(user) {
+
+        if (user.id != uid) {
+            uid = user.id;
+            if (ui.showAliveSocket) {
+                ui.showAliveSocket = false;
+                toggleSocketDetailVisibility();
+            }
+        }
 
         $('.socketchatbox-userdetail-sockets').html('');
         $('.socketchatbox-livesockets-count').text(user.socketList.length);

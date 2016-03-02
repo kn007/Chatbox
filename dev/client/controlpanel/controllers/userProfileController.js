@@ -21,6 +21,23 @@
             window.open("https://geoiptool.com/en/?ip=");
         });
 
+
+        $(window).keydown(function (event) {
+
+            // When the client hits ENTER on their keyboard
+            if (event.which === 13) {
+
+                if ($('.socketchatbox-userdetail-name-edit').is(":focus")) {
+                    
+                    var userID = $('.socketchatbox-admin-changeUserName').data('id');
+                    updateUserName(userID);
+                    return;
+                }
+            }
+
+        });
+
+
     });
 
 
@@ -65,12 +82,8 @@
 
     });
 
+    function updateUserName(userID) {
 
-    // admin change user's name
-    $(document).on('click', '.socketchatbox-admin-changeUserName', function() {
-        
-        var $this = $(this);
-        var userID = $this.data('id');
         var newName = $('.socketchatbox-userdetail-name-edit').val();
         var data = {};
         data.token = chatboxAdmin.token;
@@ -78,6 +91,14 @@
         data.newName = newName;
         chatbox.socket.emit('admin change username', data);
         chatboxAdmin.restartGetUserList();
+    }
+
+    // admin change user's name
+    $(document).on('click', '.socketchatbox-admin-changeUserName', function() {
+        
+        var $this = $(this);
+        var userID = $this.data('id');
+        updateUserName(userID);
 
     });
 
