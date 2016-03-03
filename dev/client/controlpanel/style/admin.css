@@ -117,7 +117,7 @@ div#socketchatbox-online {}
 /* User detail popup */
 
 .selectedSocket {
-  background: yellow;
+  background: yellow !important;
 }
 
 
@@ -138,6 +138,7 @@ div#socketchatbox-online {}
 }
 
 .socketchatbox-socketdetail-each {
+  background: #F5F5F5;
   padding: 10px;
   cursor: pointer;
   border: 1px solid lightgray;
