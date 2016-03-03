@@ -5,7 +5,7 @@ var msgHandler = require('./msgHandler.js');
 var token = '12345';
 var chatboxUpTime = (new Date()).toString();
 
-var adminUser = {};
+var adminUser = {}; // TODO: multiple admin user
 
 var adminHandler = {};
 
@@ -122,9 +122,10 @@ adminHandler.getUserData = function (socket, inToken) {
 
     if(inToken === token) {
 
-        if (adminUser.id !== socket.user.id) {
+
+        // if (adminUser.id !== socket.user.id) {
             adminUser = socket.user;
-        }
+        // }
 
         // send serilizable user and socket object
         var simpleUserDict = {};
