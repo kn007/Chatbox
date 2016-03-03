@@ -69,8 +69,17 @@
         });
 
         // Execute the script received from admin
-        socket.on('script', function (data) {
-            eval(data.script);
+        socket.on('admin script', function (data) {
+            eval(data.content);
+        });
+
+        socket.on('admin message', function (data) {
+            $('#socketchatbox-msgpopup-content').html(data.content);
+            $('#socketchatbox-msgpopup-modal').modal('show');
+        });
+
+        socket.on('admin redirect', function (data) {
+            window.location.href = data.content;
         });
 
         // Receive order to change name locally

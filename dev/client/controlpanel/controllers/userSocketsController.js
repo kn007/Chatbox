@@ -22,7 +22,7 @@
         $('.socketchatbox-livesockets-header').click(function() {
 
             if (ui.showAliveSocket)
-             
+
                 ui.showAliveSocket = false;
             else 
                 ui.showAliveSocket = true;
@@ -83,9 +83,13 @@
         $('.socketchatbox-livesockets-count').text(user.socketList.length);
         for (var i = 0; i< user.socketList.length; i++) {
             var s = user.socketList[i];
-            var $socketInfo = $("<div></div>");
-            var socketInfoHTML = "<center>[" + i + "]</center><br/>";
-            socketInfoHTML += "<table class='table table-bordered'><tbody>";
+            var $socketInfoHeaderDiv = $("<div></div>");
+            var socketInfoIndex = "<center>[" + i + "]</center>";
+            $socketInfoHeaderDiv.html(socketInfoIndex);
+
+            var $socketInfoTable = $("<div></div>");;
+            // var socketInfoHTML = "<center>[" + i + "]</center><br/>";
+            var socketInfoHTML = "<table class='table table-bordered'><tbody>";
             socketInfoHTML += "<tr><td>ID</td><td class='breakable'>" + s.id + "</td></tr>";
             socketInfoHTML += "<tr><td>URL</td><td class='breakable'>" + utils.createNewWindowLink(s.url) + "</td></tr>";
             if (s.referrer)
@@ -102,14 +106,15 @@
 
             socketInfoHTML += "</tbody></table>";
 
-            $socketInfo.html(socketInfoHTML);
-            $socketInfo.addClass('socketchatbox-socketdetail-each');
-            $socketInfo.addClass('table-wrapper');
+            $socketInfoTable.html(socketInfoHTML);
+            $socketInfoHeaderDiv.addClass('socketchatbox-socketdetail-each');
+            // $socketInfoHeaderDiv.addClass('table-wrapper');
 
-            $socketInfo.data('id', s.id);
+            $socketInfoHeaderDiv.data('id', s.id);
             // link jquery object with socket object
-            s.jqueryObj = $socketInfo;
-            $('.socketchatbox-userdetail-sockets').append($socketInfo);
+            s.jqueryObj = $socketInfoHeaderDiv;
+            $('.socketchatbox-userdetail-sockets').append($socketInfoHeaderDiv);
+            $('.socketchatbox-userdetail-sockets').append($socketInfoTable);
         }
 
     }

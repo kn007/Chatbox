@@ -6,6 +6,7 @@
     window.chatboxAdmin = {};
 
 
+    chatboxAdmin.commandHandler = {};
     chatboxAdmin.scriptHandler = {};
     chatboxAdmin.dataHandler = {};
     chatboxAdmin.ui = {};   

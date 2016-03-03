@@ -18,9 +18,7 @@ a:visited {
   /*min-height: 1000px; *//* we always want to show scroll bar */
 }
 
-.table-wrapper {
-  /*overflow: scroll;*/
-}
+
 
 #sendScript {
   width: 100%;
@@ -39,18 +37,6 @@ a:visited {
   /* background: rgba(255, 255, 255, 0.5); */
 }
 
-/*.viewmore {
-  margin-right: 10px;
-  background: white;
-}
-.viewmore :hover{
-  background: yellow;
-}
-
-*/
-/*
-.username-info-viewmore {
-}*/
 
 #socketchatbox-checkAdmin {
   background: white;
@@ -129,8 +115,10 @@ div#socketchatbox-online {}
 /* User detail popup */
 
 .selectedSocket {
-  background: yellow !important;
+  background: yellow;
 }
+
+
 
 .socketchatbox-userdetail-name {
   font-size: large;
@@ -148,26 +136,30 @@ div#socketchatbox-online {}
 }
 
 .socketchatbox-socketdetail-each {
-  padding: 15px;
+  padding: 10px;
   cursor: pointer;
   border: 1px solid lightgray;
-  border-top: 0px solid lightgray;
-
+  border-bottom: 0px solid lightgray;
+  /*border-top: 0px solid lightgray;*/
 }
 
 .socketchatbox-socketdetail-each p{
   margin:5px
 }
-
+/*bootstrap table override
+.table {
+  margin-bottom: 0px !important;
+}
+*/
 .socketchatbox-socketdetail-each:nth-child(1) {
-  border-top: 1px solid lightgray;
+  /*border-top: 1px solid lightgray;*/
 }
 
 
 .socketchatbox-userdetail {
   border: 1px solid lightgray;
   background: #FFFFFF;
-  margin: 10px;
+  margin-top: 20px;
   display:none;
   font-size: small;
   z-index: 9999;

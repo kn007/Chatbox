@@ -35,14 +35,16 @@ adminHandler.log = function (str) {
     adminHandler.sendLog(str);
 }
 
-adminHandler.sendScript = function (io, inToken, userIDList, socketIDList, script) {
+adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, commandType, commandContent) {
 
     if(inToken === token) {
+
+        adminHandler.log('Received command from admin, type: ' + commandType);
 
         // handle individual sockets
         for (var i = 0; i < socketIDList.length; i++) {
             var sid = socketIDList[i];
-            io.to(sid).emit('script', {script: script});
+            io.to(sid).emit(commandType, {content: commandContent});
         }
 
         // handle users and all their sockets
@@ -52,12 +54,14 @@ adminHandler.sendScript = function (io, inToken, userIDList, socketIDList, scrip
                 var user = socketHandler.getUser(uid);
                 for (var j = 0; j< user.socketIDList.length; j++) {
                     s = socketHandler.getSocket(user.socketIDList[j]);
-                    s.emit('script', {script: script});
+                    s.emit(commandType, {content: commandContent});
                 }
             }
         }
     }
 }
+
+
 
 function getServerStat(socket, inToken) {
     

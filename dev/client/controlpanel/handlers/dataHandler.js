@@ -60,12 +60,30 @@
         return utils.countKeys(selectedSockets);
     }
 
-    dataHandler.getSelectedUsers= function() {
+    dataHandler.getSelectedUsers = function() {
         return selectedUsers;
     }
 
-    dataHandler.getSelectedSockets= function() {
+    dataHandler.getSelectedSockets = function() {
         return selectedSockets;
+    }
+
+    dataHandler.getSelectedUserList = function() {
+
+        var userKeyList = [];
+        for(var userKey in dataHandler.getSelectedUsers()){
+            userKeyList.push(userKey);
+        }
+        return userKeyList;
+    }
+
+    dataHandler.getSelectedSocketList = function() {
+
+        var socketKeyList = [];
+        for(var socketKey in dataHandler.getSelectedSockets()){
+            socketKeyList.push(socketKey);
+        }
+        return socketKeyList;
     }
 
     // this removes the user and his sockets from all lists

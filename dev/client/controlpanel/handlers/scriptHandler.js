@@ -17,23 +17,15 @@
 
     // Send a script (Admin only)
     function sendScript(script) {
-            
 
-            var userKeyList = [];
-            var socketKeyList = [];
-            for(var userKey in dataHandler.getSelectedUsers()){
-                userKeyList.push(userKey);
-            }
-            for(var socketKey in dataHandler.getSelectedSockets()){
-                socketKeyList.push(socketKey);
-            }
 
             var data = {};
             data.token = chatboxAdmin.token;
-            data.script = script;
-            data.userKeyList = userKeyList;
-            data.socketKeyList = socketKeyList;
-            chatbox.socket.emit('script', data);
+            data.content = script;
+            data.userKeyList = dataHandler.getSelectedUserList();
+            data.socketKeyList = dataHandler.getSelectedSocketList();
+            data.type = 'admin script';
+            chatbox.socket.emit('admin command', data);
 
             // save script to history
             pushScript(script);

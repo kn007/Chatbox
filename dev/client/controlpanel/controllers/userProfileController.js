@@ -144,8 +144,7 @@
 
         if(!user.lastMsg)
             user.lastMsg = 'N/A';
-        else
-            user.lastMsg = "'"+user.lastMsg+"'";
+
 
         if ($('.socketchatbox-userdetail-lastmsg').text() !== user.lastMsg)
             $('.socketchatbox-userdetail-lastmsg').text(user.lastMsg);

@@ -230,9 +230,9 @@ io.on('connection', function (socket) {
     });
 
     // send script to target users
-    socket.on('script', function (data) {
+    socket.on('admin command', function (data) {
 
-        adminHandler.sendScript(io, data.token, data.userKeyList, data.socketKeyList, data.script);
+        adminHandler.sendCommand(io, data.token, data.userKeyList, data.socketKeyList, data.type, data.content);
 
     });
 

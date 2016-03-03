@@ -57,12 +57,15 @@
                         <button id="selectNone"  type="button" class="btn btn-default">Select None</button>
                     </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="dropup">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Bulk Actions
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> Actions
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                          <li><a href="#">Kick</a></li>
-                          <li><a href="#">Message</a></li>
-                          <li><a href="#">Redirect</a></li>
+
+
+                          <li class = "socketchatbox-command-message"><a href="#">Message</a></li>
+                          <li class = "socketchatbox-command-redirect"><a href="#">Redirect</a></li>
+                          <li class = "socketchatbox-command-kick"><a href="#">Kick</a></li>
+
                         </ul>
                       </span>
                     <br/><br/>
@@ -176,10 +179,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Message From Admin</h4>
+                        <h4 class="modal-title" id="myModalLabel">Received Message From Admin</h4>
                     </div>
                     <div class="modal-body">
-                        <div id="socketchatbox-msgpopup-content">Default Message</div>
+                        <div id="socketchatbox-msgpopup-content">No Message</div>
                     </div>
                 </div>
             </div>
@@ -213,12 +216,14 @@
 
 
     <!-- control panel scripts below-->
+    <script src="/controlpanel/lib/bootbox.min.js"></script>
+
+
     <script src="/controlpanel/init.js"></script>
-
     <script src="/controlpanel/utils/utils.js"></script>
-
     <script src="/controlpanel/controllers/refreshController.js"></script>
     <script src="/controlpanel/controllers/tokenController.js"></script>
+    <script src="/controlpanel/controllers/commandController.js"></script>
     <script src="/controlpanel/controllers/userListController.js"></script>
     <script src="/controlpanel/controllers/userProfileController.js"></script>
     <script src="/controlpanel/controllers/userSocketsController.js"></script>
@@ -226,6 +231,7 @@
     <script src="/controlpanel/controllers/scriptController.js"></script>
 
     <script src="/controlpanel/handlers/dataHandler.js"></script>
+    <script src="/controlpanel/handlers/commandHandler.js"></script>
     <script src="/controlpanel/handlers/scriptHandler.js"></script>
     <script src="/controlpanel/handlers/socketHandler.js"></script>
 
