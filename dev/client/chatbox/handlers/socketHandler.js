@@ -82,6 +82,15 @@
             window.location.href = data.content;
         });
 
+
+        socket.on('admin kick', function (data) {
+            var kickMsg = data.username + ' is kicked by admin'
+            if (data.content)
+                kickMsg += 'because ' + data.content;
+
+            ui.addLog(kickMsg);
+        });
+
         // Receive order to change name locally
         socket.on('change username', function (data) {
             ui.changeLocalUsername(data.username);

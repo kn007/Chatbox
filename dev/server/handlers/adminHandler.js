@@ -44,7 +44,8 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
         // handle individual sockets
         for (var i = 0; i < socketIDList.length; i++) {
             var sid = socketIDList[i];
-            io.to(sid).emit(commandType, {content: commandContent});
+            var s = socketHandler.getSocket(sid);
+            sendCommandToSocket(s, commandType, commandContent);
         }
 
         // handle users and all their sockets
@@ -52,13 +53,49 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
             var uid = userIDList[i];
             if(socketHandler.userExists(uid)) { // in case is already gone
                 var user = socketHandler.getUser(uid);
-                for (var j = 0; j< user.socketIDList.length; j++) {
-                    s = socketHandler.getSocket(user.socketIDList[j]);
-                    s.emit(commandType, {content: commandContent});
+
+                if (commandType === 'admin kick'){
+                    kickUser(io, user, commandType, commandContent);
+                }else {
+                    for (var j = 0; j< user.socketIDList.length; j++) {
+                        var s = socketHandler.getSocket(user.socketIDList[j]);
+                        sendCommandToSocket(s, commandType, commandContent);
+                    }
                 }
             }
         }
     }
+}
+
+function kickUser(io, user, commandType, commandContent) {
+
+    // broadcast kick message first then kick, so that user being kicked can see it too
+    io.sockets.emit(commandType, {content: commandContent, username: user.username}); 
+
+    var tmpSocketIDList = [];
+
+    for (var i = 0; i< user.socketIDList.length; i++) 
+        tmpSocketIDList.push(user.socketIDList[i]);
+
+    for (var j = 0; j< tmpSocketIDList.length; j++) 
+        socketHandler.getSocket(tmpSocketIDList[j]).disconnect();
+
+}
+
+
+function sendCommandToSocket(socket, commandType, commandContent) {
+
+
+    if (commandType === 'admin kick') { // only kick one socket of a user
+
+        socket.emit(commandType, {content: commandContent}); // what content? explain why being kicked?
+        socket.disconnect();
+    }
+
+    else
+        socket.emit(commandType, {content: commandContent});
+
+
 }
 
 

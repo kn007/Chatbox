@@ -18,7 +18,9 @@ a:visited {
   /*min-height: 1000px; *//* we always want to show scroll bar */
 }
 
-
+.socketchatbox-command-kick {
+  /*background: red;*/
+}
 
 #sendScript {
   width: 100%;

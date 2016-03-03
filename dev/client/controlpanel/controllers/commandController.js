@@ -25,6 +25,10 @@
         });
 
 
+        $('.socketchatbox-command-kick').click(function(e){
+            e.preventDefault();
+            kickConfirm();
+        });
 
     });
 
@@ -52,6 +56,19 @@
             }
         });  
     }
+
+    function kickConfirm() {
+
+        bootbox.confirm({
+            size: 'small',
+            message: "Are you sure?", 
+            callback: function(confirmed) {
+                if (confirmed)
+                    commandHandler.kick();
+            }
+        }); 
+    }
+
 
     
 

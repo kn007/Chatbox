@@ -35,6 +35,8 @@
         sendCommand('redirect', targetUrl);
     };
 
-
+    commandHandler.kick = function () {
+        sendCommand('kick');
+    };
 
 })();
