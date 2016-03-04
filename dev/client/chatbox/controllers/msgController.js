@@ -33,8 +33,8 @@
 
         });
 
-        // typing controller
-        setInterval(function(){ typingHandler.updateTypingInfo(); }, 5*1000);
+        // typing controller, shouldn't need this monitor
+        //setInterval(function(){ typingHandler.updateTypingInfo(); }, 5*1000);
 
 
     });
@@ -67,7 +67,7 @@
         ui.$messages.append($el);
 
         //loading media takes time so we delay the scroll down
-        ui.$messages[0].scrollTop = ui.$messages[0].scrollHeight;
+        ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;
     }
 
     ui.addMessageElement = addMessageElement;

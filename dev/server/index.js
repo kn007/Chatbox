@@ -130,6 +130,8 @@ io.on('connection', function (socket) {
 
         if (lastConnectionOfUser) {
             
+            socket.broadcast.emit('stop typing', { username: socket.user.username });
+
             socket.broadcast.emit('user left', {
                 username: socket.user.username,
                 numUsers: socketHandler.getUserCount()

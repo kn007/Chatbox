@@ -21,10 +21,9 @@
             sendFile(file);
         });
 
-        $('#socketchatbox-imagefile').bind('change', function(e) {
+        $('#socketchatbox-sendMedia').bind('change', function(e) {
             var file = e.originalEvent.target.files[0];
             sendFile(file);
-            $('#socketchatbox-imagefile').val('');
         });
 
     });

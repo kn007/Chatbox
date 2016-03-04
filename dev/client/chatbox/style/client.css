@@ -32,10 +32,7 @@ ul {
   right:0px;
   cursor:ne-resize; 
 }
-.socketchatbox-typing {
-  background: #EDEDED;
-  width: 100%;
-}
+
 #socketchatbox-imagefile {
   width:100%;
 }
@@ -43,22 +40,26 @@ ul {
   display: none;
   border: 1px solid lightgray;
 }
-.socketchatbox-filebutton input[type="file"] {
-  position: fixed;
-  top: -1000px;
+
+
+.socketchatbox-inputMessage-div {
+  height: 35px;  
+}
+.socketchatbox-inputMessage {
+  width: 260px;
+  padding: 0px;
+  height: 35px;
+  margin: 0px;
+  font-size: medium;
+  line-height: 2;
 }
 
-#socketchatbox-sendMedia {
-  background: lightgrey;
-  border: 1px solid lightgray;
-  color:gray;
-  margin-top: 15px;
-  padding: 5px
-}
-
-#socketchatbox-sendMedia :hover {
-  cursor:pointer;
-  color:black;
+#socketchatbox-sendFileBtn {
+  height: 35px;
+  width: 90px;
+  float: right;
+  /* margin: 0; */
+  /* padding: 0; */
 }
 
 #socketchatbox-showHideChatbox {
@@ -96,19 +97,20 @@ ul {
 
 
 .socketchatbox-page {
-  font-size: 80%; 
+  /* font-size: 80%; */
   margin: 0;
+  margin-left: 10px;
   padding: 0;
   position: fixed;
   bottom: 0px;
   overflow: auto;
   max-width: 100%;
   line-height: 1em;
-/*  resize: horizontal;
-*/  background: white;
+  /*  resize: horizontal;
+*/
+  background: white;
   z-index: 999;
   font-family: Arial, Helvetica, sans-serif;
-  
 }
 .socketchatbox-messages img{
   max-width: 100%;
@@ -130,6 +132,7 @@ ul {
   height: 350px;
   width: 350px;
   max-width: 100%;
+  overflow-y: scroll;
   background: #EDEDED;
   /* border: 1px solid lightgray; */
   border-bottom-width: 0px;
@@ -147,16 +150,18 @@ ul {
 .socketchatbox-messages {
   height: 100%;
   margin: 0;
-  overflow-y: scroll;
-  padding: 10px;
-  padding-bottom: 0px;
+  /* padding-bottom: 0px; */
+  padding: 0;
 }
 #socketchatbox-txt_fullname {
   color: black;
+  line-height: 1em;
+
 }
 .socketchatbox-message-me >.socketchatbox-username{
   /*display: none;*/
   text-align: left;
+  padding-left: 5px;
 }
 
 .socketchatbox-username {
@@ -187,7 +192,7 @@ line-height: 1em;
   padding: 10px 18px;
   position: relative;
   vertical-align: top;
-  line-height: 1.5em;
+  line-height: 1em;
   word-break: break-all;
 }
 
@@ -213,28 +218,30 @@ line-height: 1em;
 }
 
 .socketchatbox-typing {
-  color: gray;
+  color: white;
   text-align: center;
-  font-size: smaller;
-  height: 15px;
+  font-size: small;
+  /* height: 25px; */
+  padding: 7px;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 35px;
+  width: 350px;
+  position: absolute;
 }
-
+ 
 .socketchatbox-username {
   font-weight: 700; 
   text-align: right;
   font-size: smaller;
 }
 
-.socketchatbox-inputMessage {
-  height: 40px;  
-  outline: none;
-  padding-left: 5px;  
-  width: 100%;
-  font-size: 100%;
-}
 
 #socketchatbox-imagepopup-src {
   max-height: 100%;
   max-width: 100%;
 }
 
+.lightgray {
+  background: lightgray;
+}

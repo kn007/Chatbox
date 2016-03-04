@@ -22,6 +22,8 @@
         var typingUserCount = Object.keys(typingUserDict).length;
         if (typingUserCount > 0) {
 
+            $('.socketchatbox-typing').show();
+
             if (typingUserCount === 1){
                  
                  msg = Object.keys(typingUserDict)[0] + ' is typing';
@@ -42,7 +44,9 @@
 
             }
             
-        }
+        }else
+            $('.socketchatbox-typing').hide();
+
 
         $('.socketchatbox-typing').text(msg);
     }
