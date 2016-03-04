@@ -11,7 +11,6 @@ var socketCount = 0;
 var using_reverse_proxy = 0;
 
 var socketHandler = {};
-
 var totalSocketConnection = 0;
 var totalUserCount = 0;
 
@@ -81,7 +80,6 @@ socketHandler.socketDisconnected = function(socket) {
         if(user.socketIDList.length === 0){
 
             delete userDict[user.id];
-            
             onlineUserCount--;
             lastConnectionOfUser = true;
 
@@ -155,7 +153,7 @@ function newUserJoin(uid, username, firstSocket) {
 
     var user = {};
     user.id = uid;
-    user.username = utils.setUsername(username); // clean the name first
+    user.username = username; // clean the name first
     user.ip = firstSocket.remoteAddress;
     user.url = firstSocket.url;
     user.referrer = firstSocket.referrer;

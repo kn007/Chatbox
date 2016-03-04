@@ -10,7 +10,7 @@
     var typingHandler = chatbox.typingHandler;
     var typingUserDict = {};
 
-    var TYPING_STAY_TIME = 1000; // ms
+    var TYPING_STAY_TIME = 100000; // ms
 
 
 

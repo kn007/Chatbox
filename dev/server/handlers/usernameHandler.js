@@ -4,13 +4,50 @@ var utils = require('../utils/utils.js');
 
 var usernameHandler = {};
 
+var onlineUsernames = {};
 
+function checkUsername(name) {
+
+    if (name in onlineUsernames){
+
+
+        var num = 2;
+
+        while (true) {
+
+            var newName = name + '(' + num + ')';
+
+            if (newName in onlineUsernames)
+                num ++;
+
+            else{
+                onlineUsernames[newName] = 1;
+                return newName;
+            }
+        }
+
+
+    } else {
+        onlineUsernames[name] = 1;
+    }
+
+    return name;
+}
+
+usernameHandler.checkUsername = checkUsername;
+
+usernameHandler.releaseUsername = function (name) { delete onlineUsernames[name]; }
 
 function changeName(io, user, newName) {
-
-
+    
     var oldName = user.username;
-    user.username = newName;
+
+    // consideration: do we want to release the name as soon as user change name?
+    usernameHandler.releaseUsername(oldName); 
+    var newName = checkUsername(newName);
+
+
+    user.username = newName
     var socketIDsToChangeName = user.socketIDList;
 
     for (var i = 0; i< socketIDsToChangeName.length; i++) 
@@ -24,6 +61,7 @@ function changeName(io, user, newName) {
     });
 
     adminHandler.log(oldName + ' changed name to ' + user.username);
+    return newName;
 }
 
 usernameHandler.adminEditName = function(io, uid, newName) {
@@ -33,7 +71,9 @@ usernameHandler.adminEditName = function(io, uid, newName) {
     // change name and sync name change
     var oldName = user.username;
 
-    changeName(io, user, newName);
+    if (oldName === newName) return;
+
+    newName = changeName(io, user, newName);
 
     var action = {};
     action.type = 'Name Changed';
@@ -49,11 +89,14 @@ usernameHandler.userEditName = function(io, socket, newName) {
 
     // add logic here to limit visitor changing name
 
-    // if (newName === oldName) return; 
 
     // change name and sync name change
     var oldName = socket.user.username;
-    changeName(io, socket.user, newName);
+
+    if (oldName === newName) return;
+
+
+    newName = changeName(io, socket.user, newName);
 
     var action = {};
     action.type = 'Change Name';

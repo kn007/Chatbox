@@ -90,10 +90,11 @@ io.on('connection', function (socket) {
 
         var user = socket.user;
 
-        adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
-
         if (newUser) {
 
+            // ensure username unique among online users
+            user.username = usernameHandler.checkUsername(user.username);
+            
             // welcome the new user
             socket.emit('welcome new user', {
                 numUsers: socketHandler.getUserCount()
@@ -115,6 +116,9 @@ io.on('connection', function (socket) {
 
         }
 
+        adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
+
+
     });
 
     // when the socket disconnects
@@ -129,7 +133,9 @@ io.on('connection', function (socket) {
             adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').');
 
         if (lastConnectionOfUser) {
-            
+
+            usernameHandler.releaseUsername(socket.user.username);
+
             socket.broadcast.emit('stop typing', { username: socket.user.username });
 
             socket.broadcast.emit('user left', {
