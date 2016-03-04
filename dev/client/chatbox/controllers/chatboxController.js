@@ -64,7 +64,7 @@
             if (dir.indexOf('w') > -1)  boxW -= dx;
             if (dir.indexOf('e') > -1)  boxW += dx;
 
-            if(boxW<240)    boxW = 240;
+            if(boxW<250)    boxW = 250;
             if(boxH<70)     boxH = 70;
 
             ui.$chatArea.css({ "width":(boxW)+"px", "height":(boxH)+"px"});

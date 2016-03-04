@@ -22,8 +22,11 @@
         });
 
         $('#socketchatbox-sendMedia').bind('change', function(e) {
+
             var file = e.originalEvent.target.files[0];
             sendFile(file);
+            $('#socketchatbox-sendMedia').val(''); // for sending same file, need to trigger 'change'
+
         });
 
     });

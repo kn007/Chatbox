@@ -10,7 +10,9 @@
     <body>
 
     
-        <h1>Welcome to use Chatbox!</h1>
+
+  
+
         <div class="socketchatbox-page">
             <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
             <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
@@ -22,18 +24,18 @@
             </div>
             <div id='socketchatbox-body'>
                 <div class="socketchatbox-chatArea">
-                    <ul class="socketchatbox-messages"></ul>
                     <div class = "socketchatbox-typing"> </div>
+
+                    <ul class="socketchatbox-messages"></ul>
                 </div>
-                <form id="socketchatbox-sendMedia">
-                    <div>
-                        <label class="socketchatbox-filebutton">
-                            Drop file above to send or click here
-                            <input type="file" id="socketchatbox-imagefile" accept="image/*">
-                        </label>
-                    </div>
-                </form>       
-                <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
+
+                <div class = "socketchatbox-inputMessage-div">    
+                    <input class="socketchatbox-inputMessage" placeholder = "Type here..."/>
+                    <label class="btn lightgray" id='socketchatbox-sendFileBtn' for = "socketchatbox-sendMedia">
+                        <input id="socketchatbox-sendMedia" type="file" style="display:none;">
+                        Browse
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -63,7 +65,6 @@
                 </div>
             </div>
         </div>
-
 
     </body>
 

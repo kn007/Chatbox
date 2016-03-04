@@ -46,7 +46,7 @@ ul {
   height: 35px;  
 }
 .socketchatbox-inputMessage {
-  width: 260px;
+  width: 80%;
   padding: 0px;
   height: 35px;
   margin: 0px;
@@ -56,9 +56,12 @@ ul {
 
 #socketchatbox-sendFileBtn {
   height: 35px;
-  width: 90px;
+  width: 20%;
   float: right;
+  background: #337AB7;
+  color: white;
   /* margin: 0; */
+  border-radius: 0px;
   /* padding: 0; */
 }
 
@@ -103,7 +106,7 @@ ul {
   padding: 0;
   position: fixed;
   bottom: 0px;
-  overflow: auto;
+  /*overflow: auto;*/
   max-width: 100%;
   line-height: 1em;
   /*  resize: horizontal;
@@ -226,7 +229,7 @@ line-height: 1em;
   display: none;
   background: rgba(0, 0, 0, 0.5);
   bottom: 35px;
-  width: 350px;
+  width: 100%;
   position: absolute;
   z-index: 10;
 }
