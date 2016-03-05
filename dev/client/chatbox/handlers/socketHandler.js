@@ -5,7 +5,7 @@
     var msgHandler = chatbox.msgHandler;
     var typingHandler = chatbox.typingHandler;
     var notification = chatbox.notification;
-
+    var userListHandler = chatbox.userListHandler;
     var socketEvent = chatbox.socketEvent;
 
     socketEvent.register = function() {
@@ -31,9 +31,12 @@
             socket.joined = true;
 
             // Display the welcome message
-            var message = "Welcome, "+ chatbox.username;
+            var message = "Welcome, "+ chatbox.username; //TODO: this username might be allow to be used, always get username from server
             ui.addLog(message);
             ui.addParticipantsMessage(data.numUsers);
+            ui.updateOnlineUserCount(data.numUsers);
+            userListHandler.userJoin(chatbox.username);
+
         });
 
         // This is just a new connection of an existing online user
@@ -46,6 +49,7 @@
             // Display the welcome message
             var message = "Hey, "+ chatbox.username;
             ui.addLog(message);
+            ui.updateOnlineUserCount(data.numUsers);
 
             socket.emit('reset2origintitle', {});
         });
@@ -99,6 +103,9 @@
         // Whenever the server emits 'user joined', log it in the chat body
         socket.on('user joined', function (data) {
             ui.addLog(data.username + ' joined');
+            ui.updateOnlineUserCount(data.numUsers);
+            userListHandler.userJoin(data.username);
+
             //addParticipantsMessage(data.numUsers);
             //beep();
         });
@@ -106,14 +113,19 @@
         // Whenever the server emits 'user left', log it in the chat body
         socket.on('user left', function (data) {
             ui.addLog(data.username + ' left');
-            // if(data.numUsers === 1)
-            ui.addParticipantsMessage(data.numUsers);
+            ui.updateOnlineUserCount(data.numUsers);
+            userListHandler.userLeft(data.username);
+
+            if(data.numUsers === 1)
+                ui.addParticipantsMessage(data.numUsers);
             //removeChatTyping(data);
         });
 
         // Whenever the server emits 'change name', log it in the chat body
         socket.on('log change name', function (data) {
             ui.addLog(data.oldname + ' changes name to ' + data.username);
+            userListHandler.userChangeName(data.oldname, data.username);
+
         });
 
         // For New Message Notification

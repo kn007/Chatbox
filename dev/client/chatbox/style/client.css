@@ -77,11 +77,21 @@ ul {
 }
 #socketchatbox-username {
   float:left;
-  margin-left: 20px;
-  min-width: 20%;
+  margin-left: 10px;
+  margin-right: 10px;
+  /*min-width: 20%;*/
   color: white;
-  max-width:60%;
+  /*max-width:60%;*/
 }
+
+#socketchatbox-online-usercount {
+    line-height: 1em;
+    color: black;
+    background: #BBFF00;
+    border-radius: 50%;
+    height: 100%;
+}
+
 #socketchatbox-username a {
   color: white;
   text-decoration: none;

@@ -67,7 +67,7 @@
                           <li class = "socketchatbox-command-kick"><a href="#">Kick</a></li>
 
                         </ul>
-                      </span>
+                    </span>
                     <br/><br/>
                     <div id="socketchatbox-online-users">
                         Waiting...
@@ -137,6 +137,19 @@
             <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
             <div id='socketchatbox-top'>
                 <div id='socketchatbox-username'></div>
+
+                <span class="dropup">
+                        <button  id='socketchatbox-online-usercount' class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown"> 
+                        </button>
+                        <ul class="dropdown-menu socketchatbox-onlineuser-dropdown">
+
+
+                          <li class = "socketchatbox-command-kick"><a href="#">Kick</a></li>
+
+                        </ul>
+                </span>
+
+                <!-- <div id='socketchatbox-online-usercount'></div> -->
                 <div id='socketchatbox-closeChatbox'>x</div>
                 <div id='socketchatbox-showHideChatbox'>↓</div>
 
@@ -195,6 +208,7 @@
     <script src="/chatbox/init.js"></script>
 
     <script src="/chatbox/controllers/chatboxController.js"></script>
+    <script src="/chatbox/controllers/userListController.js"></script>
     <script src="/chatbox/controllers/msgController.js"></script>
     <script src="/chatbox/controllers/fileController.js"></script>
     <script src="/chatbox/controllers/usernameController.js"></script>
@@ -205,6 +219,7 @@
     <script src="/chatbox/handlers/fileHandler.js"></script>
     <script src="/chatbox/handlers/notificationHandler.js"></script>
     <script src="/chatbox/handlers/socketHandler.js"></script>
+    <script src="/chatbox/handlers/userListHandler.js"></script>
 
     <script src="/chatbox/utils/utils.js"></script>
 

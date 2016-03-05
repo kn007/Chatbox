@@ -5,6 +5,7 @@
     chatbox.ui = {};
     chatbox.ui.init = []; //init is an array of functions
     chatbox.historyHandler = {};
+    chatbox.userListHandler = {};
     chatbox.fileHandler = {};
     chatbox.msgHandler = {};
     chatbox.typingHandler = {};

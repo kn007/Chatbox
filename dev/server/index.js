@@ -111,7 +111,8 @@ io.on('connection', function (socket) {
             // the user already exists, this is just a new connection from him
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
-                username: socket.user.username
+                username: socket.user.username,
+                numUsers: socketHandler.getUserCount()
             });
 
         }
