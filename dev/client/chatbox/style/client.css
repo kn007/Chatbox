@@ -1,0 +1,251 @@
+/* ======================================================= */
+/* ================ General Chatbox Style =================*/
+/* ======================================================= */
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+}
+.socketchatbox-resize {
+
+  top:0px;
+  height:20px;
+  width:20px;
+/*  background-color:#000;
+*/  position:absolute;
+  z-index: 99999;
+
+}
+
+#socketchatbox-nw {
+  left:0px; 
+  cursor:nw-resize; 
+}
+
+#socketchatbox-ne{
+  right:0px;
+  cursor:ne-resize; 
+}
+
+#socketchatbox-imagefile {
+  width:100%;
+}
+#socketchatbox-body {
+  display: none;
+  border: 1px solid lightgray;
+}
+
+
+.socketchatbox-inputMessage-div {
+  height: 35px;  
+}
+.socketchatbox-inputMessage {
+  width: 80%;
+  padding: 0px;
+  height: 35px;
+  margin: 0px;
+  font-size: medium;
+  line-height: 2;
+}
+
+#socketchatbox-sendFileBtn {
+  height: 35px;
+  width: 20%;
+  float: right;
+  background: #337AB7;
+  color: white;
+  /* margin: 0; */
+  border-radius: 0px;
+  /* padding: 0; */
+}
+
+#socketchatbox-showHideChatbox {
+  float:right;
+  color: white;
+  margin-right: 15px;
+}
+#socketchatbox-closeChatbox {
+  float:right;
+  color: white;
+  margin-right: 25px;
+}
+#socketchatbox-username {
+  float:left;
+  margin-left: 20px;
+  min-width: 20%;
+  color: white;
+  max-width:60%;
+}
+#socketchatbox-username a {
+  color: white;
+  text-decoration: none;
+}
+#socketchatbox-top {
+  min-width: 200px;
+  cursor: pointer;
+  height: 30px;
+  background: black;
+  color: black;
+  font-size: 90%;
+  border: 1px solid black;
+  opacity: 0.7;
+  line-height: 30px;
+}
+
+
+.socketchatbox-page {
+  /* font-size: 80%; */
+  margin: 0;
+  margin-left: 10px;
+  padding: 0;
+  position: fixed;
+  bottom: 0px;
+  /*overflow: auto;*/
+  max-width: 100%;
+  line-height: 1em;
+  /*  resize: horizontal;
+*/
+  background: white;
+  z-index: 999;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.socketchatbox-messages img{
+  max-width: 100%;
+}
+
+.socketchatbox-messages video{
+  max-width: 100%;
+}
+
+.socketchatbox-log {
+  color: gray;
+  font-size: smaller;
+  margin: 5px;
+  text-align: center;
+}
+
+
+.socketchatbox-chatArea {
+  height: 350px;
+  width: 350px;
+  max-width: 100%;
+  overflow-y: scroll;
+  background: #EDEDED;
+  /* border: 1px solid lightgray; */
+  border-bottom-width: 0px;
+}
+
+.socketchatbox-message-wrapper {
+  width: 100%;
+  overflow: auto;
+}
+
+.socketchatbox-messagetime {
+  color: gray;
+}
+
+.socketchatbox-messages {
+  height: 100%;
+  margin: 0;
+  /* padding-bottom: 0px; */
+  padding: 0;
+}
+#socketchatbox-txt_fullname {
+  color: black;
+  line-height: 1em;
+
+}
+.socketchatbox-message-me >.socketchatbox-username{
+  /*display: none;*/
+  text-align: left;
+  padding-left: 5px;
+}
+
+.socketchatbox-username {
+line-height: 1em;
+}
+
+
+.socketchatbox-message {
+  margin-bottom: 15px;
+}
+
+
+.socketchatbox-message-others {
+  float: right;
+}
+
+
+
+.socketchatbox-messageBody {
+  max-width: 85%;
+  margin-top: 7px;
+  margin-left: 3px;
+  margin-right: 3px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 0 6px #B2B2B2;
+  display: inline-block;
+  padding: 10px 18px;
+  position: relative;
+  vertical-align: top;
+  line-height: 1em;
+  word-break: break-all;
+}
+
+.socketchatbox-messageBody.hasMedia{
+  border: 1px solid lightgray;
+  border-radius: 2px;
+  padding: 0px;
+
+}
+
+
+.socketchatbox-messageBody-me {
+  background: #BBFF00;
+}
+
+.socketchatbox-messageBody-me.hasMedia {
+  border: 1px solid #BBFF00;
+  background: #FFFFFF;
+}
+
+.socketchatbox-messageBody-others {
+  float: right;
+}
+
+.socketchatbox-typing {
+  color: white;
+  text-align: center;
+  font-size: small;
+  /* height: 25px; */
+  padding: 7px;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  bottom: 35px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+}
+ 
+.socketchatbox-username {
+  font-weight: 700; 
+  text-align: right;
+  font-size: smaller;
+}
+
+
+#socketchatbox-imagepopup-src {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.lightgray {
+  background: lightgray;
+}
