@@ -23,7 +23,7 @@
 
         ui.$actionHistoryDiv = $('.socketchatbox-userdetail-actions');
 
-        $('.socketchatbox-actionhistory-header').click(function() {
+        $('.socketchatbox-actionhistory-header').click(function () {
 
             if (ui.showHistory) {
 
@@ -43,14 +43,32 @@
         toggleActionHistoryVisibility();
 
 
+        $('.socketchatbox-actionhistory-expandAll').click(function() {
+            $('.socketchatbox-actionhistory-actiondetail .collapse').slideDown();
+        });
+
+        $('.socketchatbox-actionhistory-collapseAll').click(function() {
+            $('.socketchatbox-actionhistory-actiondetail .collapse').slideUp();
+        });
+
+
     });
 
     function toggleActionHistoryVisibility() {
 
-        if (ui.showHistory) 
-            ui.$actionHistoryDiv.slideDown(function(){$('.socketchatbox-actionhistory-arrow').text(' ↑ ');});
-        else
-            ui.$actionHistoryDiv.slideUp(function(){$('.socketchatbox-actionhistory-arrow').text(' ↓ ');});
+        if (ui.showHistory) {
+            $('.socketchatbox-actionhistory-togglecollapse').fadeIn().css("display","inline-block");;
+            ui.$actionHistoryDiv.slideDown(function(){
+                $('.socketchatbox-actionhistory-arrow').text(' ↑ ');
+            });
+        }
+        else{
+            
+            ui.$actionHistoryDiv.slideUp(function(){
+                $('.socketchatbox-actionhistory-arrow').text(' ↓ ');
+                $('.socketchatbox-actionhistory-togglecollapse').fadeOut();
+            });
+        }
     }
 
     function loadUserActionHistory(user) {
