@@ -8,33 +8,30 @@
     ui.init.push(function() {
 
         ui.$onlineUserNum = $('#socketchatbox-online-usercount');
-        ui.$onlineUserDropDown = $('.socketchatbox-onlineuser-dropdown');
+        ui.$onlineUsers = $('.socketchatbox-onlineusers');
 
         ui.$onlineUserNum.click(function(e) {
-            ui.$onlineUserDropDown.toggle();
-            e.stopPropagation();
 
-        });
+            if(ui.$chatBody.is(":visible")){
 
-        $(document).on('click', function(event) {
-
-            if (!$(event.target).closest(ui.$onlineUserDropDown).length) {
-                // Hide the dropdown when click elsewhere.
-                ui.$onlineUserDropDown.hide();
+                ui.$onlineUsers.slideToggle();
+                e.stopPropagation();
             }
+
         });
+
 
     });
 
     ui.updateUserList = function(userList) {
 
-        ui.$onlineUserDropDown.html('');
+        ui.$onlineUsers.html('');
 
         for (var username in userList) {
             console.log(username);
-            var $list = $('<li></li>');
-            $list.text(username);
-            ui.$onlineUserDropDown.append($list);
+            var $onlineUser = $('<span></span>');
+            $onlineUser.text(username);
+            ui.$onlineUsers.append($onlineUser);
 
         }
 

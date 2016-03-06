@@ -38,7 +38,9 @@ ul {
 }
 #socketchatbox-body {
   display: none;
-  border: 1px solid lightgray;
+  height: 350px;
+  width: 350px;
+  /* border: 1px solid lightgray; */
 }
 
 
@@ -58,7 +60,7 @@ ul {
   height: 35px;
   width: 20%;
   float: right;
-  background: #337AB7;
+  background: #4DACFF;
   color: white;
   /* margin: 0; */
   border-radius: 0px;
@@ -85,11 +87,27 @@ ul {
 }
 
 #socketchatbox-online-usercount {
-    line-height: 1em;
-    color: black;
-    background: #BBFF00;
-    border-radius: 50%;
-    height: 100%;
+    /* line-height: 1em; */
+    /* padding: 5px; */
+    color: white;
+    background: #0089FF;
+    /* border-radius: 50%; */
+    border: 0px;
+    /* height: 100%; */
+}
+.socketchatbox-onlineusers {
+  background: rgb(77, 172, 255);
+  padding: 5px;
+  width: 100%;
+  display: none;
+}
+
+.socketchatbox-onlineusers span{
+  /* margin: 5px; */
+  /* line-height: 1.3em; */
+  display: inline-block;
+  padding: 5px;
+  color: #FFF;
 }
 
 #socketchatbox-username a {
@@ -103,7 +121,7 @@ ul {
   background: black;
   color: black;
   font-size: 90%;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   opacity: 0.7;
   line-height: 30px;
 }
@@ -115,15 +133,16 @@ ul {
   margin-left: 10px;
   padding: 0;
   position: fixed;
-  bottom: 0px;
+  /* border: 1px solid #0FB5DA; */*/;
+  bottom:0px;
   /*overflow: auto;*/
-  max-width: 100%;
-  line-height: 1em;
+  max-width:100%;
+  line-height:1em;
   /*  resize: horizontal;
 */
-  background: white;
-  z-index: 999;
-  font-family: Arial, Helvetica, sans-serif;
+  background:white;
+  z-index:999;
+  font-family:Arial,Helvetica,sans-serif;
 }
 .socketchatbox-messages img{
   max-width: 100%;
@@ -142,13 +161,13 @@ ul {
 
 
 .socketchatbox-chatArea {
-  height: 350px;
-  width: 350px;
-  max-width: 100%;
+
+  width: 100%;
+  height: 100%;
   overflow-y: scroll;
   background: #EDEDED;
   /* border: 1px solid lightgray; */
-  border-bottom-width: 0px;
+  /*border-bottom-width: 0px;*/
 }
 
 .socketchatbox-message-wrapper {

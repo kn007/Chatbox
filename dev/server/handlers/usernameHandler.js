@@ -36,6 +36,8 @@ function checkUsername(name) {
 
 usernameHandler.checkUsername = checkUsername;
 
+usernameHandler.getOnlineUsernames = function () { return onlineUsernames;}
+
 usernameHandler.releaseUsername = function (name) { delete onlineUsernames[name]; }
 
 function changeName(io, user, newName) {

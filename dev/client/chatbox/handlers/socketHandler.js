@@ -35,7 +35,8 @@
             ui.addLog(message);
             ui.addParticipantsMessage(data.numUsers);
             ui.updateOnlineUserCount(data.numUsers);
-            userListHandler.userJoin(chatbox.username);
+            for (var onlineUsername in data.onlineUsers)
+                userListHandler.userJoin(onlineUsername);
 
         });
 
@@ -51,6 +52,10 @@
             ui.addLog(message);
             ui.updateOnlineUserCount(data.numUsers);
 
+
+            for (var onlineUsername in data.onlineUsers)
+                userListHandler.userJoin(onlineUsername);
+            
             socket.emit('reset2origintitle', {});
         });
 

@@ -54,8 +54,8 @@
 
             if (prev_x == -1) return;
 
-            var boxW = ui.$chatArea.outerWidth();
-            var boxH = ui.$chatArea.outerHeight();
+            var boxW = ui.$chatBody.outerWidth();
+            var boxH = ui.$chatBody.outerHeight();
             var dx = e.clientX - prev_x;
             var dy = e.clientY - prev_y;
 
@@ -67,7 +67,7 @@
             if(boxW<250)    boxW = 250;
             if(boxH<70)     boxH = 70;
 
-            ui.$chatArea.css({ "width":(boxW)+"px", "height":(boxH)+"px"});
+            ui.$chatBody.css({ "width":(boxW)+"px", "height":(boxH)+"px"});
 
             prev_x = e.clientX;
             prev_y = e.clientY;

@@ -76,8 +76,6 @@ io.on('connection', function (socket) {
         numUsers: socketHandler.getUserCount()
     });
 
-
-
     // once a new client is connected, this is the first msg he send
     // we'll find out if he's a new user or existing one looking at the cookie uuid
     // then we'll map the user and the socket
@@ -97,7 +95,8 @@ io.on('connection', function (socket) {
             
             // welcome the new user
             socket.emit('welcome new user', {
-                numUsers: socketHandler.getUserCount()
+                numUsers: socketHandler.getUserCount(),
+                onlineUsers: usernameHandler.getOnlineUsernames()
             });
 
             // echo to others that a new user just joined
@@ -112,10 +111,13 @@ io.on('connection', function (socket) {
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
                 username: socket.user.username,
-                numUsers: socketHandler.getUserCount()
+                numUsers: socketHandler.getUserCount(),
+                onlineUsers: usernameHandler.getOnlineUsernames()
+
             });
 
         }
+
 
         adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
 
