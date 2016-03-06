@@ -62,6 +62,7 @@ ul {
   float: right;
   background: #4DACFF;
   color: white;
+  overflow: hidden;
   /* margin: 0; */
   border-radius: 0px;
   /* padding: 0; */
