@@ -1,9 +1,16 @@
 var utils = require('../utils/utils.js');
 // var socketHandler = require('./socketHandler.js');
+var md5 = require('../utils/md5.js');
 
 var DEFAULT_ROOM = 'Lobby';
 var roomHandler = {};
 var roomDict = {};
+
+
+
+roomHandler.validToken = function (inToken) {return inToken in roomDict;} //TODO: add back md5.encode(inToken)
+
+roomHandler.getUsersInRoom = function(roomID) {return roomDict[roomID].userDict;} //TODO: add back md5.encode(inToken)
 
 
 // check if the socket's user already in a room

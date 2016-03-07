@@ -8,7 +8,6 @@ var fs = require('fs');
 var filePath = __dirname+"/../client/chat-log.txt";
 
 var utils = require('./utils/utils.js');
-var md5 = require('./utils/md5.js');
 
 var roomHandler = require('./handlers/roomHandler.js');
 var socketHandler = require('./handlers/socketHandler.js');
@@ -241,6 +240,7 @@ io.on('connection', function (socket) {
     // admin change visitor's username
     socket.on('admin change username', function (data) {
 
+        //TODO: fix it for room admin
         if(adminHandler.validToken(data.token)) {
 
             usernameHandler.adminEditName(io, data.userID, data.newName);

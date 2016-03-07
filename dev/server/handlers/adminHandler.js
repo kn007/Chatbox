@@ -1,6 +1,7 @@
 var utils = require('../utils/utils.js');
 var socketHandler = require('./socketHandler.js');
 var msgHandler = require('./msgHandler.js');
+var roomHandler = require('./roomHandler.js');
 
 var token = '12345';
 var chatboxUpTime = (new Date()).toString();
@@ -37,7 +38,8 @@ adminHandler.log = function (str) {
 
 adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, commandType, commandContent) {
 
-    if(inToken === token) {
+    // TODO: need to double check if target user/sockets are in the room as room Admin
+    if(inToken === token || roomHandler.validToken(inToken)) {
 
         adminHandler.log('Received command from admin, type: ' + commandType);
 
@@ -55,7 +57,7 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
                 var user = socketHandler.getUser(uid);
 
                 if (commandType === 'admin kick'){
-                    kickUser(io, user, commandType, commandContent);
+                    kickAllUsersSockets(io, user, commandType, commandContent);
                 }else {
                     for (var j = 0; j< user.socketIDList.length; j++) {
                         var s = socketHandler.getSocket(user.socketIDList[j]);
@@ -64,13 +66,13 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
                 }
             }
         }
-    }
+    } 
 }
 
-function kickUser(io, user, commandType, commandContent) {
+function kickAllUsersSockets(io, user, commandType, commandContent) {
 
     // broadcast kick message first then kick, so that user being kicked can see it too
-    io.sockets.emit(commandType, {content: commandContent, username: user.username}); 
+    io.in(user.roomID).emit(commandType, {content: commandContent, username: user.username}); 
 
     var tmpSocketIDList = [];
 
@@ -85,16 +87,11 @@ function kickUser(io, user, commandType, commandContent) {
 
 function sendCommandToSocket(socket, commandType, commandContent) {
 
+    socket.emit(commandType, {content: commandContent});
 
     if (commandType === 'admin kick') { // only kick one socket of a user
-
-        socket.emit(commandType, {content: commandContent}); // what content? explain why being kicked?
         socket.disconnect();
     }
-
-    else
-        socket.emit(commandType, {content: commandContent});
-
 
 }
 
@@ -122,60 +119,65 @@ adminHandler.getUserData = function (socket, inToken) {
 
     if(inToken === token) {
 
+        adminUser = socket.user;
 
-        // if (adminUser.id !== socket.user.id) {
-            adminUser = socket.user;
-        // }
-
-        // send serilizable user and socket object
-        var simpleUserDict = {};
-
-        for (var key in socketHandler.getAllUsers()) {
-
-            var user = socketHandler.getUser(key);
-
-            var simpleSocketList = [];
-            for (var i = 0; i < user.socketIDList.length; i++) {
-                var s = socketHandler.getSocket(user.socketIDList[i]);
-
-                // create simpleSocket model
-                var simpleSocket = {};
-                simpleSocket.id = s.id;
-                simpleSocket.ip = s.remoteAddress;
-                simpleSocket.msgCount = s.msgCount;
-                simpleSocket.lastMsg = s.lastMsg;
-                simpleSocket.lastActive = s.lastActive;
-                simpleSocket.url = s.url;
-                simpleSocket.referrer = s.referrer;
-                simpleSocket.joinTime = s.joinTime;
-
-                simpleSocketList.push(simpleSocket);
-            }
-
-            user.socketList = simpleSocketList;
-
-            simpleUserDict[user.id] = user;
-        }
+        sendOnlineUserData(socket, socketHandler.getAllUsers());
 
 
+    }else if (roomHandler.validToken(inToken)) {
+        
+        sendOnlineUserData(socket, roomHandler.getUsersInRoom(inToken));
 
-        socket.emit('listUsers', {
-            userdict: simpleUserDict,
-            success: true
-        });
-
-    // getUserList might still be called when token is wrong
     }else {
 
-        if (adminUser.id === socket.user.id) 
-        	adminUser = {};
-        
-
-
+        // bad token
         socket.emit('listUsers', {
-            success: false
+                success: false
         });
+
     }
+
+}
+
+
+// send serilizable user and socket object
+function sendOnlineUserData(socket, userDict) {
+
+    var simpleUserDict = {};
+
+    for (var key in userDict) {
+
+        var user = socketHandler.getUser(key);
+
+        var simpleSocketList = [];
+
+        for (var i = 0; i < user.socketIDList.length; i++) {
+
+            var s = socketHandler.getSocket(user.socketIDList[i]);
+
+            // create simpleSocket model
+            var simpleSocket = {};
+            simpleSocket.id = s.id;
+            simpleSocket.ip = s.remoteAddress;
+            simpleSocket.msgCount = s.msgCount;
+            simpleSocket.lastMsg = s.lastMsg;
+            simpleSocket.lastActive = s.lastActive;
+            simpleSocket.url = s.url;
+            simpleSocket.referrer = s.referrer;
+            simpleSocket.joinTime = s.joinTime;
+
+            simpleSocketList.push(simpleSocket);
+        }
+
+        user.socketList = simpleSocketList;
+
+        simpleUserDict[user.id] = user;
+    }
+
+    socket.emit('listUsers', {
+            userdict: simpleUserDict,
+            success: true
+    });
 
 }
 

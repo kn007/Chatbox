@@ -79,7 +79,7 @@
 
 
         if (typeof(chatbox.roomID) == 'undefined') 
-            chatbox.roomID = 'lobby';
+            chatbox.roomID = 'wuhh';
         
 
         // now make your connection with server!
