@@ -23,6 +23,13 @@
 
         ui.$actionHistoryDiv = $('.socketchatbox-userdetail-actions');
 
+
+        ui.$actionHistoryDiv.on( "click", ".socketchatbox-actionhistory-basic", function() {
+            var detailClass = $(this).data('targetDetail');
+            $('.'+detailClass).slideToggle();
+        });
+
+
         $('.socketchatbox-actionhistory-header').click(function () {
 
             if (ui.showHistory) {
@@ -41,6 +48,7 @@
         });
 
         toggleActionHistoryVisibility();
+
 
 
         $('.socketchatbox-actionhistory-expandAll').click(function() {
@@ -105,11 +113,12 @@
             //new Date(Number(action.time)) // full time format
             var d = new Date(Number(action.time));
             var historyID = uid + historyIndex;
-            var $actionBasicDiv = $("<div data-toggle='collapse' data-target='." + historyID + "'></div>");
+            var $actionBasicDiv = $("<div></div>");
             var actionBasicHTML = ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
             actionBasicHTML += "<span class = 'socketchatbox-actionhistory-actiontype breakable'>" + action.type + "</span>";
             $actionBasicDiv.html(actionBasicHTML);
             $actionBasicDiv.addClass('socketchatbox-actionhistory-basic');
+            $actionBasicDiv.data('targetDetail', historyID);
             $actionDiv.append($actionBasicDiv);
 
             //https://github.com/twbs/bootstrap/issues/12093
@@ -125,34 +134,12 @@
 
             $actionDiv.append($wrapperDiv);
 
-            // var htmlStr = "<span>url: " + utils.createNewWindowLink(action.url) + "</span><br />";
-            // htmlStr += action.detail;
-
-            // $actionBasicDiv.popover({
-
-            //     placement : 'left',
-            //     html : true,
-            //     // title : utils.createNewWindowLink(action.url),
-            //     content : utils.createNewWindowLink(action.url)+'<br/>'+action.detail      
-            // });
-
-            // title="Header" data-toggle="popover" data-placement="left" data-content="Content"
-
-
-            // var $actionDetailDiv = $('<div></div>');
-            // $actionDetailDiv.addClass('socketchatbox-actionhistory-actiondetail');
-            // $actionDetailDiv.addClass('breakable');
-
-            // var str = "";
-            // str += "<span>url: " + utils.createNewWindowLink(action.url) + "</span><br />";
-            // str += action.detail;
-            // $actionDetailDiv.html(str);
-            // $actionDiv.append($actionDetailDiv);
-            // $actionBasicDiv.click(function(){$actionDetailDiv.show();});
-
+           
 
             $actionDiv.addClass('socketchatbox-userdetail-actions-each');
             ui.$actionHistoryDiv.append($actionDiv);
+
+
 
         }
 
