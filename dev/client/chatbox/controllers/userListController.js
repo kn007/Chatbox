@@ -12,7 +12,7 @@
 
         ui.$onlineUserNum.click(function(e) {
 
-            if(ui.$chatBody.is(":visible")){
+            if (ui.$chatBody.is(":visible")){
 
                 ui.$onlineUsers.slideToggle();
                 e.stopPropagation();
@@ -28,7 +28,7 @@
         ui.$onlineUsers.html('');
 
         for (var username in userList) {
-            console.log(username);
+            // console.log(username);
             var $onlineUser = $('<span></span>');
             $onlineUser.text(username);
             ui.$onlineUsers.append($onlineUser);

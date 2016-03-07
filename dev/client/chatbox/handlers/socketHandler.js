@@ -18,6 +18,7 @@
             socket.emit('login', {
                 username: chatbox.username,
                 uuid: chatbox.uuid,
+                roomID: chatbox.roomID,
                 url: location.href,
                 referrer: document.referrer
             });

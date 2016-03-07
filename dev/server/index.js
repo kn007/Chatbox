@@ -8,6 +8,9 @@ var fs = require('fs');
 var filePath = __dirname+"/../client/chat-log.txt";
 
 var utils = require('./utils/utils.js');
+var md5 = require('./utils/md5.js');
+
+var roomHandler = require('./handlers/roomHandler.js');
 var socketHandler = require('./handlers/socketHandler.js');
 var adminHandler = require('./handlers/adminHandler.js');
 var msgHandler = require('./handlers/msgHandler.js');
@@ -85,12 +88,15 @@ io.on('connection', function (socket) {
         var newUser = false;
 
         newUser = socketHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
+            
+        var roomID = roomHandler.socketJoin(socket, data.roomID);
 
         var user = socket.user;
 
         if (newUser) {
 
-            // ensure username unique among online users
+
+            // ensure username unique among online users, TODO: change to unique in room
             user.username = usernameHandler.checkUsername(user.username);
             
             // welcome the new user
@@ -100,10 +106,13 @@ io.on('connection', function (socket) {
             });
 
             // echo to others that a new user just joined
-            socket.broadcast.emit('user joined', {
+            io.in(roomID).emit('user joined', {
                 username: user.username,
                 numUsers: socketHandler.getUserCount()
             });
+
+            adminHandler.log(user.username + ' joined in room ' + roomID);
+
 
         } else {
 
@@ -116,10 +125,14 @@ io.on('connection', function (socket) {
 
             });
 
+            adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
+
+
         }
 
 
-        adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
+
+
 
 
     });
@@ -138,10 +151,11 @@ io.on('connection', function (socket) {
         if (lastConnectionOfUser) {
 
             usernameHandler.releaseUsername(socket.user.username);
+            roomHandler.leftRoom(socket.user);
 
-            socket.broadcast.emit('stop typing', { username: socket.user.username });
+            io.in(socket.user.roomID).emit('stop typing', { username: socket.user.username });
 
-            socket.broadcast.emit('user left', {
+            io.in(socket.user.roomID).emit('user left', {
                 username: socket.user.username,
                 numUsers: socketHandler.getUserCount()
             });
@@ -167,8 +181,7 @@ io.on('connection', function (socket) {
     socket.on('new message', function (data) {
 
         msgHandler.receiveMsg(socket, data.msg);
-
-        io.sockets.emit('new message', {//send to everybody including sender
+        io.in(socket.user.roomID).emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
@@ -181,7 +194,7 @@ io.on('connection', function (socket) {
 
         fileHandler.receiveFile(socket, data.file, data.fileName);
 
-        io.sockets.emit('base64 file',
+        io.in(socket.user.roomID).emit('base64 file',
 
             {
               username: socket.user.username,
@@ -197,14 +210,14 @@ io.on('connection', function (socket) {
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
 
-        socket.broadcast.emit('typing', { username: socket.user.username });
+        io.in(socket.user.roomID).emit('typing', { username: socket.user.username });
 
     });
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on('stop typing', function (data) {
     
-        socket.broadcast.emit('stop typing', { username: socket.user.username });
+        io.in(socket.user.roomID).emit('stop typing', { username: socket.user.username });
 
     });
 
@@ -237,7 +250,9 @@ io.on('connection', function (socket) {
     });
 
     socket.on('getServerStat', function (data) {
+
         adminHandler.getServerStat(socket, data.token);
+        
     });
 
     // send script to target users

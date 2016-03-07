@@ -77,6 +77,11 @@
             ui.hide();
         }
 
+
+        if (typeof(chatbox.roomID) == 'undefined') 
+            chatbox.roomID = 'lobby';
+        
+
         // now make your connection with server!
         chatbox.socket = io(chatbox.domain);
         chatbox.socket.joined = false;

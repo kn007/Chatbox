@@ -57,7 +57,7 @@ function changeName(io, user, newName) {
     
 
     // echo globally that this client has changed name
-    io.sockets.emit('log change name', {
+    io.in(user.roomID).emit('log change name', {
         username: user.username,
         oldname: oldName
     });

@@ -156,6 +156,10 @@
         if ($('.socketchatbox-userdetail-useragent').text() !== user.userAgent)
             $('.socketchatbox-userdetail-useragent').text(user.userAgent);
 
+        if ($('.socketchatbox-userdetail-room').text() !== user.roomID)
+            $('.socketchatbox-userdetail-room').text(user.roomID);
+
+
     }
 
     // only if there's a user that's opened
