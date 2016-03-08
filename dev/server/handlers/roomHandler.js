@@ -10,7 +10,7 @@ var roomDict = {};
 
 roomHandler.validToken = function (inToken) {return inToken in roomDict;} //TODO: add back md5.encode(inToken)
 
-roomHandler.getUsersInRoom = function(roomID) {return roomDict[roomID].userDict;} //TODO: add back md5.encode(inToken)
+roomHandler.getUsersInRoom = function(inToken) {return roomDict[inToken].userDict;} //TODO: add back md5.encode(inToken)
 
 
 // check if the socket's user already in a room

@@ -126,13 +126,7 @@ io.on('connection', function (socket) {
 
             adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
 
-
         }
-
-
-
-
-
 
     });
 
@@ -166,9 +160,24 @@ io.on('connection', function (socket) {
     // enforce that all his socket connections change name too
     socket.on('user edits name', function (data) {
 
-        usernameHandler.userEditName(io, socket, data.newName);
+
+        var user = socket.user;
+        var oldName = user.username;
+
+        if (oldName === data.newName) 
+            return;
+
+        usernameHandler.userEditName(socket, data.newName);
+
+        io.in(user.roomID).emit('log change name', {
+            username: user.username,
+            oldname: oldName
+        });
+
+        adminHandler.log(oldName + ' changed name to ' + user.username);
 
     });
+
 
     socket.on('report', function (data) {
 
@@ -230,22 +239,17 @@ io.on('connection', function (socket) {
     });
 
 
-    //==========================================================================
-    //==========================================================================
-    // code below are for admin only, so we always want to verify token first
-    //==========================================================================
-    //==========================================================================
+    //============================================================================================
+    //============================================================================================
+    //   code below are for admin only, so we always want to verify token first in adminHandler
+    //============================================================================================
+    //============================================================================================
 
 
     // admin change visitor's username
     socket.on('admin change username', function (data) {
 
-        //TODO: fix it for room admin
-        if(adminHandler.validToken(data.token)) {
-
-            usernameHandler.adminEditName(io, data.userID, data.newName);
-
-        }
+        adminHandler.adminChangeUsername(io, data.token, data.userID, data.newName);
 
     });
 

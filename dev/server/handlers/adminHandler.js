@@ -1,6 +1,7 @@
 var utils = require('../utils/utils.js');
 var socketHandler = require('./socketHandler.js');
 var msgHandler = require('./msgHandler.js');
+var usernameHandler = require('./usernameHandler.js');
 var roomHandler = require('./roomHandler.js');
 
 var token = '12345';
@@ -68,6 +69,31 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
         }
     } 
 }
+
+// When admin changes a user's username
+adminHandler.adminChangeUsername = function (io, inToken, userID, newName) {
+    
+    // TODO: need to double check if target user/sockets are in the room as room Admin
+    if(inToken === token || roomHandler.validToken(inToken)) {
+
+        var user = socketHandler.getUser(userID);
+
+        var oldName = user.username;
+
+        usernameHandler.adminEditName(user, newName);
+
+        io.in(user.roomID).emit('log change name', {
+            username: user.username,
+            oldname: oldName
+        });
+
+        adminHandler.log(oldName + ' changed name to ' + user.username);
+    }
+
+}
+
+
+
 
 function kickAllUsersSockets(io, user, commandType, commandContent) {
 

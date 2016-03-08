@@ -1,10 +1,9 @@
 var socketHandler = require('./socketHandler.js');
-var adminHandler = require('./adminHandler.js');
 var utils = require('../utils/utils.js');
 
 var usernameHandler = {};
 
-var onlineUsernames = {};
+var onlineUsernames = {}; // this needs to be changed to honor rooms, not entire system
 
 function checkUsername(name) {
 
@@ -28,6 +27,7 @@ function checkUsername(name) {
 
 
     } else {
+
         onlineUsernames[name] = 1;
     }
 
@@ -36,15 +36,15 @@ function checkUsername(name) {
 
 usernameHandler.checkUsername = checkUsername;
 
-usernameHandler.getOnlineUsernames = function () { return onlineUsernames;}
+usernameHandler.getOnlineUsernames = function () { return onlineUsernames; }
 
 usernameHandler.releaseUsername = function (name) { delete onlineUsernames[name]; }
 
-function changeName(io, user, newName) {
+function changeName(user, newName) {
     
     var oldName = user.username;
 
-    // consideration: do we want to release the name as soon as user change name?
+    // consideration: do we want to release the name as soon as user changes name?
     usernameHandler.releaseUsername(oldName); 
     var newName = checkUsername(newName);
 
@@ -56,38 +56,28 @@ function changeName(io, user, newName) {
     	socketHandler.getSocket(socketIDsToChangeName[i]).emit('change username', { username: newName });
     
 
-    // echo globally that this client has changed name
-    io.in(user.roomID).emit('log change name', {
-        username: user.username,
-        oldname: oldName
-    });
-
-    adminHandler.log(oldName + ' changed name to ' + user.username);
     return newName;
 }
 
-usernameHandler.adminEditName = function(io, uid, newName) {
+usernameHandler.adminEditName = function(user, newName) {
 
-	var user = socketHandler.getUser(uid);
 
     // change name and sync name change
     var oldName = user.username;
 
     if (oldName === newName) return;
 
-    newName = changeName(io, user, newName);
+    newName = changeName(user, newName);
 
     var action = {};
-    action.type = 'Name Changed';
+    action.type = 'Name Changed by Admin';
     action.time = utils.getTime();
     action.url = 'N/A';
     action.detail = 'Changed name from ' + oldName + ' to ' + newName;
     user.actionList.push(action);
 }
 
-
-
-usernameHandler.userEditName = function(io, socket, newName) {
+usernameHandler.userEditName = function(socket, newName) {
 
     // add logic here to limit visitor changing name
 
@@ -98,7 +88,7 @@ usernameHandler.userEditName = function(io, socket, newName) {
     if (oldName === newName) return;
 
 
-    newName = changeName(io, socket.user, newName);
+    newName = changeName(socket.user, newName);
 
     var action = {};
     action.type = 'Change Name';
