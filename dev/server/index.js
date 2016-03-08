@@ -95,19 +95,24 @@ io.on('connection', function (socket) {
         if (newUser) {
 
 
-            // ensure username unique among online users, TODO: change to unique in room
-            user.username = usernameHandler.checkUsername(user.username);
+            // ensure username unique in same chat room
+            usernameHandler.registerUniqueName(user, user.username);
             
+
+            //TODO: if the username distributed to user from server is different from the client one
+            // we need to tell the client to update local name
+
             // welcome the new user
             socket.emit('welcome new user', {
-                numUsers: socketHandler.getUserCount(),
-                onlineUsers: usernameHandler.getOnlineUsernames()
+                username: user.username,
+                // numUsers: socketHandler.getUserCount() // this should be user count in same room
+                onlineUsers: usernameHandler.getNamesInRoom(roomID) 
             });
 
             // echo to others that a new user just joined
             io.in(roomID).emit('user joined', {
                 username: user.username,
-                numUsers: socketHandler.getUserCount()
+                // numUsers: socketHandler.getUserCount() // this should be user count in same room
             });
 
             adminHandler.log(user.username + ' joined in room ' + roomID);
@@ -118,9 +123,9 @@ io.on('connection', function (socket) {
             // the user already exists, this is just a new connection from him
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
-                username: socket.user.username,
-                numUsers: socketHandler.getUserCount(),
-                onlineUsers: usernameHandler.getOnlineUsernames()
+                username: user.username,
+                // numUsers: socketHandler.getUserCount(), // this should be user count in same room
+                onlineUsers: usernameHandler.getNamesInRoom(roomID)
 
             });
 
@@ -143,7 +148,7 @@ io.on('connection', function (socket) {
 
         if (lastConnectionOfUser) {
 
-            usernameHandler.releaseUsername(socket.user.username);
+            usernameHandler.releaseUsername(socket.user.roomID, socket.user.username);
             roomHandler.leftRoom(socket.user);
 
             io.in(socket.user.roomID).emit('stop typing', { username: socket.user.username });

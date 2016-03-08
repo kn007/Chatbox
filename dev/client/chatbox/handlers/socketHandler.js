@@ -30,14 +30,22 @@
         // This is a new user
         socket.on('welcome new user', function (data) {
             socket.joined = true;
+            ui.changeLocalUsername(data.username);
 
             // Display the welcome message
             var message = "Welcome, "+ chatbox.username; //TODO: this username might be allow to be used, always get username from server
             ui.addLog(message);
-            ui.addParticipantsMessage(data.numUsers);
-            ui.updateOnlineUserCount(data.numUsers);
-            for (var onlineUsername in data.onlineUsers)
+
+            var userCount = 0;
+
+            for (var onlineUsername in data.onlineUsers){
+                userCount++;
                 userListHandler.userJoin(onlineUsername);
+            }
+
+            ui.updateOnlineUserCount(userCount);
+            ui.addParticipantsMessage(userCount);
+
 
         });
 
@@ -51,11 +59,17 @@
             // Display the welcome message
             var message = "Hey, "+ chatbox.username;
             ui.addLog(message);
-            ui.updateOnlineUserCount(data.numUsers);
 
-
-            for (var onlineUsername in data.onlineUsers)
+            var userCount = 0;
+            
+            for (var onlineUsername in data.onlineUsers){
+                userCount++;
                 userListHandler.userJoin(onlineUsername);
+            }
+
+            ui.updateOnlineUserCount(userCount);
+            ui.addParticipantsMessage(userCount);
+
             
             socket.emit('reset2origintitle', {});
         });
@@ -63,7 +77,7 @@
         // Whenever the server emits 'new message', update the chat body
         socket.on('new message', function (data) {
             msgHandler.processChatMessage(data);
-                        // play new msg sound and change chatbox color to notify users
+            // play new msg sound and change chatbox color to notify users
             if (data.username !== chatbox.username) {
                 //newMsgBeep();
                 notification.receivedNewMsg();
