@@ -9,12 +9,13 @@
     </head>
     <body>
         <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
-        <div id = "wrapper">
- 
-            <div class="socketchatbox-admin-leftside">
 
-                <div class="socketchatbox-admin-server">
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <!-- <div class="socketchatbox-admin-leftside"> -->
+
+                <div class="socketchatbox-admin-server"></div>
 
                 <br/><br/>
 
@@ -22,28 +23,30 @@
                     <b>Instructions</b><br/><br/>
                     <li>
                     The first thing you need to do is to enter your token and click update, the 
-                    default token is "12345", you can change the token in index.js.</li> 
+                    default token is "12345", you can change the token in adminHandler.js.</li> 
                     <li>Once the admin validation is successful, you can see all users online at the moment.</li> 
-                    <li>Click on the ' ↓ ' after user name to see more details, including all his sockets information.</li>
-                    <li>To run JavaScript on user's browser, you need to select the user as target before sending your script.</li>
+                    <li>Click on the ' ↓ ' after user name to see more details about the user.</li>
+                    <li>Remember to select target users before performing any action.</li>
 
                     You can see some example scripts in <b><a href="/AdminHelp.md" target="_blank">AdminHelp.md</a></b>.
 
                     And here's the <b><a href="/chat-log.txt" target="_blank">chat log file</a></b>.
                 </div>
+                <br/><br/>
+
 
             </div>
 
-            <div class="socketchatbox-info-admin">
+
+            <div class="col-md-7">
+
+                <!-- <div class="socketchatbox-info-admin"> -->
 
                 <div id="socketchatbox-checkAdmin">
                     <b>Token Verification:</b> <span id="socketchatbox-tokenStatus">Waiting...</span> 
                     <br/><br/>
                     Token: <input type="password" id="socketchatbox-token">
-                    <button id="socketchatbox-updateToken">Update</button>
-                    
-                           
-
+                    <button id="socketchatbox-updateToken">Update</button>        
                 </div>
                 <br/><br/>
 
@@ -67,7 +70,7 @@
                           <li class = "socketchatbox-command-kick"><a href="#">Kick</a></li>
 
                         </ul>
-                      </span>
+                    </span>
                     <br/><br/>
                     <div id="socketchatbox-online-users">
                         Waiting...
@@ -80,6 +83,8 @@
                                     <tr><td>Name</td> <td><input class="socketchatbox-userdetail-name-edit" type="text" />
                                         <button class="socketchatbox-admin-changeUserName">update</button></td>
                                     </tr>
+                                    <tr><td>Room ID</td> <td class="socketchatbox-userdetail-room breakable"></td></tr>
+
                                     <tr><td>Last Message</td> <td class="socketchatbox-userdetail-lastmsg breakable"></td></tr>
                                     <tr><td>Total Messages</td> <td class="socketchatbox-userdetail-totalmsg"></td></tr>
                                     <tr><td>Landing Page</td> <td class="socketchatbox-userdetail-landingpage breakable"></td></tr>
@@ -88,7 +93,7 @@
                                     <tr><td>Join Time</td> <td class="socketchatbox-userdetail-jointime"></td>
                                     </tr>
                                     <tr><td>IP</td><td><span class="socketchatbox-userdetail-ip"></span>
-                                        <button class="socketchatbox-admin-blockIP">block</button>
+                                        <!-- <button class="socketchatbox-admin-blockIP">block</button> -->
                                         <button class="socketchatbox-admin-lookupIP">look up</button></td>
                                     </tr>
                                     <tr><td>User-Agent</td> <td class="socketchatbox-userdetail-useragent breakable"></td></tr>
@@ -101,8 +106,18 @@
                             <div class="socketchatbox-userdetail-sockets"></div>
                              
                         </div>
+                        <br/>
 
-                        <center><button class="socketchatbox-actionhistory-header btn btn-default"> Action History <span class="socketchatbox-actionhistory-count badge"></span><span class="socketchatbox-actionhistory-arrow"> ↓ </span></button></center>
+                        <center><button class="socketchatbox-actionhistory-header btn btn-default"> Action History <span class="socketchatbox-actionhistory-count badge"></span><span class="socketchatbox-actionhistory-arrow"> ↓ </span></button></center><br/>
+                        <center>
+                            <div class="btn-group btn-group-sm socketchatbox-actionhistory-togglecollapse">
+                            <button class="btn btn-default socketchatbox-actionhistory-expandAll"  type="button">Expand All</button>
+                            <button class="btn btn-default socketchatbox-actionhistory-collapseAll"  type="button" >Collapse All</button>
+                        </div>
+
+                        </center>
+                        
+
                         <br/>
                         
                         <div class="socketchatbox-userdetail-actions"></div>
@@ -127,8 +142,18 @@
                     <div id="socketchatbox-scriptSentStatus"></div>
 
                 </div>
+
             </div>
+
         </div>
+    </div>
+
+
+
+
+
+
+
 
   
 
@@ -136,15 +161,19 @@
             <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
             <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
             <div id='socketchatbox-top'>
-                <div id='socketchatbox-username'></div>
+                <div id='socketchatbox-username'></div>   
+                <button  id='socketchatbox-online-usercount' class="badge"> 
+                </button>
+
                 <div id='socketchatbox-closeChatbox'>x</div>
                 <div id='socketchatbox-showHideChatbox'>↓</div>
 
             </div>
             <div id='socketchatbox-body'>
-                <div class="socketchatbox-chatArea">
-                    <div class = "socketchatbox-typing"> </div>
+                <div class='socketchatbox-onlineusers'></div>
+                <div class = "socketchatbox-typing"> </div>
 
+                <div class="socketchatbox-chatArea">
                     <ul class="socketchatbox-messages"></ul>
                 </div>
 
@@ -195,6 +224,7 @@
     <script src="/chatbox/init.js"></script>
 
     <script src="/chatbox/controllers/chatboxController.js"></script>
+    <script src="/chatbox/controllers/userListController.js"></script>
     <script src="/chatbox/controllers/msgController.js"></script>
     <script src="/chatbox/controllers/fileController.js"></script>
     <script src="/chatbox/controllers/usernameController.js"></script>
@@ -205,6 +235,7 @@
     <script src="/chatbox/handlers/fileHandler.js"></script>
     <script src="/chatbox/handlers/notificationHandler.js"></script>
     <script src="/chatbox/handlers/socketHandler.js"></script>
+    <script src="/chatbox/handlers/userListHandler.js"></script>
 
     <script src="/chatbox/utils/utils.js"></script>
 

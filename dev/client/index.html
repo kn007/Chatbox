@@ -9,7 +9,11 @@
     </head>
     <body>
 
-    
+   
+
+
+  
+
 
   
 
@@ -17,15 +21,19 @@
             <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
             <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
             <div id='socketchatbox-top'>
-                <div id='socketchatbox-username'></div>
+                <div id='socketchatbox-username'></div>   
+                <button  id='socketchatbox-online-usercount' class="badge"> 
+                </button>
+
                 <div id='socketchatbox-closeChatbox'>x</div>
                 <div id='socketchatbox-showHideChatbox'>↓</div>
 
             </div>
             <div id='socketchatbox-body'>
-                <div class="socketchatbox-chatArea">
-                    <div class = "socketchatbox-typing"> </div>
+                <div class='socketchatbox-onlineusers'></div>
+                <div class = "socketchatbox-typing"> </div>
 
+                <div class="socketchatbox-chatArea">
                     <ul class="socketchatbox-messages"></ul>
                 </div>
 
@@ -76,8 +84,8 @@
     <script src="/chatbox/init.js"></script>
 
     <script src="/chatbox/controllers/chatboxController.js"></script>
+    <script src="/chatbox/controllers/userListController.js"></script>
     <script src="/chatbox/controllers/msgController.js"></script>
-    <script src="/chatbox/handlers/typingHandler.js"></script>
     <script src="/chatbox/controllers/fileController.js"></script>
     <script src="/chatbox/controllers/usernameController.js"></script>
 
@@ -87,9 +95,12 @@
     <script src="/chatbox/handlers/fileHandler.js"></script>
     <script src="/chatbox/handlers/notificationHandler.js"></script>
     <script src="/chatbox/handlers/socketHandler.js"></script>
+    <script src="/chatbox/handlers/userListHandler.js"></script>
 
     <script src="/chatbox/utils/utils.js"></script>
 
     <script src="/chatbox/main.js"></script>
+
+
 
 </html>

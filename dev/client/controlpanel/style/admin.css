@@ -7,15 +7,17 @@ html {
   font-family: Arial, Helvetica, sans-serif;
   /* font-family: "Times New Roman", Times, serif; */
 }
+
+body {
+  background: whitesmoke;
+
+}
 a:visited {
   color:black;
 }
-.socketchatbox-admin-title h1 {color: #3D3D3D;/* margin: 50px; */font-size: 35px;padding: 50px;background: whitesmoke;}
+.socketchatbox-admin-title h1 {/* color: #3FA6FF; *//* margin: 50px; */font-size: 35px;padding: 50px;background: whitesmoke;}
 .socketchatbox-admin-instruction li{
   margin:10px
-}
-#wrapper {
-  /*min-height: 1000px; *//* we always want to show scroll bar */
 }
 
 .socketchatbox-command-kick {
@@ -27,16 +29,8 @@ a:visited {
   outline: none;
   padding: 10px;
   margin: 0px;
-}
-
-.socketchatbox-info-admin {
-  right: 5%;
-  width: 50%;
-  position: absolute;
-  min-width: 450px;
-  /* max-width: 618px; */
-  /*word-wrap: break-word;*/
-  /* background: rgba(255, 255, 255, 0.5); */
+  background: #337AB7;
+  color: white;
 }
 
 
@@ -59,14 +53,15 @@ div#socketchatbox-online {}
 .socketchatbox-scriptHistory {
   border: 1px solid lightgray;
   padding: 20px;
-  background: #F5F5F5;
+  border-bottom-width: 0;
+  background: #FFFFFF;
 }
-.socketchatbox-admin-leftside {
+/*.socketchatbox-admin-leftside {
   width: 36%;
   margin-left: 5%;
   position: absolute;
   margin-bottom: 50px;
-}
+}*/
 .socketchatbox-admin-server {
   border: 1px solid lightgray;
   padding-left: 5px;
@@ -273,10 +268,13 @@ div#socketchatbox-online {}
 button {
   border: 1px solid lightgray;
   /*margin-left: 10px;*/
-  cursor: pointer;
+  /* cursor: pointer; */
   background: #f5f5f5;
 }
 
+.socketchatbox-actionhistory-togglecollapse {
+  display: none;
+}
 
 .blue {
   background: blue;

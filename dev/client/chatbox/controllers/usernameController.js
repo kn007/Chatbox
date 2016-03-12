@@ -49,7 +49,7 @@
             // When the client hits ESC on their keyboard
             if (event.which === 27) {
                 if ($('#socketchatbox-txt_fullname').is(":focus")) {
-                    ui.$username.text(username);
+                    ui.$username.text(chatbox.username);
                     ui.$inputMessage.focus();
                     return;
                 }

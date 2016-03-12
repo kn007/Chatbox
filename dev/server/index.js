@@ -8,6 +8,8 @@ var fs = require('fs');
 var filePath = __dirname+"/../client/chat-log.txt";
 
 var utils = require('./utils/utils.js');
+
+var roomHandler = require('./handlers/roomHandler.js');
 var socketHandler = require('./handlers/socketHandler.js');
 var adminHandler = require('./handlers/adminHandler.js');
 var msgHandler = require('./handlers/msgHandler.js');
@@ -76,8 +78,6 @@ io.on('connection', function (socket) {
         numUsers: socketHandler.getUserCount()
     });
 
-
-
     // once a new client is connected, this is the first msg he send
     // we'll find out if he's a new user or existing one looking at the cookie uuid
     // then we'll map the user and the socket
@@ -87,37 +87,51 @@ io.on('connection', function (socket) {
         var newUser = false;
 
         newUser = socketHandler.socketJoin(socket, data.url, data.referrer, data.uuid, data.username);
+            
+        var roomID = roomHandler.socketJoin(socket, data.roomID);
 
         var user = socket.user;
 
         if (newUser) {
 
-            // ensure username unique among online users
-            user.username = usernameHandler.checkUsername(user.username);
+
+            // ensure username unique in same chat room
+            usernameHandler.registerUniqueName(user, user.username);
             
+
+            //TODO: if the username distributed to user from server is different from the client one
+            // we need to tell the client to update local name
+
             // welcome the new user
             socket.emit('welcome new user', {
-                numUsers: socketHandler.getUserCount()
+                username: user.username,
+                // numUsers: socketHandler.getUserCount() // this should be user count in same room
+                onlineUsers: usernameHandler.getNamesInRoom(roomID) 
             });
 
             // echo to others that a new user just joined
-            socket.broadcast.emit('user joined', {
+            io.in(roomID).emit('user joined', {
                 username: user.username,
-                numUsers: socketHandler.getUserCount()
+                // numUsers: socketHandler.getUserCount() // this should be user count in same room
             });
+
+            adminHandler.log(user.username + ' joined in room ' + roomID);
+
 
         } else {
 
             // the user already exists, this is just a new connection from him
             // force sync all user's client side usernames
             socket.emit('welcome new connection', {
-                username: socket.user.username
+                username: user.username,
+                // numUsers: socketHandler.getUserCount(), // this should be user count in same room
+                onlineUsers: usernameHandler.getNamesInRoom(roomID)
+
             });
 
+            adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
+
         }
-
-        adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
-
 
     });
 
@@ -134,11 +148,12 @@ io.on('connection', function (socket) {
 
         if (lastConnectionOfUser) {
 
-            usernameHandler.releaseUsername(socket.user.username);
+            usernameHandler.releaseUsername(socket.user.roomID, socket.user.username);
+            roomHandler.leftRoom(socket.user);
 
-            socket.broadcast.emit('stop typing', { username: socket.user.username });
+            io.in(socket.user.roomID).emit('stop typing', { username: socket.user.username });
 
-            socket.broadcast.emit('user left', {
+            io.in(socket.user.roomID).emit('user left', {
                 username: socket.user.username,
                 numUsers: socketHandler.getUserCount()
             });
@@ -150,9 +165,24 @@ io.on('connection', function (socket) {
     // enforce that all his socket connections change name too
     socket.on('user edits name', function (data) {
 
-        usernameHandler.userEditName(io, socket, data.newName);
+
+        var user = socket.user;
+        var oldName = user.username;
+
+        if (oldName === data.newName) 
+            return;
+
+        usernameHandler.userEditName(socket, data.newName);
+
+        io.in(user.roomID).emit('log change name', {
+            username: user.username,
+            oldname: oldName
+        });
+
+        adminHandler.log(oldName + ' changed name to ' + user.username);
 
     });
+
 
     socket.on('report', function (data) {
 
@@ -164,8 +194,7 @@ io.on('connection', function (socket) {
     socket.on('new message', function (data) {
 
         msgHandler.receiveMsg(socket, data.msg);
-
-        io.sockets.emit('new message', {//send to everybody including sender
+        io.in(socket.user.roomID).emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
@@ -178,7 +207,7 @@ io.on('connection', function (socket) {
 
         fileHandler.receiveFile(socket, data.file, data.fileName);
 
-        io.sockets.emit('base64 file',
+        io.in(socket.user.roomID).emit('base64 file',
 
             {
               username: socket.user.username,
@@ -194,14 +223,14 @@ io.on('connection', function (socket) {
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
 
-        socket.broadcast.emit('typing', { username: socket.user.username });
+        io.in(socket.user.roomID).emit('typing', { username: socket.user.username });
 
     });
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on('stop typing', function (data) {
     
-        socket.broadcast.emit('stop typing', { username: socket.user.username });
+        io.in(socket.user.roomID).emit('stop typing', { username: socket.user.username });
 
     });
 
@@ -215,26 +244,24 @@ io.on('connection', function (socket) {
     });
 
 
-    //==========================================================================
-    //==========================================================================
-    // code below are for admin only, so we always want to verify token first
-    //==========================================================================
-    //==========================================================================
+    //============================================================================================
+    //============================================================================================
+    //   code below are for admin only, so we always want to verify token first in adminHandler
+    //============================================================================================
+    //============================================================================================
 
 
     // admin change visitor's username
     socket.on('admin change username', function (data) {
 
-        if(adminHandler.validToken(data.token)) {
-
-            usernameHandler.adminEditName(io, data.userID, data.newName);
-
-        }
+        adminHandler.adminChangeUsername(io, data.token, data.userID, data.newName);
 
     });
 
     socket.on('getServerStat', function (data) {
+
         adminHandler.getServerStat(socket, data.token);
+        
     });
 
     // send script to target users

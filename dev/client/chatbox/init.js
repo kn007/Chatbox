@@ -5,6 +5,7 @@
     chatbox.ui = {};
     chatbox.ui.init = []; //init is an array of functions
     chatbox.historyHandler = {};
+    chatbox.userListHandler = {};
     chatbox.fileHandler = {};
     chatbox.msgHandler = {};
     chatbox.typingHandler = {};
@@ -75,6 +76,11 @@
 
             ui.hide();
         }
+
+
+        if (typeof(chatbox.roomID) == 'undefined') 
+            chatbox.roomID = 'z';
+        
 
         // now make your connection with server!
         chatbox.socket = io(chatbox.domain);
