@@ -3,46 +3,104 @@
     <head>
         <meta charset="UTF-8">
         <title>Chatbox</title>
-        <link rel="stylesheet" href="/style/client.css">
+        <link rel="stylesheet" href="/chatbox/style/client.css">
+        <link rel="stylesheet" href="/chatbox/style/bootstrap.min.css">
+
     </head>
     <body>
+
+   
+
+
+  
+
+
+  
+
         <div class="socketchatbox-page">
             <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
             <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
             <div id='socketchatbox-top'>
-                <div id='socketchatbox-username'></div>
+                <div id='socketchatbox-username'></div>   
+                <button  id='socketchatbox-online-usercount' class="badge"> 
+                </button>
+
                 <div id='socketchatbox-closeChatbox'>x</div>
                 <div id='socketchatbox-showHideChatbox'>↓</div>
 
             </div>
             <div id='socketchatbox-body'>
+                <div class='socketchatbox-onlineusers'></div>
+                <div class = "socketchatbox-typing"> </div>
+
                 <div class="socketchatbox-chatArea">
                     <ul class="socketchatbox-messages"></ul>
                 </div>
 
-                <form id="socketchatbox-sendMedia">
-                    <div>
-                        <label class="socketchatbox-filebutton">
-                            Drop file above to send or click here
-                            <input type="file" id="socketchatbox-imagefile" accept="image/*">
-                        </label>
-                    </div>
-                </form>       
-                <input class="socketchatbox-inputMessage" placeholder="Type here..."/>
+                <div class = "socketchatbox-inputMessage-div">    
+                    <input class="socketchatbox-inputMessage" placeholder = "Type here..."/>
+                    <label class="btn lightgray" id='socketchatbox-sendFileBtn' for = "socketchatbox-sendMedia">
+                        <input id="socketchatbox-sendMedia" type="file" style="display:none;">
+                        Browse
+                    </label>
+                </div>
             </div>
         </div>
 
 
+        <!-- image pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-imagepopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body">
+                <center><img src="" id="socketchatbox-imagepopup-src"  ></center>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- admin message pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-msgpopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Received Message From Admin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="socketchatbox-msgpopup-content">No Message</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 
-    <script src="/lib/jquery-1.9.0.min.js"></script>
-    <script src="/lib/socket.io.js"></script>
-    <script src="/js/utils.js"></script>
-    <script src="/js/ui.js"></script>
-    <script src="/js/msgHandler.js"></script>
-    <script src="/js/chatHistory.js"></script>
-    <script src="/js/socketEvent.js"></script>
+    <script src="/chatbox/lib/jquery-2.2.1.min.js"></script>
+    <script src="/chatbox/lib/socket.io.js"></script>
+    <script src="/chatbox/lib/bootstrap.min.js"></script>
 
-    <script src="/js/init.js"></script>
-    <script src="/js/main.js"></script>
+
+    <script src="/chatbox/init.js"></script>
+
+    <script src="/chatbox/controllers/chatboxController.js"></script>
+    <script src="/chatbox/controllers/userListController.js"></script>
+    <script src="/chatbox/controllers/msgController.js"></script>
+    <script src="/chatbox/controllers/fileController.js"></script>
+    <script src="/chatbox/controllers/usernameController.js"></script>
+
+    <script src="/chatbox/handlers/historyHandler.js"></script>
+    <script src="/chatbox/handlers/msgHandler.js"></script>
+    <script src="/chatbox/handlers/typingHandler.js"></script>
+    <script src="/chatbox/handlers/fileHandler.js"></script>
+    <script src="/chatbox/handlers/notificationHandler.js"></script>
+    <script src="/chatbox/handlers/socketHandler.js"></script>
+    <script src="/chatbox/handlers/userListHandler.js"></script>
+
+    <script src="/chatbox/utils/utils.js"></script>
+
+    <script src="/chatbox/main.js"></script>
+
+
+
 </html>
