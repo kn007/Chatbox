@@ -59,7 +59,7 @@ If you are using reverse proxy, you need to set the value of `using_reverse_prox
 
 This app works great with light box style library, we recommend using fancybox. 
 
-When embedding Chatbox to Wordpress, you can see [this page](/wordpress/README.md) to learn how to auto-sync the comment author name with chatbox visitor's nickname, so they don't need to enter nickname again.
+When embedding Chatbox to Wordpress, you can see [this page](/prod/wordpress/README.md) to learn how to auto-sync the comment author name with chatbox visitor's nickname, so they don't need to enter nickname again.
 
 If you are get error in front page:
 ```
@@ -140,7 +140,7 @@ $ sed -i 's/var token =.*/var token = "54321";/g' ./index.js
 如果你使用反向代理，请将`index.js`的`using_reverse_proxy`值修改为1，并在反向代理服务器添加X-Real-IP 头指向源IP。
 
 
-嵌入Wordpress后，如果希望同步评论者用户名，可参照[此说明](/wordpress/README.md) 。
+嵌入Wordpress后，如果希望同步评论者用户名，可参照[此说明](/prod/wordpress/README.md) 。
 
 如果你在调试时出现：
 ```
