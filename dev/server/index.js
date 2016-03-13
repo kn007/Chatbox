@@ -193,11 +193,11 @@ io.on('connection', function (socket) {
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
-        msgHandler.receiveMsg(socket, data.msg);
         io.in(socket.user.roomID).emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
+        msgHandler.receiveMsg(socket, data.msg);
 
     });
 

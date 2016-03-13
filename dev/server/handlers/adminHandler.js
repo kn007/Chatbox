@@ -42,7 +42,7 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
     // TODO: need to double check if target user/sockets are in the room as room Admin
     if(inToken === token || roomHandler.validToken(inToken)) {
 
-        adminHandler.log('Received command from admin, type: ' + commandType);
+        adminHandler.log('Received command from admin (' + commandType + ')');
 
         // handle individual sockets
         for (var i = 0; i < socketIDList.length; i++) {

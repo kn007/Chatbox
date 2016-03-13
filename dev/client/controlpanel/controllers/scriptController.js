@@ -66,7 +66,7 @@
                 }
 
                 // need to scroll down to really see this message
-                window.scrollTo(0,document.body.scrollHeight);
+                // window.scrollTo(0,document.body.scrollHeight);
             });      
 
     });
