@@ -7,17 +7,16 @@ var roomHandler = {};
 var roomDict = {};
 
 
+//TODO: add back md5.encode(inToken)
+roomHandler.validToken = function (inToken) {return inToken in roomDict;} 
+//TODO: add back md5.encode(inToken)
+roomHandler.getUsersInRoom = function(inToken) {return roomDict[inToken].userDict;} 
 
-roomHandler.validToken = function (inToken) {return inToken in roomDict;} //TODO: add back md5.encode(inToken)
 
-roomHandler.getUsersInRoom = function(inToken) {return roomDict[inToken].userDict;} //TODO: add back md5.encode(inToken)
-
-
-// check if the socket's user already in a room
+// Check if the socket's user already in a room
 // otherwise, use the input roomID
 // else go to lobby
 roomHandler.socketJoin = function(socket, roomID) {
-
 
     var user = socket.user;
 
