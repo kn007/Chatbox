@@ -7,34 +7,52 @@ var roomHandler = require('./roomHandler.js');
 var token = '12345';
 var chatboxUpTime = (new Date()).toString();
 
-var adminUser = {}; // TODO: multiple admin user
+var adminUserDict = {}; // store admin user IDs
 
 var adminHandler = {};
 
 
-function adminOnline() { return socketHandler.userExists(adminUser.id); }
+// function adminOnline() { return socketHandler.userExists(adminUser.id); }
 
-adminHandler.adminOnline = adminOnline;
+// adminHandler.adminOnline = adminOnline;
 
 adminHandler.validToken = function (inToken) { return inToken === token; }
 
-adminHandler.sendLog = function (str) {
+adminHandler.sendLogToAdmin = function (str) {
 
-    if (adminOnline()) {
+    for (adminUserID in adminUserDict) {
+        sendLogToUser(adminUserID, str);
+    }
+}
 
+adminHandler.sendLogToRoomAdmin = function (str, roomID) {
+
+    var roomAdminIDs = roomHandler.getAdmins(roomID);
+    for (adminUserID in roomAdminIDs) {
+        sendLogToUser(adminUserID, str);
+    }
+}
+
+function sendLogToUser(userID, str) {
+    // make sure this admin user is still online
+    if (socketHandler.userExists(adminUserID)) {
+
+        var adminUser = socketHandler.getUser(adminUserID);
         for(var i = 0; i < adminUser.socketIDList.length; i++) {
             var sid = adminUser.socketIDList[i];
-            if (socketHandler.getSocket(sid).joined)
+            // if (socketHandler.getSocket(sid).joined) // must already joined to have user, right?
                 socketHandler.getSocket(sid).emit('server log', {log: str});
         }
     }
 }
 
 // log to console, if admin is online, send to admin as well
-adminHandler.log = function (str) {
+adminHandler.log = function (str, roomID) {
 
     console.log(str);
-    adminHandler.sendLog(str);
+    adminHandler.sendLogToAdmin(str);
+    if (typeof roomID != "undefined")
+        adminHandler.sendLogToRoomAdmin(str, roomID);
 }
 
 adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, commandType, commandContent) {
@@ -133,6 +151,11 @@ function getServerStat(socket, inToken) {
             totalSockets: socketHandler.totalSocketConnectionCount(),
             totalMsg: msgHandler.getTotalMsgCount()
         });
+
+    } else if (roomHandler.validToken(inToken)) {
+
+        socket.emit('room stat', roomHandler.getRoomInfo(inToken));
+        
     }
 }
 
@@ -143,22 +166,27 @@ adminHandler.getUserData = function (socket, inToken) {
 	if (!socket.joined)
 		return;
 
-    if(inToken === token) {
+    if (inToken === token) {
 
-        adminUser = socket.user;
+        adminUserDict[socket.user.id] = true;
 
         sendOnlineUserData(socket, socketHandler.getAllUsers());
 
 
     }else if (roomHandler.validToken(inToken)) {
+
+        roomHandler.addAdmin(inToken, socket.user.id);
         
         sendOnlineUserData(socket, roomHandler.getUsersInRoom(inToken));
 
     }else {
 
+        delete adminUserDict[socket.user.id];
+        // roomHandler.removeAdmin(inToken, socket.user.id); //TODO
+
         // bad token
         socket.emit('listUsers', {
-                success: false
+            success: false
         });
 
     }

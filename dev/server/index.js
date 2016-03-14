@@ -129,7 +129,7 @@ io.on('connection', function (socket) {
 
             });
 
-            adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
+            adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').', user.roomID);
 
         }
 
@@ -144,7 +144,7 @@ io.on('connection', function (socket) {
         if (!socket.joined)
             adminHandler.log('Socket disconnected before logging in, sid: ' + socket.id);
         else
-            adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').');
+            adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').', socket.user.roomID);
 
         if (lastConnectionOfUser) {
 
@@ -179,14 +179,14 @@ io.on('connection', function (socket) {
             oldname: oldName
         });
 
-        adminHandler.log(oldName + ' changed name to ' + user.username);
+        adminHandler.log(oldName + ' changed name to ' + user.username, socket.user.roomID);
 
     });
 
 
     socket.on('report', function (data) {
 
-        adminHandler.log(socket.user.username + ": " + data.msg);
+        adminHandler.log(socket.user.username + ": " + data.msg, socket.user.roomID);
 
     });
 
@@ -198,12 +198,13 @@ io.on('connection', function (socket) {
             message: data.msg
         });
         msgHandler.receiveMsg(socket, data.msg);
+        roomHandler.newMsg(socket.user.roomID);
 
     });
 
     socket.on('base64 file', function (data) {
 
-        adminHandler.log('received base64 file from ' + socket.user.username);
+        adminHandler.log('received base64 file from ' + socket.user.username, socket.user.roomID);
 
         fileHandler.receiveFile(socket, data.file, data.fileName);
 

@@ -67,6 +67,7 @@
 
     function updateToken(t) {
 
+        chatboxAdmin.verified = false;
         chatboxAdmin.token = t;
         utils.addCookie('chatBoxAdminToken', t);
         chatboxAdmin.restartGetUserList();
