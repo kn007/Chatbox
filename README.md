@@ -8,7 +8,7 @@ A simple and fast chatbox app based on Node.js and Socket.io that features a pow
 #### Start Chatbox
 
 ```
-$ cd chatbox
+$ cd Chatbox/prod
 $ npm install
 $ node index.js
 ```
@@ -79,13 +79,13 @@ More info at [subsection 4.2.1 of the WebSockets RFC 6455](http://tools.ietf.org
 
 ## 聊天盒
 
-该聊天盒基于Node.js与Socket.io，充分利用了HTML5 Websocket双向通讯技术，在方便网站游客高速实时聊天的同时也提供网站管理员强大的控制面板，管理员可对全体游客或者特定游客进行各种操作。
+该聊天盒基于Node.js与Socket.io，利用了Websocket双向通讯技术，在方便网站游客实时聊天的同时也提供网站管理员强大的控制面板，管理员可对全体游客或者特定游客进行各种操作。
 
 
 #### 启动聊天盒
 
 ```
-$ cd chatbox
+$ cd Chatbox/prod
 $ npm install
 $ node index.js
 ```
