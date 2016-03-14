@@ -53,7 +53,7 @@ app.use(express.static(__dirname + '/../client'));
 
 
 app.get('/admin', function (req, res) {
-    res.redirect('/controlpanel/views/');
+    res.redirect('/admin.html');
 });
 
 
