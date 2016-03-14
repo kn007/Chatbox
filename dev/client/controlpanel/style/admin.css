@@ -179,7 +179,7 @@ div#socketchatbox-online {}
 
 .socketchatbox-refresh-interval {
     width: 35%!important;
-    margin-left:30px;
+    margin-left:30px !important;
     display: inline!important;
 }
 
