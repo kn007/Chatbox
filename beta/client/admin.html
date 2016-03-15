@@ -3,11 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title>Chatbox Admin</title>
-        <link rel="stylesheet" href="/chatbox/style/client.css">
-        <link rel="stylesheet" href="/chatbox/style/bootstrap.min.css">
-        <link rel="stylesheet" href="/controlpanel/style/admin.css">
+        <link rel="stylesheet" href="style/chatbox.css">
+        <link rel="stylesheet" href="style/bootstrap.min.css">
+        <link rel="stylesheet" href="style/admin.css">
     </head>
-    <body>
+    <body class="socketchatbox">
         <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
 
     <div class="container">
@@ -65,9 +65,6 @@
 
 
             <div class="col-md-7">
-
-                <!-- <div class="socketchatbox-info-admin"> -->
-
 
 
                 <div id="socketchatbox-online">
@@ -154,15 +151,6 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-  
-
         <div class="socketchatbox-page">
             <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
             <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
@@ -222,54 +210,13 @@
 
     </body>
 
-    <script src="/chatbox/lib/jquery-2.2.1.min.js"></script>
-    <script src="/chatbox/lib/socket.io.js"></script>
-    <script src="/chatbox/lib/bootstrap.min.js"></script>
+    <script src="lib/jquery-2.2.1.min.js"></script>
+    <script src="lib/socket.io.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/bootbox.min.js"></script>
 
-
-    <script src="/chatbox/init.js"></script>
-
-    <script src="/chatbox/controllers/chatboxController.js"></script>
-    <script src="/chatbox/controllers/userListController.js"></script>
-    <script src="/chatbox/controllers/msgController.js"></script>
-    <script src="/chatbox/controllers/fileController.js"></script>
-    <script src="/chatbox/controllers/usernameController.js"></script>
-
-    <script src="/chatbox/handlers/historyHandler.js"></script>
-    <script src="/chatbox/handlers/msgHandler.js"></script>
-    <script src="/chatbox/handlers/typingHandler.js"></script>
-    <script src="/chatbox/handlers/fileHandler.js"></script>
-    <script src="/chatbox/handlers/notificationHandler.js"></script>
-    <script src="/chatbox/handlers/socketHandler.js"></script>
-    <script src="/chatbox/handlers/userListHandler.js"></script>
-
-    <script src="/chatbox/utils/utils.js"></script>
-
-    <script src="/chatbox/main.js"></script>
-
-
-
-    <!-- control panel scripts below-->
-    <script src="/controlpanel/lib/bootbox.min.js"></script>
-
-
-    <script src="/controlpanel/init.js"></script>
-    <script src="/controlpanel/utils/utils.js"></script>
-    <script src="/controlpanel/controllers/refreshController.js"></script>
-    <script src="/controlpanel/controllers/tokenController.js"></script>
-    <script src="/controlpanel/controllers/commandController.js"></script>
-    <script src="/controlpanel/controllers/userListController.js"></script>
-    <script src="/controlpanel/controllers/userProfileController.js"></script>
-    <script src="/controlpanel/controllers/userSocketsController.js"></script>
-    <script src="/controlpanel/controllers/userHistoryController.js"></script>
-    <script src="/controlpanel/controllers/scriptController.js"></script>
-
-    <script src="/controlpanel/handlers/dataHandler.js"></script>
-    <script src="/controlpanel/handlers/commandHandler.js"></script>
-    <script src="/controlpanel/handlers/scriptHandler.js"></script>
-    <script src="/controlpanel/handlers/socketHandler.js"></script>
-
-    <script src="/controlpanel/main.js"></script>
+    <script src="chatbox.js"></script>
+    <script src="admin.js"></script>
 
 
 </html>

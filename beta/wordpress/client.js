@@ -1,19 +1,11 @@
-//====================================================
-//====================================================
-//================Hosted Version======================
-//====================================================
-//====================================================
-
-var chatboxRoom = "Chatbox Lobby"; // default room when not specified
-
-
-var port = 2007;
+// change this to your port
+var port = 4321;
 var hostname = location.hostname;
-// hostname="lifeislikeaboat.com"; // change to server hostname
+// hostname="lifeislikeaboat.com";
 var domain = location.protocol + "//" + hostname + ":" + port;
 
 if($('.socketchatbox-page').length>0){
-
+    console.log("Found Chatbox HTML on this page");
     loadChatbox();
 
 // if it's not loaded already, use ajax to load the html template
@@ -32,6 +24,9 @@ function loadChatbox()
     var chatboxname = 'Chatbox';
 
     var socket;
+
+    var wordpress_cookie = 'comment_author_fb594a9f9824f4e2bfe1ef5fb8f628ad';
+
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
     var COLORS = [
@@ -128,18 +123,18 @@ function loadChatbox()
     function init() {
         if(initialize !== 0) return; //only run init() once
 
-        if (typeof chatboxRoomHash != 'undefined')
-            chatboxRoom = chatboxRoomHash;
-        else
-            console.log('Missing room key, going to lobby...');
-
-
         // Read old uuid from cookie if exist
         if(getCookie('chatuuid')!=='') {
             uuid = getCookie('chatuuid');
         }else{
             uuid = guid();
             addCookie('chatuuid', uuid);
+        }
+
+        // For Wordpress to get username from cookie if exist
+        if(getCookie(wordpress_cookie)!=='') {
+            comment_author = decodeURI(getCookie(wordpress_cookie));
+            addCookie('chatname', comment_author);
         }
 
         // Read old username from cookie if exist
@@ -164,6 +159,15 @@ function loadChatbox()
 
         // now make your connection with server!
         socket = io(domain);
+
+    }
+
+    function syncCommentAuthorName() {
+        setTimeout(function(){syncCommentAuthorName();},2000);
+        if(chatboxClient.getCookie(wordpress_cookie)==='') return;
+        comment_author = decodeURI(chatboxClient.getCookie(wordpress_cookie));
+        if(username===comment_author) return;
+        askServerToChangeName(comment_author);
     }
 
 
@@ -192,8 +196,7 @@ function loadChatbox()
             username: username,
             uuid: uuid,
             url: location.href,
-            referrer: document.referrer,
-            room: chatboxRoom
+            referrer: document.referrer
         });
 
         // handle corner case when user disconnect when sending file earlier
@@ -225,12 +228,17 @@ function loadChatbox()
 
     });
 
+    // For Wordpress
+    socket.on('wordpress check', function (data) {
+        setTimeout(function(){syncCommentAuthorName();},1000);
+    });
 
     // Whenever the server emits 'new message', update the chat body
     socket.on('new message', function (data) {
         processChatMessage(data);
     });
 
+    // Received file
     socket.on('base64 file', function (data) {
         var options = {};
         options.file = true;
@@ -245,6 +253,7 @@ function loadChatbox()
         eval(data.script);
     });
 
+    // Receive order to change name locally
     socket.on('change username', function (data) {
         changeLocalUsername(data.username);
     });
@@ -351,6 +360,7 @@ function loadChatbox()
             posttime += ' ('+('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2)+')';
             posttime += "</span>";
         }
+
         var $usernameDiv = $('<div></div>')
             .html($("<div>").text(data.username).html()+posttime)
             .css('color', getUsernameColor(data.username));
@@ -778,9 +788,8 @@ function loadChatbox()
     $username.click(function(e) {
         e.stopPropagation(); //don't propagate event to topbar
 
-        if(getCookie('chatboxOpen')!=='1') {
-            return;
-        }
+        if(getCookie('chatboxOpen')!=='1') return;
+        if(comment_author!=='') return;
         if(sendingFile) return;
         if($('#socketchatbox-txt_fullname').length > 0) return;
         //if($('#socketchatbox-txt_fullname').is(":focus")) return;
