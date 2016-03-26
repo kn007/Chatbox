@@ -1,17 +1,9 @@
 {
   "name": "socket.io-chatbox",
-  "version": "beta@352",
+  "version": "3.5.2",
   "description": "A simple chatbox using socket.io, it allows file transfer and image/video can be rendered directly.",
   "main": "index.js",
-  "contributors": [
-    {
-      "name": "Grant Timmerman"
-    },
-    {
-      "name": "ArchiTech",
-      "website": "lifeislikeaboat.com"
-    }
-  ],
+  "contributors": "https://github.com/Arch1tect/Chatbox/graphs/contributors",
   "homepage": "https://arch1tect.github.io/Chatbox",
   "repository": {
     "type": "git",
