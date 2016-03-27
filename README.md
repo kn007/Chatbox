@@ -60,5 +60,5 @@ $ node index.js
 
 ##### 截图
 
-![screenshot](/screenshots/Screenshot.png?raw=true "Screenshot")
+![screenshot](/screenshots/chatboxAdmin.gif?raw=true "Screenshot")
 
