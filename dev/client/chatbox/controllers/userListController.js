@@ -26,14 +26,17 @@
     ui.updateUserList = function(userList) {
 
         ui.$onlineUsers.html('');
-
+        var counter = 0;
         for (var username in userList) {
             // console.log(username);
+            counter++;
             var $onlineUser = $('<span></span>');
             $onlineUser.text(username);
             ui.$onlineUsers.append($onlineUser);
 
         }
+
+        ui.$onlineUserNum.text(counter);
 
     }
 
