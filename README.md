@@ -61,5 +61,9 @@ $ node index.js
 ##### 截图
 
 ![screenshot](/screenshots/adminChangeName.gif?raw=true "Screenshot")
+
+Admin change user name
+
 ![screenshot](/screenshots/adminMsg.gif?raw=true "Screenshot")
 
+Admin send message to user
