@@ -27,6 +27,15 @@ The chatbox is usually minimized at left bottom by default.
 
 
 
+##### Screenshot
+
+* Admin change user name
+
+![screenshot](/screenshots/adminChangeName.gif?raw=true "Screenshot")
+
+* Admin send message to user
+
+![screenshot](/screenshots/adminMsg.gif?raw=true "Screenshot")
 
 
 -----------------------------------------------------------
@@ -56,14 +65,3 @@ $ node index.js
 [http://lifeislikeaboat.com](http://lifeislikeaboat.com) 
 
 [https://kn007.net/](https://kn007.net/)
-
-
-##### 截图
-
-![screenshot](/screenshots/adminChangeName.gif?raw=true "Screenshot")
-
-Admin change user name
-
-![screenshot](/screenshots/adminMsg.gif?raw=true "Screenshot")
-
-Admin send message to user
