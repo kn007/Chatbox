@@ -73,12 +73,15 @@ roomHandler.socketJoin = function(socket, roomID) {
     
 }
 
-// May not want to delete the room, we'll lose the total user count and message count
 roomHandler.leftRoom = function(user) {
 
     var room = roomDict[user.roomID];
     delete room.userDict[user.id];
+    delete room.adminUserDict[user.id];
+
     room.userCount--;
+
+    // May not want to delete the room, we'll lose the total user count and message count
     if (room.userCount === 0)
         delete roomDict[user.roomID];
 }

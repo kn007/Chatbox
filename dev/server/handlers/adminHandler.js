@@ -47,6 +47,7 @@ function sendLogToUser(userID, str) {
 }
 
 // log to console, if admin is online, send to admin as well
+// note: if user is both admin and room admin, he will receive log twice, this is rare case
 adminHandler.log = function (str, roomID) {
 
     console.log(str);
@@ -94,7 +95,14 @@ adminHandler.adminChangeUsername = function (io, inToken, userID, newName) {
     // TODO: need to double check if target user/sockets are in the room as room Admin
     if(inToken === token || roomHandler.validToken(inToken)) {
 
+        // User might be gone already
+        if (!socketHandler.userExists(userID)) {
+            adminHandler.log('Failed to changed name to ' + newName + ' because user already left.', user.roomID);
+            return;
+        }
+
         var user = socketHandler.getUser(userID);
+
 
         var oldName = user.username;
 
@@ -105,7 +113,7 @@ adminHandler.adminChangeUsername = function (io, inToken, userID, newName) {
             oldname: oldName
         });
 
-        adminHandler.log(oldName + ' changed name to ' + user.username);
+        adminHandler.log(oldName + ' changed name to ' + user.username, user.roomID);
     }
 
 }
