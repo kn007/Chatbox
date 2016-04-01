@@ -1,3 +1,5 @@
+"use strict";
+
 var utils = require('../utils/utils.js');
 
 // users are grouped by browser base on cookie's uuid implementation,
@@ -7,7 +9,6 @@ var userDict = {};
 var onlineUserCount = 0;
 
 var socketDict = {};
-var socketCount = 0;
 var using_reverse_proxy = 0;
 
 var socketHandler = {};
@@ -33,14 +34,14 @@ function recordSocketActionTime(socket, msg) {
 
 socketHandler.recordSocketActionTime = recordSocketActionTime;
 
-socketHandler.userExists = function(uid) {return uid in userDict;}
-socketHandler.getUser = function(uid) {return userDict[uid];}
-socketHandler.getAllUsers = function() {return userDict;}
-socketHandler.getUserCount = function() {return onlineUserCount;}
-socketHandler.getTotalUserCount = function() {return totalUserCount;}
-socketHandler.totalSocketConnectionCount = function() {return totalSocketConnection;}
-socketHandler.getSocket = function(sid) {return socketDict[sid];}
-socketHandler.getAllSockets = function() {return socketDict;}
+socketHandler.userExists = function(uid) {return uid in userDict;};
+socketHandler.getUser = function(uid) {return userDict[uid];};
+socketHandler.getAllUsers = function() {return userDict;};
+socketHandler.getUserCount = function() {return onlineUserCount;};
+socketHandler.getTotalUserCount = function() {return totalUserCount;};
+socketHandler.totalSocketConnectionCount = function() {return totalSocketConnection;};
+socketHandler.getSocket = function(sid) {return socketDict[sid];};
+socketHandler.getAllSockets = function() {return socketDict;};
 
 
 socketHandler.socketConnected = function(socket) {
@@ -54,7 +55,7 @@ socketHandler.socketConnected = function(socket) {
     
     totalSocketConnection++;
 	socket.joined = false;
-}
+};
 
 // if it's user's last connection, return true
 // otherwise return false
@@ -89,15 +90,15 @@ socketHandler.socketDisconnected = function(socket) {
             action.type = 'Left';
             action.time = utils.getTime();
             action.url = socket.url;
-            action.detail = "IP: "+ socket.remoteAddress 
+            action.detail = "IP: "+ socket.remoteAddress + "<br/>Message sent: " + socket.msgCount;
             // + "<br/>Stay time: " + ((action.time-socket.joinTime)/1000) 
-            + "<br/>Message sent: " + socket.msgCount;
+
             user.actionList.push(action);
         }
 	}
 
     return lastConnectionOfUser; 
-}
+};
 
 socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
 
@@ -145,7 +146,7 @@ socketHandler.socketJoin = function(socket, url, referrer, uid, username) {
 
 	return firstSocketOfNewUser;
 
-}
+};
 
 
 // create the user from the first socket

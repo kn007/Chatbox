@@ -2,7 +2,6 @@
     "use strict";
    
     var utils = chatbox.utils;
-    var scriptHandler = chatboxAdmin.scriptHandler;
     var dataHandler = chatboxAdmin.dataHandler;
 
     var ui = chatboxAdmin.ui;
@@ -87,7 +86,7 @@
             var socketInfoIndex = "<center>[" + i + "]</center>";
             $socketInfoHeaderDiv.html(socketInfoIndex);
 
-            var $socketInfoTable = $("<div></div>");;
+            var $socketInfoTable = $("<div></div>");
             // var socketInfoHTML = "<center>[" + i + "]</center><br/>";
             var socketInfoHTML = "<table class='table table-bordered'><tbody>";
             socketInfoHTML += "<tr><td>ID</td><td class='breakable'>" + s.id + "</td></tr>";

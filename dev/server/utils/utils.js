@@ -1,3 +1,5 @@
+"use strict";
+
 var utils = {
 
     getTime: function() {
@@ -7,7 +9,7 @@ var utils = {
     }
 
 
-}
+};
 
 
 module.exports = utils;

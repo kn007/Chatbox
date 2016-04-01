@@ -102,7 +102,7 @@
 
     ui.hide = hide;
 
-    ui.updateOnlineUserCount = function (num) {ui.$onlineUserNum.text(num);}
+    ui.updateOnlineUserCount = function (num) {ui.$onlineUserNum.text(num);};
 
 
 

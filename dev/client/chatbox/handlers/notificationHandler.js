@@ -1,10 +1,6 @@
-window.chatbox = window.chatbox || {};
-"use strict";
-
 (function() {
-
-    var ui = chatbox.ui;
-    var utils = chatbox.utils;
+    "use strict";
+    window.chatbox = window.chatbox || {};
 
     var notification = chatbox.notification;
 

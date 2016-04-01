@@ -1,9 +1,7 @@
 (function() {
     "use strict";
    
-    var utils = chatbox.utils;
     var scriptHandler = chatboxAdmin.scriptHandler;
-    var dataHandler = chatboxAdmin.dataHandler;
 
     var ui = chatboxAdmin.ui;
 

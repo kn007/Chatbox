@@ -3,7 +3,6 @@
     "use strict";
 
     var ui = chatbox.ui;
-    var utils = chatbox.utils;
 
     ui.init.push(function() {
 
@@ -38,6 +37,6 @@
 
         ui.$onlineUserNum.text(counter);
 
-    }
+    };
 
 })();

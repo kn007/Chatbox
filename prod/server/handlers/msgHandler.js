@@ -1,3 +1,5 @@
+"use strict";
+
 var utils = require('../utils/utils.js');
 var socketHandler = require('./socketHandler.js');
 
@@ -8,7 +10,7 @@ var totalMsg = 0;
 
 var msgHandler = {};
 
-msgHandler.getTotalMsgCount = function() { return totalMsg; }
+msgHandler.getTotalMsgCount = function() { return totalMsg; };
 
 msgHandler.receiveMsg = function(socket, msg) {
 
@@ -39,7 +41,7 @@ msgHandler.receiveMsg = function(socket, msg) {
         	console.log("The message is saved to log file!");
 
     });
-}
+};
 
 
 module.exports = msgHandler;

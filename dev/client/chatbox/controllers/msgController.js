@@ -4,7 +4,6 @@
 
     var ui = chatbox.ui;
     var msgHandler = chatbox.msgHandler;
-    var typingHandler = chatbox.typingHandler;
     var utils = chatbox.utils;
 
 
@@ -32,10 +31,6 @@
             }
 
         });
-
-        // typing controller, shouldn't need this monitor
-        //setInterval(function(){ typingHandler.updateTypingInfo(); }, 5*1000);
-
 
     });
 

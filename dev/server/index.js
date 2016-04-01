@@ -1,13 +1,11 @@
+"use strict";
+
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-//set chat history log file
-var fs = require('fs');
-var filePath = __dirname+"/../client/chat-log.txt";
 
-var utils = require('./utils/utils.js');
 
 var roomHandler = require('./handlers/roomHandler.js');
 var socketHandler = require('./handlers/socketHandler.js');
@@ -22,10 +20,6 @@ var usernameHandler = require('./handlers/usernameHandler.js');
 //set which port this app runs on
 var port = 4321;
 
-
-var totalUsers = 0;
-var totalSockets = 0;
-var totalMsg = 0;
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
@@ -51,16 +45,23 @@ app.use(function (req, res, next) {
 // serve the client folder 
 app.use(express.static(__dirname + '/../client'));
 
+var inProdDir = __dirname.indexOf("prod") > -1;
+
+if (inProdDir)
+    console.log('Running in prod directory');
+else
+    console.log('Running in dev directory');
 
 app.get('/admin', function (req, res) {
-    res.redirect('/controlpanel/views/');
+
+    if(inProdDir)
+        res.redirect('/admin.html');
+    else
+        res.redirect('/controlpanel/views/');
+
 });
 
-
 // Chatbox
-
-
-
 io.on('connection', function (socket) {
 
 

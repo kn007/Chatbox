@@ -86,7 +86,7 @@
         chatbox.socket = io(chatbox.domain);
         chatbox.socket.joined = false;
         socketEvent.register();
-    }
+    };
 
 
 })();

@@ -1,7 +1,6 @@
 (function() {
     "use strict";
    
-   var utils = chatbox.utils;
    var ui = chatboxAdmin.ui;
    var dataHandler = chatboxAdmin.dataHandler;
    chatboxAdmin.verified = false;
@@ -94,7 +93,7 @@
 
         });
 
-    }
+    };
 
 
 })();

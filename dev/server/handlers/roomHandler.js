@@ -1,5 +1,5 @@
-var utils = require('../utils/utils.js');
-// var socketHandler = require('./socketHandler.js');
+"use strict";
+
 var md5 = require('../utils/md5.js');
 
 var DEFAULT_ROOM = 'Lobby';
@@ -13,7 +13,7 @@ roomHandler.validToken = function (inToken) {
     var roomID = md5.encode(inToken);
 
     return roomID in roomDict;
-}
+};
 
 roomHandler.addAdmin = function (inToken, userID) {
     
@@ -21,17 +21,17 @@ roomHandler.addAdmin = function (inToken, userID) {
 
     roomDict[roomID].adminUserDict[userID] = true;
     
-}
+};
 
 roomHandler.getAdmins = function (roomID) {
     return roomDict[roomID].adminUserDict;
-}
+};
 
 //TODO: add back md5.encode(inToken)
 roomHandler.getUsersInRoom = function(inToken) {
 
     return roomDict[md5.encode(inToken)].userDict;
-} 
+};
 
 
 // Check if the socket's user already in a room
@@ -71,7 +71,7 @@ roomHandler.socketJoin = function(socket, roomID) {
 
     return user.roomID;
     
-}
+};
 
 roomHandler.leftRoom = function(user) {
 
@@ -84,11 +84,11 @@ roomHandler.leftRoom = function(user) {
     // May not want to delete the room, we'll lose the total user count and message count
     if (room.userCount === 0)
         delete roomDict[user.roomID];
-}
+};
 
 roomHandler.newMsg = function (roomID) {
     roomDict[roomID].totalMsg++;
-}
+};
 
 roomHandler.getRoomInfo = function(inToken) {
 
@@ -102,7 +102,7 @@ roomHandler.getRoomInfo = function(inToken) {
         totalMsg: room.totalMsg
 
     };
-}
+};
 
 
 function createRoom(roomID) {

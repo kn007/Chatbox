@@ -1,14 +1,12 @@
 (function() {
     "use strict";
 
-            
-
     if(isReady())
 
         chatboxAdmin.init(); 
 
     else
-        
+
         waitToStart();
 
 

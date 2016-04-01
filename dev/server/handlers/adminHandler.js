@@ -1,10 +1,11 @@
-var utils = require('../utils/utils.js');
+"use strict";
+
 var socketHandler = require('./socketHandler.js');
 var msgHandler = require('./msgHandler.js');
 var usernameHandler = require('./usernameHandler.js');
 var roomHandler = require('./roomHandler.js');
 
-var token = '12345';
+var token = '12345'; // system admin token TODO: move it to config file
 var chatboxUpTime = (new Date()).toString();
 
 var adminUserDict = {}; // store admin user IDs
@@ -16,31 +17,33 @@ var adminHandler = {};
 
 // adminHandler.adminOnline = adminOnline;
 
-adminHandler.validToken = function (inToken) { return inToken === token; }
+adminHandler.validToken = function (inToken) { 
+    return inToken === token; 
+};
 
 adminHandler.sendLogToAdmin = function (str) {
 
-    for (adminUserID in adminUserDict) {
+    for (var adminUserID in adminUserDict) {
         sendLogToUser(adminUserID, str);
     }
-}
+};
 
 adminHandler.sendLogToRoomAdmin = function (str, roomID) {
 
     var roomAdminIDs = roomHandler.getAdmins(roomID);
-    for (adminUserID in roomAdminIDs) {
+    for (var adminUserID in roomAdminIDs) {
         sendLogToUser(adminUserID, str);
     }
-}
+};
 
-function sendLogToUser(userID, str) {
+function sendLogToUser(adminUserID, str) {
     // make sure this admin user is still online
     if (socketHandler.userExists(adminUserID)) {
 
         var adminUser = socketHandler.getUser(adminUserID);
         for(var i = 0; i < adminUser.socketIDList.length; i++) {
             var sid = adminUser.socketIDList[i];
-            // if (socketHandler.getSocket(sid).joined) // must already joined to have user, right?
+            // if (socketHandler.getSocket(sid).joined) // must already joined to have user, no need to check this right?
                 socketHandler.getSocket(sid).emit('server log', {log: str});
         }
     }
@@ -54,7 +57,7 @@ adminHandler.log = function (str, roomID) {
     adminHandler.sendLogToAdmin(str);
     if (typeof roomID != "undefined")
         adminHandler.sendLogToRoomAdmin(str, roomID);
-}
+};
 
 adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, commandType, commandContent) {
 
@@ -64,14 +67,15 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
         adminHandler.log('Received command from admin (' + commandType + ')');
 
         // handle individual sockets
-        for (var i = 0; i < socketIDList.length; i++) {
+        var i,s;
+        for (i = 0; i < socketIDList.length; i++) {
             var sid = socketIDList[i];
-            var s = socketHandler.getSocket(sid);
+            s = socketHandler.getSocket(sid);
             sendCommandToSocket(s, commandType, commandContent);
         }
 
         // handle users and all their sockets
-        for (var i = 0; i < userIDList.length; i++) {
+        for (i = 0; i < userIDList.length; i++) {
             var uid = userIDList[i];
             if(socketHandler.userExists(uid)) { // in case is already gone
                 var user = socketHandler.getUser(uid);
@@ -80,14 +84,14 @@ adminHandler.sendCommand = function (io, inToken, userIDList, socketIDList, comm
                     kickAllUsersSockets(io, user, commandType, commandContent);
                 }else {
                     for (var j = 0; j< user.socketIDList.length; j++) {
-                        var s = socketHandler.getSocket(user.socketIDList[j]);
+                        s = socketHandler.getSocket(user.socketIDList[j]);
                         sendCommandToSocket(s, commandType, commandContent);
                     }
                 }
             }
         }
     } 
-}
+};
 
 // When admin changes a user's username
 adminHandler.adminChangeUsername = function (io, inToken, userID, newName) {
@@ -116,7 +120,7 @@ adminHandler.adminChangeUsername = function (io, inToken, userID, newName) {
         adminHandler.log(oldName + ' changed name to ' + user.username, user.roomID);
     }
 
-}
+};
 
 
 
@@ -199,7 +203,7 @@ adminHandler.getUserData = function (socket, inToken) {
 
     }
 
-}
+};
 
 
 // send serilizable user and socket object

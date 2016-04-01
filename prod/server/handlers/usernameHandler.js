@@ -1,3 +1,4 @@
+"use strict";
 var socketHandler = require('./socketHandler.js');
 var utils = require('../utils/utils.js');
 
@@ -43,7 +44,7 @@ usernameHandler.releaseUsername = function (roomID, name) {
     }
 
     //TODO: delelte namesInRoom when there's 0 names left in room
-}
+};
 
 // check if the username is used, if not return it
 // if it's used, return a username not used by adding number
@@ -98,7 +99,7 @@ function registerUniqueName (user, name) {
 
 usernameHandler.registerUniqueName = registerUniqueName;
 
-usernameHandler.getNamesInRoom = function (roomID) { return roomsOfNames[roomID]; }
+usernameHandler.getNamesInRoom = function (roomID) { return roomsOfNames[roomID]; };
 
 
 function changeName(user, newName) {
@@ -137,7 +138,7 @@ usernameHandler.adminEditName = function(user, newName) {
     action.url = 'N/A';
     action.detail = 'Changed name from ' + oldName + ' to ' + newName;
     user.actionList.push(action);
-}
+};
 
 usernameHandler.userEditName = function(socket, newName) {
 
@@ -156,7 +157,7 @@ usernameHandler.userEditName = function(socket, newName) {
     action.detail = 'Changed name from ' + oldName + ' to ' + newName;
     socket.user.actionList.push(action);
 
-}
+};
 
 
 module.exports = usernameHandler;

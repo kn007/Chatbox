@@ -1,0 +1,12 @@
+{
+  "node": true,
+  "browser": true,
+  "globals": {
+    "$": false,
+    "jQuery": false,
+    "bootbox": false,
+    "io": false,
+    "chatbox": false,
+    "chatboxAdmin": false
+  }
+}

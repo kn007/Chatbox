@@ -9,7 +9,7 @@
     function readThenSendFile(data){
 
         if(fileHandler.sendingFile){
-            alert('Still sending last file!');
+            window.alert('Still sending last file!');
             return;
         }
 
@@ -37,7 +37,7 @@
         var File_Size_Limit = 5;
         if (fileSize > File_Size_Limit){
 
-            alert("Don't upload file larger than "+File_Size_Limit+" MB!");
+            window.alert("Don't upload file larger than "+File_Size_Limit+" MB!");
             return true;
         }
 
