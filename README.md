@@ -42,8 +42,8 @@ The chatbox is usually minimized at left bottom by default.
 ![screenshot](/screenshots/chatbox.gif?raw=true "Screenshot")
 
 
-<a href='/screenshots/adminChangeName.gif?raw=true' target="_blank"> #### Admin change visitor's name </a>
-<a href='/screenshots/adminMsg.gif?raw=true' target="_blank"> #### Admin send message to visitor </a>
+#### <a href='/screenshots/adminChangeName.gif?raw=true' target="_blank">Admin change visitor's name</a>
+#### <a href='/screenshots/adminMsg.gif?raw=true' target="_blank">Admin send message to visitor</a>
 
 
 
