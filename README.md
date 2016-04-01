@@ -28,7 +28,7 @@ $ node index.js
 Now you can visit `http://localhost:4321` to see your chatbox, and `http://localhost:4321/admin` to your admin page
 
 
-#### Demo
+## Demo
 
 The chatbox is usually minimized at left bottom by default.
 
@@ -39,11 +39,11 @@ The chatbox is usually minimized at left bottom by default.
 
 
 
-#### Admin change user name
+#### Admin change visitor's name
 
 ![screenshot](/screenshots/adminChangeName.gif?raw=true "Screenshot")
 
-#### Admin send message to user
+#### Admin send message to visitor
 
 ![screenshot](/screenshots/adminMsg.gif?raw=true "Screenshot")
 
@@ -78,7 +78,7 @@ $ node index.js
 
 直接访问`http://localhost:4321`即可进入聊天盒，控制面板的地址则位于`http://localhost:4321/admin`
 
-#### 示例
+## 示例
 
 聊天盒一般默认最小化于网页左下角
 
