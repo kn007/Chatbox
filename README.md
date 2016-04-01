@@ -37,7 +37,9 @@ The chatbox is usually minimized at left bottom by default.
 [https://kn007.net/](https://kn007.net/)
 
 
+#### Send media
 
+![screenshot](/screenshots/chatbox.gif?raw=true "Screenshot")
 
 #### Admin change visitor's name
 
