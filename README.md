@@ -42,7 +42,7 @@ The chatbox is usually minimized at left bottom by default.
 ![screenshot](/screenshots/chatbox.gif?raw=true "Screenshot")
 
 
-<a href='/screenshots/ target="_blank">More screenshots here</a>
+<a href='/screenshots/' target="_blank">More screenshots here</a>
 
 
 
