@@ -62,7 +62,8 @@
         ui.$messages.append($el);
 
         //loading media takes time so we delay the scroll down
-        ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;
+        setTimeout(function(){ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;}, 1 * 1000);
+        
     }
 
     ui.addMessageElement = addMessageElement;
