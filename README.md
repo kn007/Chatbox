@@ -39,7 +39,10 @@ The chatbox is usually minimized at left bottom by default.
 
 #### Screenshot
 
-![screenshot](/screenshots/chatbox.gif?raw=true "Screenshot")
+![screenshot](/screenshots/chatbox.png?raw=true "Screenshot")
+
+
+![screenshot](/screenshots/adminChangeName.gif?raw=true "Screenshot")
 
 
 <a href='/screenshots/' target="_blank">More screenshots here</a>
