@@ -5,7 +5,8 @@ var msgHandler = require('./msgHandler.js');
 var usernameHandler = require('./usernameHandler.js');
 var roomHandler = require('./roomHandler.js');
 
-var token = '12345'; // system admin token TODO: move it to config file
+//TODO: grab it from config file and change variable name so that it's not mistaken with room token
+var token = '12345'; // system admin token 
 var chatboxUpTime = (new Date()).toString();
 
 var adminUserDict = {}; // store admin user IDs

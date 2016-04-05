@@ -203,10 +203,10 @@ var MD5 = function (string) {
     return temp.toLowerCase();
 };
 
-
-module.exports = {
-  encode: MD5
-};
+// Depreciated, now using SHA256
+// module.exports = {
+//   encode: MD5
+// };
 
 
 

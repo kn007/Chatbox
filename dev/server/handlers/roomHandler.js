@@ -1,23 +1,22 @@
 "use strict";
 
-var md5 = require('../utils/md5.js');
+var SHA256 = require('../utils/SHA256.js');
 
 var DEFAULT_ROOM = 'Lobby';
 var roomHandler = {};
 var roomDict = {};
 
 
-//TODO: add back md5.encode(inToken)
 roomHandler.validToken = function (inToken) {
 
-    var roomID = md5.encode(inToken);
+    var roomID = SHA256.encode(inToken);
 
     return roomID in roomDict;
 };
 
 roomHandler.addAdmin = function (inToken, userID) {
     
-    var roomID = md5.encode(inToken);
+    var roomID = SHA256.encode(inToken);
 
     roomDict[roomID].adminUserDict[userID] = true;
     
@@ -27,10 +26,10 @@ roomHandler.getAdmins = function (roomID) {
     return roomDict[roomID].adminUserDict;
 };
 
-//TODO: add back md5.encode(inToken)
+
 roomHandler.getUsersInRoom = function(inToken) {
 
-    return roomDict[md5.encode(inToken)].userDict;
+    return roomDict[SHA256.encode(inToken)].userDict;
 };
 
 
@@ -92,7 +91,7 @@ roomHandler.newMsg = function (roomID) {
 
 roomHandler.getRoomInfo = function(inToken) {
 
-    var room = roomDict[md5.encode(inToken)];
+    var room = roomDict[SHA256.encode(inToken)];
 
     return {
 
