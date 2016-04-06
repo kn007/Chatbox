@@ -25,8 +25,11 @@
 
                 hide();
                 utils.addCookie('chatboxOpen',0);
+
             }else {
+            
                 show();
+                ui.scrollToBottom();
                 utils.addCookie('chatboxOpen',1);
             }
         });

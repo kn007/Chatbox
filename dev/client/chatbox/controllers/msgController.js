@@ -56,13 +56,20 @@
         }
     }
  
+    function scrollToBottom() {
+
+        ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;
+    }
+    
+    ui.scrollToBottom = scrollToBottom;
+
     // Add it to chat area
     function addMessageElement($el) {
 
         ui.$messages.append($el);
 
         //loading media takes time so we delay the scroll down
-        setTimeout(function(){ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;}, 100);
+        setTimeout(function(){scrollToBottom();}, 100);
         
     }
 
@@ -78,6 +85,7 @@
 
 
     function addParticipantsMessage(numUsers) {
+
         var message = '';
         if (numUsers === 1) {
 
