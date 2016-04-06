@@ -8,7 +8,9 @@ var uglify = require('gulp-uglify');
 // JS concat, strip debugging and minify
 gulp.task('default', function() {
 
+  // bundle for chatbox.js 
   gulp.src([
+    './dev/server/config.js',
   	'./dev/client/chatbox/init.js',
   	'./dev/client/chatbox/utils/*.js', 
   	'./dev/client/chatbox/controllers/*.js', 
@@ -20,7 +22,7 @@ gulp.task('default', function() {
     .pipe(uglify())
     .pipe(gulp.dest('./build/'));
 
-
+  // bundle for admin.js
   gulp.src([
   	'./dev/client/controlpanel/init.js',
   	'./dev/client/controlpanel/utils/*.js', 
