@@ -19,7 +19,7 @@
 
     // change this to the port you want to use on server if you are hosting
     // TODO: move to config file
-    var port = 4321;
+    var port = chatboxOpt.port;
     var hostname = location.hostname;
     // hostname="lifeislikeaboat.com";
     chatbox.domain = location.protocol + "//" + hostname + ":" + port;
