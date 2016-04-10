@@ -19,7 +19,7 @@
 
     // change this to the port you want to use on server if you are hosting
     // TODO: move to config file
-    var port = 4321;
+    var port = chatboxOpt.port;
     var hostname = location.hostname;
     // hostname="lifeislikeaboat.com";
     chatbox.domain = location.protocol + "//" + hostname + ":" + port;
@@ -79,14 +79,14 @@
 
 
         if (typeof(chatbox.roomID) == 'undefined') 
-            chatbox.roomID = 'z';
+            chatbox.roomID = '01cfcd4f6b8770febfb40cb906715822';
         
 
         // now make your connection with server!
         chatbox.socket = io(chatbox.domain);
         chatbox.socket.joined = false;
         socketEvent.register();
-    }
+    };
 
 
 })();

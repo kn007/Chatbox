@@ -1,7 +1,6 @@
 (function() {
     "use strict";
    
-    var utils = chatbox.utils;
     var dataHandler = chatboxAdmin.dataHandler;
     var commandHandler = chatboxAdmin.commandHandler;
 
@@ -12,7 +11,7 @@
         var socketCount = dataHandler.selectedSocketsCount();
 
         return (userCount + socketCount > 0);
-    }
+    };
 
     // Send a command (Admin only)
     function sendCommand(type, content) {

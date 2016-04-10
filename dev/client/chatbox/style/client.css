@@ -53,6 +53,7 @@ ul {
   height: 35px;
   border: 0px;
   margin: 0px;
+  border: 1px solid #4DACFF;
   font-size: medium;
   line-height: 2;
 }
@@ -130,7 +131,7 @@ ul {
 
 
 .socketchatbox-page {
-  /* font-size: 80%; */
+  font-size: 12px; 
   margin: 0;
   margin-left: 10px;
   padding: 0;
@@ -175,8 +176,10 @@ ul {
 }
 
 .socketchatbox-message-wrapper {
-  width: 100%;
+  /* width: 100%; */
   overflow: auto;
+  /* margin-bottom: 15px; */
+  padding-bottom: 10px;
 }
 
 .socketchatbox-messagetime {
@@ -206,12 +209,14 @@ line-height: 1em;
 
 
 .socketchatbox-message {
-  margin-bottom: 15px;
+  /* margin-bottom: 61px; */
+  /* max-width: 90%; */
 }
 
 
 .socketchatbox-message-others {
-  float: right;
+  /* float: right; */
+  /* max-width: 100%; */
 }
 
 
@@ -229,7 +234,8 @@ line-height: 1em;
   position: relative;
   vertical-align: top;
   line-height: 1.25em;
-  word-break: break-all;
+  /* word-break: break-all; */
+  /* overflow-x: scroll; */
 }
 
 .socketchatbox-messageBody.hasMedia{

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chatbox Admin</title>
+        <link rel="stylesheet" href="/client.css">
+        <link rel="stylesheet" href="/admin.css">
+    </head>
+    <body>
+        <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
+        <div id = "wrapper">
+ 
+            <div class="socketchatbox-admin-leftside">
+
+                <div class="socketchatbox-admin-server">
+                </div>
+
+                <br/><br/>
+
+                <div class = "socketchatbox-admin-instruction">
+                    <b>Instructions</b><br/><br/>
+                    <li>
+                    The first thing you need to do is to enter your token and click update, the 
+                    default token is "12345", you can change the token in index.js.</li> 
+                    <li>Once the admin validation is successful, you can see all users online at the moment.</li> 
+                    <li>Click on the '[ ↓ ]' after user name to see more details, including all his sockets information.</li>
+                    <li>To run JavaScript on user's browser, you need to select the user as target before sending your script.</li>
+
+                    You can see some example scripts in <a href="/AdminHelp.md" target="_blank">AdminHelp.md</a>.
+
+                    And here's the <a href="/chat-log.txt" target="_blank">chat log file</a>.
+                </div>
+
+            </div>
+
+            <div class="socketchatbox-info-admin">
+
+                <div id="socketchatbox-checkAdmin">
+                    <b>Token Verification:</b> <span id="socketchatbox-tokenStatus">Waiting...</span> 
+                    <br/><br/>
+                    Token: <input type="password" id="socketchatbox-token">
+                    <button id="socketchatbox-updateToken">Update</button>
+                    
+                           
+
+                </div>
+                <br/><br/>
+
+                <div id="socketchatbox-online">
+                    <b> Users Online</b>
+                    <button id="selectAll">Select All</button>
+                    <button id="selectNone">Select None</button>
+                    <br/><br/>
+                    <small>Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec</small><input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="2"  />
+                    <br/><br/>
+                    <div id="socketchatbox-online-users">
+                        Waiting...
+                    </div>
+                    <div class="socketchatbox-userdetail socketchatbox-admin-userdetail-pop">
+                        <center><span class="socketchatbox-userdetail-name"></span></center>
+                        <div class="socketchatbox-admin-userprofile">
+                        <p>Name: <input class="socketchatbox-userdetail-name-edit" type="text" />
+                            <button class="socketchatbox-admin-changeUserName">update</button>
+                        </p>
+                        <p>Last Message: <span class="socketchatbox-userdetail-lastmsg"></span></p>
+                        <p>Total Messages: <span class="socketchatbox-userdetail-totalmsg"></span></p>
+                        <p>Landing Page: <span class="socketchatbox-userdetail-landingpage"></span></p>
+                        <p>Referrer: <span class="socketchatbox-userdetail-referrer"></span></p>
+                        <p>Idle Time: <span class="socketchatbox-userdetail-lastactive"></span></p>
+                        <p>Join Time: <span class="socketchatbox-userdetail-jointime"></span>
+                        </p>
+                        <p>IP: <span class="socketchatbox-userdetail-ip"></span>
+                            <button class="socketchatbox-admin-blockIP">block</button>
+                            <button class="socketchatbox-admin-lookupIP">look up</button>
+                        </p>
+                        <p>User-Agent:  <span class="socketchatbox-userdetail-useragent"></span></p>
+                        </div>
+                        <div class="socketchatbox-socketdetail">
+                            <center>Live Connection</center>
+
+
+                            <div class="socketchatbox-userdetail-sockets"></div>
+                        </div>
+
+                        <center>Action History</center>
+                        <br/>
+                        <div class="socketchatbox-userdetail-actions"></div>
+
+
+                    </div>
+                    
+                </div>
+
+                <br/><br/>
+
+                <div class="socketchatbox-admin-input">
+                    <div class="socketchatbox-scriptHistory">
+                        <b>Client-Side Scripting</b>
+                        <button class="prevScript">prev</button>
+                        <button class="nextScript">next</button>
+                        <button class="cloneScript">clone</button>
+                        
+
+
+                        <div class="socketchatbox-scriptHistoryScript">
+                             
+                        </div>
+
+                        
+                    </div>
+                    <textarea placeholder="Type script here..." rows="4" cols="50"></textarea>
+                    <button id='sendScript'>Send Script!</button>
+                    <div id="socketchatbox-scriptSentStatus"></div>
+
+                </div>
+            
+
+            </div>
+        </div>
+
+    </body>
+
+    <script src="/jquery-1.9.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/admin.js"></script>
+
+</html>

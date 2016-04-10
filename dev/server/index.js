@@ -1,13 +1,11 @@
+"use strict";
+
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-//set chat history log file
-var fs = require('fs');
-var filePath = __dirname+"/../client/chat-log.txt";
 
-var utils = require('./utils/utils.js');
 
 var roomHandler = require('./handlers/roomHandler.js');
 var socketHandler = require('./handlers/socketHandler.js');
@@ -22,10 +20,6 @@ var usernameHandler = require('./handlers/usernameHandler.js');
 //set which port this app runs on
 var port = 4321;
 
-
-var totalUsers = 0;
-var totalSockets = 0;
-var totalMsg = 0;
 server.listen(port, function () {
     console.log('Server listening at port %d', port);
 });
@@ -51,16 +45,23 @@ app.use(function (req, res, next) {
 // serve the client folder 
 app.use(express.static(__dirname + '/../client'));
 
+var inProdDir = __dirname.indexOf("prod") > -1;
+
+if (inProdDir)
+    console.log('Running in prod directory');
+else
+    console.log('Running in dev directory');
 
 app.get('/admin', function (req, res) {
-    res.redirect('/controlpanel/views/');
+
+    if(inProdDir)
+        res.redirect('/admin.html');
+    else
+        res.redirect('/controlpanel/views/');
+
 });
 
-
 // Chatbox
-
-
-
 io.on('connection', function (socket) {
 
 
@@ -129,7 +130,7 @@ io.on('connection', function (socket) {
 
             });
 
-            adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').');
+            adminHandler.log(user.username + ' logged in ('+(user.socketIDList.length) +').', user.roomID);
 
         }
 
@@ -144,7 +145,7 @@ io.on('connection', function (socket) {
         if (!socket.joined)
             adminHandler.log('Socket disconnected before logging in, sid: ' + socket.id);
         else
-            adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').');
+            adminHandler.log(socket.user.username + ' closed a connection ('+(socket.user.socketIDList.length)+').', socket.user.roomID);
 
         if (lastConnectionOfUser) {
 
@@ -179,31 +180,32 @@ io.on('connection', function (socket) {
             oldname: oldName
         });
 
-        adminHandler.log(oldName + ' changed name to ' + user.username);
+        adminHandler.log(oldName + ' changed name to ' + user.username, socket.user.roomID);
 
     });
 
 
     socket.on('report', function (data) {
 
-        adminHandler.log(socket.user.username + ": " + data.msg);
+        adminHandler.log(socket.user.username + ": " + data.msg, socket.user.roomID);
 
     });
 
     // when the client emits 'new message', this listens and executes
     socket.on('new message', function (data) {
 
-        msgHandler.receiveMsg(socket, data.msg);
         io.in(socket.user.roomID).emit('new message', {//send to everybody including sender
             username: socket.user.username,
             message: data.msg
         });
+        msgHandler.receiveMsg(socket, data.msg);
+        roomHandler.newMsg(socket.user.roomID);
 
     });
 
     socket.on('base64 file', function (data) {
 
-        adminHandler.log('received base64 file from ' + socket.user.username);
+        adminHandler.log('received base64 file from ' + socket.user.username, socket.user.roomID);
 
         fileHandler.receiveFile(socket, data.file, data.fileName);
 

@@ -1,3 +1,4 @@
+"use strict";
 var utils = require('../utils/utils.js');
 var socketHandler = require('./socketHandler.js');
 
@@ -23,7 +24,7 @@ fileHandler.receiveFile = function(socket, file, fileName) {
 
     socketHandler.recordSocketActionTime(socket);
 
-}
+};
 
 
 module.exports = fileHandler;

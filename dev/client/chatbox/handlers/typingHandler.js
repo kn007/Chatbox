@@ -1,12 +1,6 @@
 (function() {
     "use strict";
 
-
-    var utils = chatbox.utils;
-    var ui = chatbox.ui;
-
-
-
     var typingHandler = chatbox.typingHandler;
     var typingUserDict = {};
 
@@ -87,7 +81,7 @@
 
     typingHandler.removeAllTypingUser = function () {
         typingUserDict = {};
-    }
+    };
 
 
 })();

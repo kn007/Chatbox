@@ -1,0 +1,23 @@
+server {
+  listen 443 ssl http2;
+  server_name chatbox.kn007.net;
+  include kn007_net_security.conf;
+  location ~ ^/(admin\.html|chat-log.txt) {
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_http_version 1.1;
+    proxy_pass http://127.0.0.1:2231;
+    auth_basic "kn007's Auth System";
+    auth_basic_user_file /usr/local/nginx/passwd_chatbox.db;
+  }
+  location / {
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_http_version 1.1;
+    proxy_pass http://127.0.0.1:2231;
+  }
+}

@@ -108,7 +108,7 @@
 
 
         socket.on('admin kick', function (data) {
-            var kickMsg = data.username + ' is kicked by admin'
+            var kickMsg = data.username + ' is kicked by admin';
             if (data.content)
                 kickMsg += 'because ' + data.content;
 
@@ -164,11 +164,10 @@
             typingHandler.removeTypingUser(data.username);
         });
 
-    }
+    };
 
 
-
-    // The functions below are for admin to call with eval, user himself can't really call them
+    // The functions below are complained by jshint for not used, they are used by eval, don't delete them! 
     var show = ui.show;
     var hide = ui.hide;
 

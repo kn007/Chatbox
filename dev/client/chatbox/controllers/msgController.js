@@ -4,7 +4,6 @@
 
     var ui = chatbox.ui;
     var msgHandler = chatbox.msgHandler;
-    var typingHandler = chatbox.typingHandler;
     var utils = chatbox.utils;
 
 
@@ -33,10 +32,6 @@
 
         });
 
-        // typing controller, shouldn't need this monitor
-        //setInterval(function(){ typingHandler.updateTypingInfo(); }, 5*1000);
-
-
     });
 
     $(document).on('click', '.chatbox-image', function(e) {
@@ -61,13 +56,21 @@
         }
     }
  
+    function scrollToBottom() {
+
+        ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;
+    }
+    
+    ui.scrollToBottom = scrollToBottom;
+
     // Add it to chat area
     function addMessageElement($el) {
 
         ui.$messages.append($el);
 
         //loading media takes time so we delay the scroll down
-        ui.$chatArea[0].scrollTop = ui.$chatArea[0].scrollHeight;
+        setTimeout(function(){scrollToBottom();}, 100);
+        
     }
 
     ui.addMessageElement = addMessageElement;
@@ -82,6 +85,7 @@
 
 
     function addParticipantsMessage(numUsers) {
+
         var message = '';
         if (numUsers === 1) {
 

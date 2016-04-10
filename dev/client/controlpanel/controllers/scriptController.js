@@ -1,9 +1,7 @@
 (function() {
     "use strict";
    
-    var utils = chatbox.utils;
     var scriptHandler = chatboxAdmin.scriptHandler;
-    var dataHandler = chatboxAdmin.dataHandler;
 
     var ui = chatboxAdmin.ui;
 
@@ -66,7 +64,7 @@
                 }
 
                 // need to scroll down to really see this message
-                window.scrollTo(0,document.body.scrollHeight);
+                // window.scrollTo(0,document.body.scrollHeight);
             });      
 
     });

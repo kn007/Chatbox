@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chatbox Admin</title>
+        <link rel="stylesheet" href="style/chatbox.css">
+        <link rel="stylesheet" href="style/bootstrap.min.css">
+        <link rel="stylesheet" href="style/admin.css">
+    </head>
+    <body class="socketchatbox">
+        <center><span class="socketchatbox-admin-title"><h1>Chatbox Control Panel</h1></span></center>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <!-- <div class="socketchatbox-admin-leftside"> -->
+
+<!--
+                <div class = "socketchatbox-admin-instruction">
+                    <b>Instructions</b><br/><br/>
+                    <li>
+                    The first thing you need to do is to enter your token and click update, the 
+                    default token is "12345", you can change the token in adminHandler.js.</li> 
+                    <li>Once the admin validation is successful, you can see all users online at the moment.</li> 
+                    <li>Click on the ' ↓ ' after user name to see more details about the user.</li>
+                    <li>Remember to select target users before performing any action.</li>
+
+                    You can see some example scripts in <b><a href="/AdminHelp.md" target="_blank">AdminHelp.md</a></b>.
+
+                    And here's the <b><a href="/chat-log.txt" target="_blank">chat log file</a></b>.
+                </div>
+                <br/><br/>
+ -->
+                 <div id="socketchatbox-checkAdmin">
+                    <b>Token Verification:</b> <span id="socketchatbox-tokenStatus">Waiting...</span> 
+                    <br/><br/>
+                    Token: <input type="password" id="socketchatbox-token">
+                    <button id="socketchatbox-updateToken">Update</button>        
+                </div>
+                <br/><br/>
+                <div class="socketchatbox-admin-server"></div>
+
+                <br/><br/>
+
+
+                <div class="socketchatbox-admin-input">
+                    <div class="socketchatbox-scriptHistory">
+                        <b>Client-Side Scripting</b>
+                        <button class="prevScript"> < </button>
+                        <button class="nextScript"> > </button>
+                        <button class="cloneScript">clone</button>    
+                        <pre class="socketchatbox-scriptHistoryScript"></pre>
+                    </div>
+                    <textarea placeholder="Type script here..." rows="3" cols="50"></textarea>
+                    <div id="socketchatbox-scriptSentStatus"></div>
+
+                    <button id='sendScript'>Send Script!</button>
+
+                </div>
+
+                <br/><br/>
+
+
+            </div>
+
+
+            <div class="col-md-7">
+
+
+                <div id="socketchatbox-online">
+                    <b> Users Online</b>
+                    <br/><br/>
+                    Refresh Interval: <span class="socketchatbox-refresh-interval-val">5</span> sec<input class="socketchatbox-refresh-interval" type="range" min="1" max="100" value="5" step="1"  />
+                    <br/><br/>
+                    <div class="btn-group btn-group-sm">
+                        <button id="selectAll"  type="button" class="btn btn-default">Select All</button>
+                        <button id="selectNone"  type="button" class="btn btn-default">Select None</button>
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="dropup">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> Actions
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+
+
+                          <li class = "socketchatbox-command-message"><a href="#">Message</a></li>
+                          <li class = "socketchatbox-command-redirect"><a href="#">Redirect</a></li>
+                          <li class = "socketchatbox-command-kick"><a href="#">Kick</a></li>
+
+                        </ul>
+                    </span>
+                    <br/><br/>
+                    <div id="socketchatbox-online-users">
+                        Waiting...
+                    </div>
+                    <div class="socketchatbox-userdetail socketchatbox-admin-userdetail-pop">
+                        <center><span class="socketchatbox-userdetail-name"></span></center>
+                        <div class="socketchatbox-admin-userprofile table-wrapper">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr><td>Name</td> <td><input class="socketchatbox-userdetail-name-edit" type="text" />
+                                        <button class="socketchatbox-admin-changeUserName">update</button></td>
+                                    </tr>
+                                    <tr><td>Room ID</td> <td class="socketchatbox-userdetail-room breakable"></td></tr>
+
+                                    <tr><td>Last Message</td> <td class="socketchatbox-userdetail-lastmsg breakable"></td></tr>
+                                    <tr><td>Total Messages</td> <td class="socketchatbox-userdetail-totalmsg"></td></tr>
+                                    <tr><td>Landing Page</td> <td class="socketchatbox-userdetail-landingpage breakable"></td></tr>
+                                    <tr><td>Referrer</td> <td class="socketchatbox-userdetail-referrer breakable"></td></tr>
+                                    <tr><td>Idle Time</td> <td class="socketchatbox-userdetail-lastactive"></td></tr>
+                                    <tr><td>Join Time</td> <td class="socketchatbox-userdetail-jointime"></td>
+                                    </tr>
+                                    <tr><td>IP</td><td><span class="socketchatbox-userdetail-ip"></span>
+                                        <!-- <button class="socketchatbox-admin-blockIP">block</button> -->
+                                        <button class="socketchatbox-admin-lookupIP">look up</button></td>
+                                    </tr>
+                                    <tr><td>User-Agent</td> <td class="socketchatbox-userdetail-useragent breakable"></td></tr>
+                                </tbody>    
+                            </table>
+                        </div>
+                        <div class="socketchatbox-socketdetail">
+                            <center><button class="socketchatbox-livesockets-header btn btn-default">Live Connection <span class="socketchatbox-livesockets-count badge"></span><span class="socketchatbox-livesockets-arrow">  ↓ </span></button></center>
+                            
+                            <div class="socketchatbox-userdetail-sockets"></div>
+                             
+                        </div>
+                        <br/>
+
+                        <center><button class="socketchatbox-actionhistory-header btn btn-default"> Action History <span class="socketchatbox-actionhistory-count badge"></span><span class="socketchatbox-actionhistory-arrow"> ↓ </span></button></center><br/>
+                        <center>
+                            <div class="btn-group btn-group-sm socketchatbox-actionhistory-togglecollapse">
+                            <button class="btn btn-default socketchatbox-actionhistory-expandAll"  type="button">Expand All</button>
+                            <button class="btn btn-default socketchatbox-actionhistory-collapseAll"  type="button" >Collapse All</button>
+                        </div>
+
+                        </center>
+                        
+
+                        <br/>
+                        
+                        <div class="socketchatbox-userdetail-actions"></div>
+                         
+
+                    </div>
+                    
+                </div>
+                    
+            <br/><br/>
+
+            </div>
+
+        </div>
+    </div>
+
+        <div class="socketchatbox-page">
+            <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
+            <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
+            <div id='socketchatbox-top'>
+                <div id='socketchatbox-username'></div>   
+                <button  id='socketchatbox-online-usercount' class="badge"> 
+                </button>
+
+                <div id='socketchatbox-closeChatbox'>x</div>
+                <div id='socketchatbox-showHideChatbox'>↓</div>
+
+            </div>
+            <div id='socketchatbox-body'>
+                <div class='socketchatbox-onlineusers'></div>
+                <div class = "socketchatbox-typing"> </div>
+
+                <div class="socketchatbox-chatArea">
+                    <ul class="socketchatbox-messages"></ul>
+                </div>
+
+                <div class = "socketchatbox-inputMessage-div">    
+                    <input class="socketchatbox-inputMessage" placeholder = "Type here..."/>
+                    <label class="btn lightgray" id='socketchatbox-sendFileBtn' for = "socketchatbox-sendMedia">
+                        <input id="socketchatbox-sendMedia" type="file" style="display:none;">
+                        Browse
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- image pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-imagepopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body">
+                <center><img src="" id="socketchatbox-imagepopup-src"  ></center>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- admin message pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-msgpopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Received Message From Admin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="socketchatbox-msgpopup-content">No Message</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    <script src="lib/jquery-2.2.1.min.js"></script>
+    <script src="lib/socket.io.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/bootbox.min.js"></script>
+
+    <script src="chatbox.js"></script>
+    <script src="admin.js"></script>
+
+
+</html>

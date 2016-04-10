@@ -1,10 +1,9 @@
 (function() {
     "use strict";
    
-   var utils = chatbox.utils;
    var ui = chatboxAdmin.ui;
    var dataHandler = chatboxAdmin.dataHandler;
-   var verified = false;
+   chatboxAdmin.verified = false;
    var socketEvent = chatboxAdmin.socketEvent;
 
     socketEvent.register = function() {
@@ -21,6 +20,22 @@
             $serverStatMsg.addClass('server-log-message');
 
             $('.socketchatbox-admin-server').append($serverStatMsg);
+            $('.socketchatbox-admin-server')[0].scrollTop = $('.socketchatbox-admin-server')[0].scrollHeight;
+
+
+        });
+
+        socket.on('room stat', function (data) {
+
+            var $serverStatMsg = $('<p></p>');
+            $serverStatMsg.html("<p>Welcome, Room Admin! </p><p>The Room was opened on "+data.createTime +
+                ".</p><p>There have been "+data.totalUsers +
+                " users, " + data.totalSockets+" sockets and " + data.totalMsg + " messages.</p>");
+            $serverStatMsg.addClass('server-log-message');
+
+            $('.socketchatbox-admin-server').append($serverStatMsg);
+            $('.socketchatbox-admin-server')[0].scrollTop = $('.socketchatbox-admin-server')[0].scrollHeight;
+
 
         });
 
@@ -59,8 +74,8 @@
                 ui.validToken();
 
 
-                if (!verified){
-                    verified = true;
+                if (!chatboxAdmin.verified){
+                    chatboxAdmin.verified = true;
                     socket.emit('getServerStat', {token: chatboxAdmin.token});
                 }
 
@@ -78,7 +93,7 @@
 
         });
 
-    }
+    };
 
 
 })();

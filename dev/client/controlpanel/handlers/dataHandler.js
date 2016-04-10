@@ -26,47 +26,47 @@
 
     dataHandler.getUserDict = function() {
         return userDict;
-    }
+    };
 
     dataHandler.getSocketDict = function() {
         return socketDict;
-    }
+    };
 
     dataHandler.getOpenedUserID = function() {
         return openedUserID;
-    }
+    };
 
     dataHandler.setOpenedUserID = function(id) {
         openedUserID = id;
-    }
+    };
 
     dataHandler.userFullySelected = function(userID) {
         return userID in selectedUsers;
-    }
+    };
 
     dataHandler.userPartiallySelected = function(userID) {
         return userID in partiallyselectedUsers;
-    }
+    };
 
     dataHandler.socketSelected = function(socketID) {
         return socketID in selectedSockets;
-    }
+    };
 
     dataHandler.selectedUsersCount = function() {
         return utils.countKeys(selectedUsers);
-    }
+    };
 
     dataHandler.selectedSocketsCount = function() {
         return utils.countKeys(selectedSockets);
-    }
+    };
 
     dataHandler.getSelectedUsers = function() {
         return selectedUsers;
-    }
+    };
 
     dataHandler.getSelectedSockets = function() {
         return selectedSockets;
-    }
+    };
 
     dataHandler.getSelectedUserList = function() {
 
@@ -75,7 +75,7 @@
             userKeyList.push(userKey);
         }
         return userKeyList;
-    }
+    };
 
     dataHandler.getSelectedSocketList = function() {
 
@@ -84,7 +84,7 @@
             socketKeyList.push(socketKey);
         }
         return socketKeyList;
-    }
+    };
 
     // this removes the user and his sockets from all lists
     function clearUserSocketFromSelection(userID) {
@@ -226,8 +226,9 @@
 
     function handleDataTransition() {
 
+        var userID;
         // handle selected users
-        for (var userID in selectedUsers) {
+        for (userID in selectedUsers) {
             // if user still online
             if (userID in userDict) 
 
@@ -242,7 +243,7 @@
         // handle partially selected users
         // they may be gone, but they may also become fully selected users 
 
-        for (var userID in partiallyselectedUsers) {
+        for (userID in partiallyselectedUsers) {
             // if user still online
             if (userID in userDict) {
 

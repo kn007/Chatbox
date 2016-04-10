@@ -1,0 +1,298 @@
+/* ======================================================= */
+/* ================  Chatbox Admin Style =================*/
+/* ======================================================= */
+
+html {
+  background: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: "Times New Roman", Times, serif; */
+}
+
+body {
+  background: whitesmoke;
+
+}
+a:visited {
+  color:black;
+}
+.socketchatbox-admin-title h1 {/* color: #3FA6FF; *//* margin: 50px; */font-size: 35px;padding: 50px;background: whitesmoke;}
+.socketchatbox-admin-instruction li{
+  margin:10px
+}
+
+.socketchatbox-command-kick {
+  /*background: red;*/
+}
+
+#sendScript {
+  width: 100%;
+  outline: none;
+  padding: 10px;
+  margin: 0px;
+  background: #337AB7;
+  color: white;
+}
+
+
+#socketchatbox-checkAdmin {
+  background: white;
+  border: 1px solid lightgray;
+  padding: 20px;
+}
+#socketchatbox-online {
+  border: 1px solid lightgray;
+  padding: 20px;
+  background: white;
+}
+
+.socketchatbox-onlineuserlist-user {
+  margin:5px;
+}
+
+div#socketchatbox-online {}
+.socketchatbox-scriptHistory {
+  border: 1px solid lightgray;
+  padding: 20px;
+  border-bottom-width: 0;
+  background: #FFFFFF;
+}
+/*.socketchatbox-admin-leftside {
+  width: 36%;
+  margin-left: 5%;
+  position: absolute;
+  margin-bottom: 50px;
+}*/
+.socketchatbox-admin-server {
+  border: 1px solid lightgray;
+  padding-left: 5px;
+  background: rgba(0, 0, 0, 0.75);
+  word-wrap: break-word;
+  font-size: small;
+  overflow-y:scroll;
+  height: 250px;
+}
+.log-time {
+  width: 112px;
+  margin-right: 21px;
+}
+.server-log-message {
+  color: white;:;
+  margin: 3px;
+  margin-left: 7px;
+}
+.socketchatbox-admin-instruction {
+  border: 1px solid lightgray;
+  background: #FCFF8C;
+  padding: 20px;
+}
+.socketchatbox-scriptHistoryScript {
+  margin-top: 20px !important;
+  max-height: 100px;
+  overflow-y: scroll;
+}
+.username-info {
+  cursor: pointer;
+  border-radius: 5px;
+  background: white;
+  /* border: 1px solid white; */
+}
+
+.selected {
+  background: yellow !important;
+  /* border: 1px solid lightgray; */
+  /* padding: 5px; */
+}
+
+.partially-selected {
+  border: 1px solid lightgray;
+  background: linear-gradient(90deg, yellow 50%, white 50%) !important;
+}
+
+
+/* User detail popup */
+
+.selectedSocket {
+  background: yellow !important;
+}
+
+
+
+.socketchatbox-userdetail-name {
+  font-size: large;
+  font-weight: bold;
+}
+
+.socketchatbox-userdetail-sockets {
+  /*max-height: 300px;
+  overflow-y: scroll;*/
+  margin: 10px;
+}
+
+.socketchatbox-socketdetail {
+  margin:5px;
+}
+
+.socketchatbox-socketdetail-each {
+  background: #F5F5F5;
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  border-bottom: 0px solid lightgray;
+  /*border-top: 0px solid lightgray;*/
+}
+
+.socketchatbox-socketdetail-each p{
+  margin:5px
+}
+/*bootstrap table override
+.table {
+  margin-bottom: 0px !important;
+}
+*/
+.socketchatbox-socketdetail-each:nth-child(1) {
+  /*border-top: 1px solid lightgray;*/
+}
+
+.table {background: #FBFBFB !important;}
+
+.socketchatbox-userdetail {
+  border-top: 1px dashed lightgray;
+  background: #FFFFFF;
+  margin-top: 20px;
+  display:none;
+  font-size: small;
+  z-index: 9999;
+  padding: 15px;
+}
+.socketchatbox-admin-userprofile {
+  margin: 20px;
+}
+
+.socketchatbox-admin-userprofile p{
+  margin: 7px;
+}
+
+
+.socketchatbox-admin-changeUserName {
+  /*margin:0px;*/
+}
+
+.socketchatbox-refresh-interval {
+    width: 35%!important;
+    margin-left:30px!important;
+    display: inline!important;
+}
+
+.socketchatbox-livesockets-header {
+  cursor: pointer;
+}
+
+.socketchatbox-livesockets-header:hover{
+  background: yellow;
+}
+
+
+
+
+.socketchatbox-actionhistory-header {
+  cursor: pointer;
+}
+
+.socketchatbox-actionhistory-header:hover{
+  background: yellow;
+}
+.socketchatbox-actionhistory-actiontype {
+  float: right;
+}
+ 
+
+.socketchatbox-userdetail-actions {
+  margin: 20px;
+  margin-top:0px;
+}
+
+.socketchatbox-actionhistory-basic {
+  padding: 10px;
+  cursor: pointer;
+}
+.socketchatbox-actionhistory-actiondetail {
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-top: 1px dashed lightgray;
+
+}
+
+.socketchatbox-userdetail-actions-each {
+  border: 1px solid lightgray;
+  border-top: 0px solid lightgray;
+
+}
+.socketchatbox-userdetail-actions-each:nth-child(1) {
+    border-top: 1px solid lightgray;
+
+}
+.socketchatbox-userdetail-actions-each:nth-child(odd) {
+  background: #FFFFFF;
+}
+
+.socketchatbox-userdetail-actions-each:nth-child(even) {
+  background: #F7F7F7;
+}
+
+
+#socketchatbox-scriptSentStatus {
+  margin: 10px;
+}
+
+.socketchatbox-admin-input {
+
+  font-size: 100%;
+}
+
+.socketchatbox-admin-input textarea{
+  height: 100px;  
+  width: 100%;
+  outline: none;
+  padding-left: 20px; 
+  border: 1px solid lightgray;
+}
+.breakable {
+  word-break: break-word !important;
+}
+.popover-content {
+    word-wrap: break-word;
+}
+.popover-title {
+    word-wrap: break-word;
+}
+button {
+  border: 1px solid lightgray;
+  /*margin-left: 10px;*/
+  /* cursor: pointer; */
+  background: #f5f5f5;
+}
+
+.socketchatbox-actionhistory-togglecollapse {
+  display: none;
+}
+
+.blue {
+  background: blue;
+}
+
+.yellow {
+  background: yellow !important;
+}
+
+.error {
+  background: red !important;
+}
+.green {
+  background: #C0FF3F;
+}
+.redFont {
+  color: red;
+}
+
+

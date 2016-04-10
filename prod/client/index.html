@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chatbox</title>
+        <link rel="stylesheet" href="style/chatbox.css">
+        <link rel="stylesheet" href="style/bootstrap.min.css">
+
+    </head>
+    <body class="socketchatbox">
+
+        <div class="socketchatbox-page">
+            <div id="socketchatbox-nw" class="socketchatbox-resize"></div>
+            <div id="socketchatbox-ne" class="socketchatbox-resize"></div>
+            <div id='socketchatbox-top'>
+                <div id='socketchatbox-username'></div>   
+                <button  id='socketchatbox-online-usercount' class="badge"> 
+                </button>
+
+                <div id='socketchatbox-closeChatbox'>x</div>
+                <div id='socketchatbox-showHideChatbox'>↓</div>
+
+            </div>
+            <div id='socketchatbox-body'>
+                <div class='socketchatbox-onlineusers'></div>
+                <div class = "socketchatbox-typing"> </div>
+
+                <div class="socketchatbox-chatArea">
+                    <ul class="socketchatbox-messages"></ul>
+                </div>
+
+                <div class = "socketchatbox-inputMessage-div">    
+                    <input class="socketchatbox-inputMessage" placeholder = "Type here..."/>
+                    <label class="btn lightgray" id='socketchatbox-sendFileBtn' for = "socketchatbox-sendMedia">
+                        <input id="socketchatbox-sendMedia" type="file" style="display:none;">
+                        Browse
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- image pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-imagepopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body">
+                <center><img src="" id="socketchatbox-imagepopup-src"  ></center>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- admin message pop up bootstrap modal -->
+        <div class="modal fade" id="socketchatbox-msgpopup-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Received Message From Admin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="socketchatbox-msgpopup-content">No Message</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    <script src="lib/jquery-2.2.1.min.js"></script>
+    <script src="lib/socket.io.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+
+    <script src="chatbox.js"></script>
+
+
+</html>

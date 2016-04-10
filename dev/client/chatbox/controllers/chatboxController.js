@@ -25,8 +25,11 @@
 
                 hide();
                 utils.addCookie('chatboxOpen',0);
+
             }else {
+            
                 show();
+                ui.scrollToBottom();
                 utils.addCookie('chatboxOpen',1);
             }
         });
@@ -102,7 +105,7 @@
 
     ui.hide = hide;
 
-    ui.updateOnlineUserCount = function (num) {ui.$onlineUserNum.text(num);}
+    ui.updateOnlineUserCount = function (num) {ui.$onlineUserNum.text(num);};
 
 
 

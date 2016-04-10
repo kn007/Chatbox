@@ -86,7 +86,7 @@ div#socketchatbox-online {}
   padding: 20px;
 }
 .socketchatbox-scriptHistoryScript {
-  margin-top: 20px;
+  margin-top: 20px !important;
   max-height: 100px;
   overflow-y: scroll;
 }
@@ -153,9 +153,10 @@ div#socketchatbox-online {}
   /*border-top: 1px solid lightgray;*/
 }
 
+.table {background: #FBFBFB !important;}
 
 .socketchatbox-userdetail {
-  border: 1px solid lightgray;
+  border-top: 1px dashed lightgray;
   background: #FFFFFF;
   margin-top: 20px;
   display:none;
@@ -178,7 +179,7 @@ div#socketchatbox-online {}
 
 .socketchatbox-refresh-interval {
     width: 35%!important;
-    margin-left:30px;
+    margin-left:30px !important;
     display: inline!important;
 }
 
@@ -236,7 +237,7 @@ div#socketchatbox-online {}
 }
 
 .socketchatbox-userdetail-actions-each:nth-child(even) {
-  background: #F5F5F5;
+  background: #F7F7F7;
 }
 
 
@@ -253,7 +254,7 @@ div#socketchatbox-online {}
   height: 100px;  
   width: 100%;
   outline: none;
-  padding-right: 5px; 
+  padding-left: 20px; 
   border: 1px solid lightgray;
 }
 .breakable {

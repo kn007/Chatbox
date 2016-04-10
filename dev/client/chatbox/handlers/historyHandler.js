@@ -36,7 +36,7 @@
 
             ui.addLog('-----End of History-----');
         }
-    }
+    };
 
 
     historyHandler.save = function(username, msg) {
@@ -64,7 +64,7 @@
             chatHistory = chatHistory.slice(Math.max(chatHistory.length - 20, 0));
             utils.addCookie('chathistory',JSON.stringify(chatHistory));
         }
-    }
+    };
 
 
 })();

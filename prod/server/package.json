@@ -1,0 +1,17 @@
+{
+  "name": "socket.io-chatbox",
+  "version": "0.1.352-dev",
+  "description": "A simple chatbox using socket.io, it allows file transfer and image/video can be rendered directly.",
+  "main": "index.js",
+  "contributors": "https://github.com/Arch1tect/Chatbox/graphs/contributors",
+  "homepage": "https://arch1tect.github.io/Chatbox",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Arch1tect/Chatbox.git"
+  },
+  "license": "BSD",
+  "dependencies": {
+    "express": "3.4.8",
+    "socket.io": "^1.3.7"
+  }
+}

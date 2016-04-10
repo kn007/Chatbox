@@ -27,7 +27,8 @@
         console.log("Admin init");
 
         // load jquery objects and register events
-        for (var i = 0; i < ui.init.length; i++) {
+        var i;
+        for (i = 0; i < ui.init.length; i++) {
             ui.init[i]();
         }
 
@@ -42,7 +43,7 @@
 
         chatboxAdmin.getUserList();
 
-    }
+    };
 
 
 })();

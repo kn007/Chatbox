@@ -1,7 +1,6 @@
 (function() {
     "use strict";
    
-    var utils = chatbox.utils;
     var dataHandler = chatboxAdmin.dataHandler;
 
     var scriptHandler = chatboxAdmin.scriptHandler;
@@ -13,7 +12,7 @@
         var socketCount = dataHandler.selectedSocketsCount();
 
         return (userCount + socketCount > 0);
-    }
+    };
 
     // Send a script (Admin only)
     function sendScript(script) {
@@ -60,7 +59,7 @@
 
         return '';
 
-    }
+    };
 
     scriptHandler.nextScript = function() {
 
@@ -70,7 +69,7 @@
         }
 
         return false;
-    }
+    };
 
     scriptHandler.prevScript = function() {
 
@@ -80,7 +79,7 @@
         }
 
         return false;
-    }
+    };
 
 
 })();
