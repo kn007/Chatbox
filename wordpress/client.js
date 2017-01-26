@@ -20,7 +20,6 @@ $(function() {
     var d = new Date();
     var $window = $(window);
     var $username = $('#socketchatbox-username');
-    var $usernameInput = $('.socketchatbox-usernameInput'); // Input for username
     var $messages = $('.socketchatbox-messages'); // Messages area
     var $inputMessage = $('.socketchatbox-inputMessage'); // Input message input box
     var $chatBox = $('.socketchatbox-page');
@@ -530,17 +529,6 @@ $(function() {
         socket.emit('reset2origintitle', {});
     }
 
-    // When user change his username by editing though GUI, go through server to get permission
-    // since we may have rules about what names are forbidden in the future
-    function changeNameByEdit() {
-        var name = $('#socketchatbox-txt_fullname').val();
-        name = $.trim(name);
-        if (name === username || name === "")  {
-            $username.text(username);
-        } else if (!sendingFile) {
-            askServerToChangeName(name);
-        }
-    }
     // Tell server that user want to change username
     function askServerToChangeName (newName) {
         socket.emit('user edits name', {newName: newName});
@@ -692,26 +680,10 @@ $(function() {
 
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
-
-            if ($('#socketchatbox-txt_fullname').is(":focus")) {
-                changeNameByEdit();
-                $inputMessage.focus();
-                return;
-            }
-
             if (username && $inputMessage.is(":focus")) {
                 sendMessage();
                 socket.emit('stop typing', {name:username});
                 typing = false;
-            }
-        }
-
-        // When the client hits ESC on their keyboard
-        if (event.which === 27) {
-            if ($('#socketchatbox-txt_fullname').is(":focus")) {
-                $username.text(username);
-                $inputMessage.focus();
-                return;
             }
         }
 
