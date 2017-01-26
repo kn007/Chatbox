@@ -731,29 +731,6 @@ $(function() {
         }
     });
 
-    // user edit username
-    $username.click(function(e) {
-        if(getCookie('chatboxOpen')!=='1') return;
-        if(comment_author!=='') return;
-        if(sendingFile) return;
-        e.stopPropagation();
-        if($('#socketchatbox-txt_fullname').length > 0) return;
-        //if($('#socketchatbox-txt_fullname').is(":focus")) return;
-
-        var name = $(this).text();
-        $(this).html('');
-        $('<input></input>')
-            .attr({
-                'type': 'text',
-                'name': 'fname',
-                'id': 'socketchatbox-txt_fullname',
-                'size': '10',
-                'value': name
-            })
-            .appendTo('#socketchatbox-username');
-        $('#socketchatbox-txt_fullname').focus();
-    });
-
     document.addEventListener('visibilitychange', function() {
         if(!document.hidden) clearNewMessageNotification();
         if(getCookie('chatboxOpen')==='1') {
